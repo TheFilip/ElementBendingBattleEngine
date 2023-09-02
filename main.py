@@ -5,7 +5,18 @@
 #team stat too, sum all and divide by 150(?) and thats a stat multiplier before comparesent.
 #picks random opponent, each needs to be hit 9 times to be knocked off. (time limit?)
 import random, sys
-from characterList import character_
+from characterList import character_, compareStats
+chooseSeed = False
+
+
+
+if chooseSeed == True:
+    seed = 1
+else:
+    seed = random.randrange(sys.maxsize)
+
+# Set the random seed for consistent random number generation
+random.seed(int(seed), version=2)
 
 
 baseHitTarget = 3
@@ -20,47 +31,7 @@ quickSim = False
 #observe - more likely to evade
 
 
-            
-def compareStats(player1,player2):
-
-    if player1.moveChoice == "attack":
-        if player2.moveChoice == "attack":
-            if player1.movePower >= player2.movePower:
-                player2.health -= 1
-                print(player1.name,"attacks",player2.name)
-            else:
-                print(player1.name,"fails attack against",player2.name)
-        elif player2.moveChoice == "defend":
-            print(player1.name,"gets defened by",player2.name)
-        elif player2.moveChoice == "observe":
-            print(player1.name,"sneaks up on",player2.name)
-            player2.health -= 1
-
-    elif player1.moveChoice == "defend":
-        if player2.moveChoice == "defend":
-            if player1.movePower >= player2.movePower:
-                player2.health -= 1
-                print(player1.name,"defends better than",player2.name)
-            else:
-                print(player1.name,"fails defend against",player2.name)
-        elif player2.moveChoice == "observe":
-            print(player1.name,"gets read by",player2.name)
-        elif player2.moveChoice == "attack":
-            print(player1.name,"counters",player2.name)
-            player2.health -= 1
-
-    else:
-        if player2.moveChoice == "observe":
-            if player1.movePower >= player2.movePower:
-                player2.health -= 1
-                print(player1.name,"strategizes against",player2.name)
-            else:
-                print(player1.name,"and",player2.name,"both read each other")
-        elif player2.moveChoice == "attack":
-            print(player1.name,"gets attacked by",player2.name)
-        elif player2.moveChoice == "defend":
-            print(player1.name,"gets one over",player2.name)
-            player2.health -= 1
+        
 
 
 
@@ -177,16 +148,11 @@ teamB = []
 
 
 
-
-
-
-
-
-
-
 t1W=0
 t2W=0
 winningTeam = None
+roundsPassed = 0
+resultsList = []
 
 #teamAstats = 0
 #teamBstats = 0
@@ -203,6 +169,8 @@ winningTeam = None
 #for i in teamB:
     #teamBstats += int(i.movePower)
 def match(team1,team2):
+    roundsPassed = 0
+    roundResults = []
     for i in team1:
         i.health = baseHitTarget
     for i in team2:
@@ -211,10 +179,16 @@ def match(team1,team2):
         turnPlayers = []
         for i in team1:
             if i.health<=0:
+                print("-----")
+                print(i.name,"has been knocked out!")
                 team1.remove(i)
+                print("-----")
         for i in team2:
             if i.health<=0:
+                print("-----")
+                print(i.name,"has been knocked out!")
                 team2.remove(i)
+                print("-----")
         turnPlayers.append(team1)
         turnPlayers.append(team2)
         if len(team1) == 0:
@@ -223,6 +197,8 @@ def match(team1,team2):
             if len(team2) == 0:
                 break
             else:
+                roundsPassed += 1
+                print("----- Round",roundsPassed,"-----")
                 for i in team1:
                     print(i.name,"-",i.health)
                     i.turnChoice(team2)
@@ -230,12 +206,12 @@ def match(team1,team2):
                     print(i.name,"-",i.health)
                     i.turnChoice(team1)
 
-                print("Team A:")
+                #print("Team A:")
                 for i in team1:
                     compareStats(i,i.target)
                     #if i.target.health <= 0:
                         #teamB.remove(i)
-                print("Team B:")
+                #print("Team B:")
                 for i in team2:
                     compareStats(i,i.target)
                     #if i.target.health <= 0:
@@ -258,6 +234,8 @@ def match(team1,team2):
         print(winners)
         print(len(team1),":",len(team2))
         t2W +=1
+    roundResults = [(len(team1),len(team2))]
+    resultsList.append(roundResults)
     print("End")
 
 
@@ -271,7 +249,10 @@ matchesN = 1
 roundsN = 3
 runs = matchesN*roundsN
 for i in range(runs):
-    match([Shoushao],[Kaya])
+    match([Kawa,Gachun,Paiji],[Futai,Koteo,Choilei])
+
 
 print((t1W),"A:B",((t2W)))
 print(((t1W/runs)*100),"A win %:B win %",(((t2W)/runs))*100)
+print("Round Results: ",resultsList)
+print("seed:",seed)
