@@ -14,9 +14,10 @@ runs = matchesN*roundsN
 chooseSeed = True
 
 if chooseSeed == True:
-    seed = 6083379010002323634
+    seed = 9102585960368991521
 else:
     seed = random.randrange(sys.maxsize)
+
 
 
 

@@ -15,8 +15,8 @@ global RedTeam,BlueTeam
 
 
 
-RedTeam = [Yuka,Asuka,Mei]
-BlueTeam = [JinHo,Kaito,Renji]
+RedTeam = [Leeshao,Parkta,Gepai]
+BlueTeam = [Gabao,Bao,Wongchan]
 
 
 
@@ -64,20 +64,9 @@ def match(team1,team2):
     #t2W=0
     while len(team1)>0 and len(team2)>0:
         turnPlayers = []
-        for i in team1:
-            if i.health<=0:
-                print("-----")
-                print(i.name,"from Team 1 has been knocked out!")
-                team1.remove(i)
-                print("-----")
-        for i in team2:
-            if i.health<=0:
-                print("-----")
-                print(i.name,"from Team 2 has been knocked out!")
-                team2.remove(i)
-                print("-----")
         turnPlayers.append(team1)
         turnPlayers.append(team2)
+        print("----------")
         if len(team1) == 0:
             break
         else:
@@ -85,7 +74,7 @@ def match(team1,team2):
                 break
             else:
                 roundsPassed += 1
-                print("----- Round",roundsPassed,"-----")
+                print("----- Turn",roundsPassed,"-----")
                 for i in team1:
                     print(i.name,"-",i.health)
                     i.turnChoice(team2)
@@ -95,14 +84,26 @@ def match(team1,team2):
 
                 #print("Team A:")
                 for i in team1:
+                    print("--")
                     compareStats(i,i.target)
                     #if i.target.health <= 0:
                         #teamB.remove(i)
                 #print("Team B:")
                 for i in team2:
+                    print("--")
                     compareStats(i,i.target)
                     #if i.target.health <= 0:
                         #teamA.remove(i)
+        for i in team1:
+            if i.health<0 or i.health==0:
+                print("-----")
+                print(i.name,"from Team 1 has been knocked out!")
+                team1.remove(i)
+        for i in team2:
+            if i.health<0 or i.health==0:
+                print("-----")
+                print(i.name,"from Team 2 has been knocked out!")
+                team2.remove(i)
         
         
     winners = []
@@ -123,7 +124,7 @@ def match(team1,team2):
         t2W +=1
     roundResults = [(len(team1),len(team2))]
     resultsList.append(roundResults)
-    print("End")
+    print("----- Round Finish -----")
 
 
 
@@ -138,8 +139,10 @@ for i in range(runs):
     match(teamA,teamB)
 
 
-    
-print((t1W),":",((t2W)))
-print(((t1W/runs)*100),"win %:win %",(((t2W)/runs))*100)
-print("Round Results: ",resultsList)
-print("seed:",seed)
+if displayStoryText == False: ################################### IF DISPLAYSTORYTEXT IS FALSE OR TRUE, CHANGE THIS TOOO
+    print("Match Finish!")
+else:
+    print((t1W),":",((t2W)))
+    print(((t1W/runs)*100),"win %:win %",(((t2W)/runs))*100)
+    print("Round Results: ",resultsList)
+    print("seed:",seed)

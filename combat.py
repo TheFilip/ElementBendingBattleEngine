@@ -11,22 +11,25 @@ dialogAmountTarget = ((random.randint(45,55))*runs)
 baseHitTarget = 3
 baseMoveList = ["attack","defend","observe"]
 
+displayStoryText = False
         
 
 def compareStats(player1,player2):
 
 
 
-    global dialogAmount
-    if dialogAmount < dialogAmountTarget:
-        if random.randint(1,100) <= chancesOfDescription:
-            dialogAmount += 1
-            #print(dialogAmount,"/",dialogAmountTarget)
-            generateText(player1)
-        if random.randint(1,100) <= chancesOfDescription:
-            dialogAmount += 1
-            #print(dialogAmount,"/",dialogAmountTarget)
-            generateText(player2)
+    
+    if displayStoryText == True:
+        global dialogAmount
+        if dialogAmount < dialogAmountTarget:
+            if random.randint(1,100) <= chancesOfDescription:
+                dialogAmount += 1
+                #print(dialogAmount,"/",dialogAmountTarget)
+                generateText(player1)
+            if random.randint(1,100) <= chancesOfDescription:
+                dialogAmount += 1
+                #print(dialogAmount,"/",dialogAmountTarget)
+                generateText(player2)
 
 
 
