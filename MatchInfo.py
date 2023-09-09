@@ -5,7 +5,7 @@ import random, sys
 
 baseHitTarget = 3
 baseMoveList = ["attack","defend","observe"]
-
+ 
 matchesN = 1
 roundsN = 3
 runs = matchesN*roundsN
@@ -55,7 +55,7 @@ class character_:
 
 
 
-
+#EARTH
 Yuka = character_("Yuka","Earth",60,33,47,51,"attack")
 Asuka = character_("Asuka","Earth",29,33,62,44,"observe")
 Mei = character_("Mei","Earth",43,66,64,51,"observe")
@@ -156,3 +156,23 @@ Caikoge = character_("Caikoge","Earth",35,70,73,68,"defend")
 Shuwulei = character_("Shuwulei","Earth",56,49,31,65,"attack")
 Gachun = character_("Gachun","Earth",55,63,34,41,"observe")
 Sako = character_("Sako","Earth",35,70,73,68,"defend")
+
+
+#FIRE
+Manami = character_("Manami","Fire",73,70,33,45,"attack")
+ShirōUma = character_("Shirō Uma","Fire",42,30,61,73,"attack")
+TatsujiHijikuro = character_("Tatsuji Hijikuro","Fire",50,37,65,59,"observe")
+EriNukui = character_("Eri Nukui","Fire",58,39,59,38,"observe")
+YūkoKaneyoshi = character_("Yūko Kaneyoshi","Fire",67,25,61,60,"observe")
+ShōTonoguchi = character_("Shō Tonoguchi","Fire",55,47,31,53,"observe")
+HikariEimori = character_("Hikari Eimori","Fire",46,71,27,67,"attack")
+
+
+#WATER
+Aputi = character_("Aputi","Water",58,46,62,70,"attack")
+SunYuNi = character_("Sun Yu-Ni","Water",41,44,35,55,"defend")
+ShinSookJa = character_("Shin Sook-Ja","Water",66,51,26,27,"defend")
+YiYunJi = character_("Yi Yun-Ji","Water",36,74,54,44,"defend")
+PyunWonook = character_("Pyun Won-Sook","Water",62,37,72,29,"observe")
+YonTaeRan = character_("Yon Tae-Ran","Water",55,63,42,50,"defend")
+PaiJungHyun = character_("Pai Jung-Hyun","Water",62,59,65,73,"observe")
