@@ -15,10 +15,10 @@ global RedTeam,BlueTeam
 
 
 
-RedTeam = [Yuka,Asuka,Mei]
-BlueTeam = [JinHo,Kaito,Renji]
-firstTeamName = "Team Red"
-secondTeamName = "Team Blue"
+RedTeam = [Sun,Pangka,Sueyru]
+BlueTeam = [Kawa,Gachun,Paiji]
+firstTeamName = "Team E"
+secondTeamName = "Team F"
 
 
 baseMoveList = ["attack","defend","observe"]
@@ -64,6 +64,7 @@ def match(team1,team2):
         turnPlayers.clear()
         turnPlayers.append(team1)
         turnPlayers.append(team2)
+        #PRINT HEALTH OF PLAYERS AT START OF ROUND
         print("----------")
         if len(team1) == 0:
             break
@@ -73,35 +74,35 @@ def match(team1,team2):
             else:
                 roundsPassed += 1
                 print("----- Turn",roundsPassed,"-----")
+
                 for i in team1:
-                    #print(i.name,"-",i.health)
                     i.turnChoice(team2)
                 for i in team2:
-                    #print(i.name,"-",i.health)
                     i.turnChoice(team1)
-                print("--")
-                #print("Team A:")
+                print(firstTeamName)
+                for i in team1:
+                    print(i.name,"-",i.health)
+                print("-----")
+                print(secondTeamName)
+                for i in team2:
+                    print(i.name,"-",i.health)
+                print("----------")
                 for i in team1:
                     print("-")
                     print(i.name,"-",i.health)
                     compareStats(i,i.target)
-                    #if i.target.health <= 0:
-                        #teamB.remove(i)
-                #print("Team B:")
                 for i in team2:
                     print("-")
                     print(i.name,"-",i.health)
                     compareStats(i,i.target)
-                    #if i.target.health <= 0:
-                        #teamA.remove(i)
+        print("-----")
         for i in team1:
             if i.health<0 or i.health==0:
-                print("-----")
                 print(i.name,"from",firstTeamName,"has been knocked out!")
                 team1.remove(i)
+        print("-----")
         for i in team2:
             if i.health<0 or i.health==0:
-                print("-----")
                 print(i.name,"from",secondTeamName,"has been knocked out!")
                 team2.remove(i)
         
