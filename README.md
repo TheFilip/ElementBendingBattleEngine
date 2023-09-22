@@ -7,3 +7,7 @@ The Battle Engine handles combat between either individual characters or teams o
 
 
 Teams can be chosen in Main file, and the match/round number in the Match Info file.
+
+![alt text](https://i.imgur.com/iGiPjkN.png)
+![alt text](https://i.imgur.com/nCI88Lk.png)
+![alt text](https://i.imgur.com/I0a2gpk.png)
