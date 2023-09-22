@@ -10,7 +10,7 @@ Teams can be chosen in Main file, and the match/round number in the Match Info f
 
 
 
-Not Included Here:
+Not Included in the Repo:
 
 - A accompaning Excel sheet of all characters and their stats. All individual stats are generated for characters, each specific for different turn options (attack, defend, observe/maneuver). Then averages of all appropriate ones dictate player stats.
 
