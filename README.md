@@ -11,10 +11,14 @@ Teams can be chosen in Main file, and the match/round number in the Match Info f
 
 
 Not Included Here:
-A accompaning Excel sheet of all characters and their stats. All individual stats are generated for characters, each specific for different turn options (attack, defend, observe/maneuver). Then averages of all appropriate ones dictate player stats.
-Easy to copy-paste column of generated python text of all charcter stats to generate character objects.
-Easily editable (not cleaned up sheet however)
-Ranking of all characters (of all 3 elements), by their stats.
+
+- A accompaning Excel sheet of all characters and their stats. All individual stats are generated for characters, each specific for different turn options (attack, defend, observe/maneuver). Then averages of all appropriate ones dictate player stats.
+
+- Easy to copy-paste column of generated python text of all charcter stats to generate character objects.
+
+- Easily editable (not cleaned up sheet however)
+
+- Ranking of all characters (of all 3 elements), by their stats.
 
 ![alt text](https://i.imgur.com/iGiPjkN.png)
 ![alt text](https://i.imgur.com/nCI88Lk.png)
