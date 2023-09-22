@@ -4,7 +4,9 @@
 #stats from 1-100, average % compared to others in program
 #team stat too, sum all and divide by 150(?) and thats a stat multiplier before comparesent.
 #picks random opponent, each needs to be hit 9 times to be knocked off. (time limit?)
-import random, sys, matplotlib.pyplot as plt
+import random, sys, matplotlib.pyplot as plt, numpy as np
+from statistics import mean
+from scipy.interpolate import make_interp_spline
 from combat import *
 from MatchInfo import *
 random.seed(int(seed), version=2)
@@ -193,6 +195,23 @@ for i in range(runs):
         match(teamA,teamB)
 
 
+
+
+
+
+yPPAverage = [sum(yPP[:i+1]) / (i+1) for i in range(len(yPP))]
+
+
+#yPPAverage = []########################### ##### WORKING ON HERE to get average and show a second plot of average throughout the match
+#for i in yPP:
+#    tempi = sum(yPP[0:i+1]) / len(yPP[0:i+1])
+
+#    yPPAverage.append(tempi)
+
+
+
+
+
 if displayStoryText == True: ################################### IF DISPLAYSTORYTEXT IS FALSE OR TRUE, CHANGE THIS TOOO
     print("Match Finish!")
 else:
@@ -204,12 +223,37 @@ else:
     print("seed:",seed)
 
     #PLOTTING PLOT
+    plt.figure(figsize=(10, 6))
+
+
+    #x_smooth = np.linspace(min(xP), max(xP), 100)  # Create a smoother x-axis
+    #array1_smooth = make_interp_spline(xP, yPP)(x_smooth)
+    #array2_smooth = make_interp_spline(xP, yPPAverage)(x_smooth)
+
+
+
+
+
     plt.plot(xP, yPP,marker='o',markersize=3)
+    plt.plot(xP, yPPAverage)
+
+
+    #plt.plot(x_smooth, array1_smooth)
+    #plt.plot(x_smooth, array2_smooth)
+
     # naming the x axis
     plt.xlabel('Rounds')
     # naming the y axis
     plt.ylabel('Advantage')
-    
+
+
+    plt.annotate(f'{yPPAverage[-1]:.2f}', (xP[-1], yPPAverage[-1]), textcoords="offset points", xytext=(0, 10), ha='center')
+
+
+
+
+    if matchesN == 1:
+        plt.xticks(xP)
     # giving a title to my graph
     plt.title('Advantage Plot')
     
