@@ -1,8 +1,8 @@
-# ElementBendingEngine
+# ElementBendingBattleEngine
 
 https://www.instagram.com/onyxcontrolproject/ < Onyx Control Book
 
-Code for the Element Bending Battle Engine
+Code for the EBBE
 
 Element Bending Battle Engine & Onyx Control are  little hobby projects to keep track of generated characters. Creating stories, adjusting individual parameters, and just seeing what happens.
 
