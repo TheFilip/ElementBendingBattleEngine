@@ -1,4 +1,6 @@
 # OnyxControlEngine
+
+https://www.instagram.com/onyxcontrolproject/ < Onyx Control Book
 Code for the Onyx Control Battle Engine
 
 Avatar Legends Onyx Control is a little hobby project to keep track of generated characters. Creating stories, adjusting individual parameters, and just seeing what happens.
