@@ -1,9 +1,10 @@
 # OnyxControlEngine
 
 https://www.instagram.com/onyxcontrolproject/ < Onyx Control Book
-Code for the Onyx Control Battle Engine
 
-Avatar Legends Onyx Control is a little hobby project to keep track of generated characters. Creating stories, adjusting individual parameters, and just seeing what happens.
+Code for the Element Bending Battle Engine
+
+Element Bending Battle Engine & Onyx Control are  little hobby projects to keep track of generated characters. Creating stories, adjusting individual parameters, and just seeing what happens.
 
 The Battle Engine handles combat between either individual characters or teams of multiple.
 
