@@ -8,7 +8,7 @@ import random, sys, matplotlib.pyplot as plt, numpy as np
 from statistics import mean
 from scipy.interpolate import make_interp_spline
 from combat import *
-from MatchInfo import *
+from matchInfo import *
 random.seed(int(seed), version=2)
 
 baseHitTarget = 3
@@ -16,8 +16,6 @@ global RedTeam,BlueTeam
 
 
 
-#+x every round
-#+y for team 1 knockicking out opponent - -y for team 2 knocking out opponent
 xP = []
 yPP = []
 yP = 0
@@ -25,11 +23,8 @@ yP = 0
 
 
 
-
-
-
-RedTeam = [Kowa,Yi,Laoyi]
-BlueTeam = [Hisho,Uyeung,Wenshao]
+RedTeam = []
+BlueTeam = []
 firstTeamName = "Team Red"
 secondTeamName = "Team White"
 
@@ -71,26 +66,43 @@ def match(team1,team2):
         global yP, xP, yPP
         totalHP1 = 0
         totalHP2 = 0
+        yPP.append(yP)
+        yP = 0
+
         for i in team1:
             if i.health<0 or i.health==0:
                 print("-----")
                 print(i.name,"from",firstTeamName,"has been knocked out!")
                 team1.remove(i)
+                yP-=1
             else:
                 totalHP1 += i.health
-            #yP-=1
         for i in team2:
             if i.health<0 or i.health==0:
                 print("-----")
                 print(i.name,"from",secondTeamName,"has been knocked out!")
                 team2.remove(i)
+                yP+=1
             else:
                 totalHP2 += i.health
-            #yP+=1
-        yP=totalHP1-totalHP2 ############################# WORKING HERE ON THIS ALGO
 
-        yPP.append(yP)
+
+
+
+
+            
+        #yP+=(totalHP1-totalHP2) ############################# WORKING HERE ON THIS ALGO
+
+        
         xP.append(totalRoundsPassed)
+
+
+        
+
+
+
+
+
         turnPlayers.clear()
         turnPlayers.append(team1)
         turnPlayers.append(team2)
@@ -102,6 +114,7 @@ def match(team1,team2):
             if len(team2) == 0:
                 break
             else:
+                
                 roundsPassed += 1
                 totalRoundsPassed += 1
         
@@ -111,14 +124,17 @@ def match(team1,team2):
                     i.turnChoice(team2)
                 for i in team2:
                     i.turnChoice(team1)
+                #print out all players for first team
                 print(firstTeamName)
                 for i in team1:
-                    print(i.name,"-",i.health)
+                    print(i.name,"the",i.element+"bender -",i.health)
                 print("-----")
+                #print out all players for second team
                 print(secondTeamName)
                 for i in team2:
-                    print(i.name,"-",i.health)
+                    print(i.name,"the",i.element+"bender -",i.health)
                 print("----------")
+                #run combat per player for each team
                 for i in team1:
                     print("-")
                     print(i.name,"-",i.health)
@@ -140,8 +156,18 @@ def match(team1,team2):
                 print(i.name,"from",secondTeamName,"has been knocked out!")
                 team2.remove(i)
                 yP+=1
+
+
+
+
+
+        #input() #### REMOVE FOR FAST GEN
         
         
+
+
+
+
     winners = []
     if len(team1)>len(team2):
         global t1W,t2W
@@ -174,8 +200,6 @@ for i in range(runs):
         u.health = baseHitTarget
     teamA = RedTeam.copy()
     teamB = BlueTeam.copy()
-    #teamA = sorted(teamA,key=lambda x:x.defendStat, reverse=False)
-    #teamB = sorted(teamB,key=lambda x:x.defendStat, reverse=False)
     match(teamA,teamB)
 
     if not teamA and not teamB: #IF A DRAW HAPPENS
@@ -192,6 +216,7 @@ for i in range(runs):
         for p in teamB:
             if p.element != elementChosen:
                 teamB.remove(p)
+        print("A draw!",elementChosen+"benders are going to battle this one out!")
         match(teamA,teamB)
 
 
@@ -234,6 +259,7 @@ else:
 
 
 
+    
     plt.plot(xP, yPP,marker='o',markersize=3)
     plt.plot(xP, yPPAverage)
 
@@ -257,5 +283,7 @@ else:
     # giving a title to my graph
     plt.title('Advantage Plot')
     
+
+
     # function to show the plot
-    plt.show()
+    #plt.show()
