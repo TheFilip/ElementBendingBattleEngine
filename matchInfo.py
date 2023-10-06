@@ -4,19 +4,19 @@ import random, sys
 
 
 baseHitTarget = 3
-baseMoveList = ["attack","defend","observe"]
+baseMoveList = ["attack","block","observe"]
  
 
 matchesN = 1
 roundsN = 3
 
 
+initiativeMax = 20
 
 
 
 
-
-chooseSeed = False
+chooseSeed = True
 
 if chooseSeed == True:
     seed = 9102585960368991521
@@ -31,26 +31,28 @@ else:
 runs = matchesN*roundsN
 
 class character_:
-    def __init__(self,name,element,attackStat,defendStat,observeStat,preference):
+    def __init__(self,name,element,attackStat,blockStat,observeStat,preference):
         self.name = name
         self.element = element
         self.health = baseHitTarget
         self.attackStat = attackStat
-        self.defendStat = defendStat
+        self.blockStat = blockStat
         self.observeStat = observeStat
         self.movelist = baseMoveList
         self.movelist.append(preference)
+        self.initiative = 0
 
     def turnChoice(self, opponentTeam):
         target = random.choice(opponentTeam)
         self.target = target
+        self.initiative = random.randint(1,initiativeMax)
         while target == self.name:
             target = random.choice(opponentTeam)
         self.moveChoice = random.choice(self.movelist)
         if self.moveChoice == "attack":
             self.movePower = random.randrange(1,self.attackStat)
-        if self.moveChoice == "defend":
-            self.movePower = random.randrange(1,self.defendStat)
+        if self.moveChoice == "block":
+            self.movePower = random.randrange(1,self.blockStat)
         if self.moveChoice == "observe":
             self.movePower = random.randrange(1,self.observeStat)
         #print(self.name,self.moveChoice,self.movePower,target.name)
@@ -71,13 +73,16 @@ Kuvira = character_("Kuvira","Earth",74,58,84,"attack")
 
 
 #EARTH
-Yuka = character_("Yuka","Earth",63,30,40,"attack")
-Asuka = character_("Asuka","Earth",34,29,51,"observe")
-Mei = character_("Mei","Earth",38,61,64,"observe")
-JinHo = character_("Jin-Ho","Earth",68,58,58,"attack")
-Kaito = character_("Kaito","Earth",55,33,36,"observe")
-Renji = character_("Renji","Earth",43,45,49,"attack")
+Yuka = character_("Yuka","Fire",57,48,52,"block")
+Asuka = character_("Asuka","Earth",72,41,81,"observe")
+Mei = character_("Mei","Water",53,49,47,"attack")
+JinHo = character_("Jin-Ho","Earth",45,68,61,"attack")
+Kaito = character_("Kaito","Fire",37,43,51,"attack")
+Renji = character_("Renji","Earth",53,57,78,"block")
+
+
 
 #FIRE
+
 
 #WATER

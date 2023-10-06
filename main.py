@@ -29,7 +29,7 @@ firstTeamName = "Team Red"
 secondTeamName = "Team White"
 
 
-baseMoveList = ["attack","defend","observe"]
+baseMoveList = ["attack","block","observe"]
 
 global t1W,t2W
 t1W=0
@@ -102,10 +102,10 @@ def match(team1,team2):
 
 
 
-
-        turnPlayers.clear()
-        turnPlayers.append(team1)
-        turnPlayers.append(team2)
+        turnPlayers = team1 + team2
+        #turnPlayers.clear()
+        #turnPlayers.insert(team1)
+        #turnPlayers.insert(team2)
         #PRINT HEALTH OF PLAYERS AT START OF ROUND
         print("----------")
         if len(team1) == 0:
@@ -134,15 +134,44 @@ def match(team1,team2):
                 for i in team2:
                     print(i.name,"the",i.element+"bender -",i.health)
                 print("----------")
+                turnPlayers.sort(key=lambda x: x.initiative, reverse=True)
                 #run combat per player for each team
-                for i in team1:
+
+                for i in turnPlayers:
                     print("-")
                     print(i.name,"-",i.health)
                     compareStats(i,i.target)
-                for i in team2:
-                    print("-")
-                    print(i.name,"-",i.health)
-                    compareStats(i,i.target)
+                    if i.target.health<0 or i.target.health == 0:
+                        if i.target in team1:
+                            print(i.target.name,"from",firstTeamName,"has been knocked out!")
+                            team1.remove(i.target)
+                            turnPlayers.remove(i.target)
+                            yP-=1
+                        if i.target in team2:
+                            print(i.target.name,"from",secondTeamName,"has been knocked out!")
+                            team2.remove(i.target)
+                            turnPlayers.remove(i.target)
+                            yP+=1 
+
+
+
+
+
+
+                #for i in team1:
+                    #print("-")
+                    #print(i.name,"-",i.health)
+                    #compareStats(i,i.target)
+                #for i in team2:
+                    #print("-")
+                    #print(i.name,"-",i.health)
+                    #compareStats(i,i.target)
+
+
+
+
+
+
         print("-----")
         for i in team1:
             if i.health<0 or i.health==0:
@@ -286,4 +315,4 @@ else:
 
 
     # function to show the plot
-    #plt.show()
+    plt.show()

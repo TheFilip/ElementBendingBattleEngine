@@ -9,7 +9,7 @@ dialogAmount = 0
 dialogAmountTarget = ((random.randint(45,55))*runs)
 
 baseHitTarget = 3
-baseMoveList = ["attack","defend","observe"]
+baseMoveList = ["attack","block","observe"]
 
 displayStoryText = False
         
@@ -63,13 +63,13 @@ def compareStats(player1,player2):
                 print(player1.name,"hits",player2.name,"with their",player1.element+"bending","while",player2.name,"is distracted")
                 print(player2.name,"gets pushed back a zone")
         #beats user
-        elif player2.moveChoice == "defend":
+        elif player2.moveChoice == "block":
             print(player1.name,"tries to hit",player2.name,"with their",player1.element+"bending","but gets blocked")
 
-#Player Choice being Defend
-    elif player1.moveChoice == "defend":
+#Player Choice being Block
+    elif player1.moveChoice == "block":
         #same as user
-        if player2.moveChoice == "defend":
+        if player2.moveChoice == "block":
             if player1.movePower >= player2.movePower:
                 player2.health -= 1
                 print(player1.name,"hits",player2.name,"with their",player1.element+"bending")
@@ -101,7 +101,7 @@ def compareStats(player1,player2):
             else:
                 print(player1.name,"tries to hit",player2.name,"with their",player1.element+"bending","but misses")
         #user beats
-        elif player2.moveChoice == "defend":
+        elif player2.moveChoice == "block":
             if player1.movePower >= player2.movePower:
                 player2.health -= 2
                 print(player1.name,"gets a clean",player1.element+"bending hit against",player2.name)
