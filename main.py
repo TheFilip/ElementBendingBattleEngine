@@ -23,8 +23,8 @@ yP = 0
 
 
 
-RedTeam = []
-BlueTeam = []
+RedTeam = [Yuka,Asuka,Mei]
+BlueTeam = [JinHo,Kaito,Renji]
 firstTeamName = "Team Red"
 secondTeamName = "Team White"
 
