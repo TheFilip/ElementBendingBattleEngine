@@ -11,7 +11,7 @@ matchesN = 1
 roundsN = 3
 
 
-initiativeMax = 20
+variance = 20 #percentage since it adjusts to 100 total
 
 
 
@@ -19,7 +19,7 @@ initiativeMax = 20
 chooseSeed = True
 
 if chooseSeed == True:
-    seed = 9102585960368991521
+    seed = 5294566580921762114
 else:
     seed = random.randrange(sys.maxsize)
 
@@ -46,16 +46,16 @@ class character_:
     def turnChoice(self, opponentTeam):
         target = random.choice(opponentTeam)
         self.target = target
-        self.initiative = (random.randint(1,initiativeMax))+self.initiativeBonus
+        self.initiative = (random.randint(1,variance))+self.initiativeBonus
         while target == self.name:
             target = random.choice(opponentTeam)
         self.moveChoice = random.choice(self.movelist)
         if self.moveChoice == "attack":
-            self.movePower = random.randrange(1,self.attackStat)
+            self.movePower = random.randrange(1,self.attackStat)+(random.randint(1,variance))
         if self.moveChoice == "block":
-            self.movePower = random.randrange(1,self.blockStat)
+            self.movePower = random.randrange(1,self.blockStat)+(random.randint(1,variance))
         if self.moveChoice == "observe":
-            self.movePower = random.randrange(1,self.observeStat)
+            self.movePower = random.randrange(1,self.observeStat)+(random.randint(1,variance))
         #print(self.name,self.moveChoice,self.movePower,target.name)
 
 

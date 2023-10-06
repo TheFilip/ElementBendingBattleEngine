@@ -52,7 +52,7 @@ resultsList = []
 
 totalHP1 = 0
 totalHP2 = 0
-
+potMVPs = []
 turnPlayers = []
 def match(team1,team2):
     global teamA, teamB, RedTeam, BlueTeam
@@ -216,6 +216,7 @@ def match(team1,team2):
     else:
         print("Draw!")
     roundResults = [(len(team1),len(team2))]
+    potMVPs.append(winners)
     resultsList.append(roundResults)
     print("----- Round Finish -----")
 
@@ -273,7 +274,8 @@ else:
     print(firstTeamName,":",secondTeamName)
     print((t1W),":",((t2W)))
     print(((t1W/runs)*100),"win %:win %",(((t2W)/runs))*100)
-    print("Round Results: ",resultsList)
+    print("Potential MVPs:",potMVPs)
+    print("Round Results:",resultsList)
     print("seed:",seed)
 
     #PLOTTING PLOT
@@ -289,7 +291,7 @@ else:
 
 
     
-    plt.plot(xP, yPP,marker='o',markersize=3)
+    #plt.plot(xP, yPP,marker='o',markersize=3)
     plt.plot(xP, yPPAverage)
 
 
@@ -315,4 +317,4 @@ else:
 
 
     # function to show the plot
-    plt.show()
+    #plt.show()
