@@ -1,6 +1,6 @@
 # ElementBendingBattleEngine
 
-https://www.instagram.com/onyxcontrolproject/ < Onyx Control Book
+https://www.instagram.com/onyxcontrol/ < Onyx Control Book
 
 Code for the EBBE
 
