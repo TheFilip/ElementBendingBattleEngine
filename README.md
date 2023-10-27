@@ -9,7 +9,14 @@ Element Bending Battle Engine & Onyx Control are  little hobby projects to keep 
 The Battle Engine handles combat between either individual characters or teams of multiple.
 
 
-Teams can be chosen in Main file, and the match/round number in the Match Info file.
+Edit the exec.py file with the team names and characters from matchInfo file.
+
+
+
+
+
+
+
 
 
 
