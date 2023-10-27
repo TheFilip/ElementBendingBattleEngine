@@ -1,6 +1,6 @@
 # ElementBendingBattleEngine
 
-https://www.instagram.com/onyxcontrol/ < Onyx Control Book
+https://www.instagram.com/onyxcontrol/ < Onyx Control: A story generated using EBBE.
 
 Code for the EBBE
 
