@@ -9,6 +9,7 @@ from statistics import mean
 from scipy.interpolate import make_interp_spline
 from combat import *
 from matchInfo import *
+
 random.seed(int(seed), version=2)
 
 baseHitTarget = 3
@@ -22,20 +23,27 @@ yP = 0
 
 
 
-
-RedTeam = [Yuka,Asuka,Mei]
-BlueTeam = [JinHo,Kaito,Renji]
-firstTeamName = "Team Red"
-secondTeamName = "Team White"
+#RedTeam = [Yuka,Asuka,Mei]
+#BlueTeam = [JinHo,Kaito,Renji]
 
 
-baseMoveList = ["attack","block","observe"]
+
+
 
 global t1W,t2W
 t1W=0
 t2W=0
 
-winningTeam = None
+
+
+
+
+
+winningTeam = "winner"
+winningName = "x"
+
+
+
 roundsPassed = 0
 totalRoundsPassed = 0
 resultsList = []
@@ -49,19 +57,42 @@ resultsList = []
 
 
 
+#generate plot ideas
+plotGen = True
+knockoutAmounts = []
+
+
+
+
 
 totalHP1 = 0
 totalHP2 = 0
 potMVPs = []
 turnPlayers = []
 def match(team1,team2):
-    global teamA, teamB, RedTeam, BlueTeam
+    global teamA, teamB
     global totalHP1, totalHP2, totalRoundsPassed
+    global winningTeam,winningName
     roundsPassed = 0
     roundResults = []
+    #team1 = a.copy()
+    #team2 = b.copy()
+    print(firstTeamName)
+    for i in team1:
+        print(i.name,"the",i.element+"bender -",i.health)
+    print("-----")
+        #print out all players for second team
+    print(secondTeamName)
+    for i in team2:
+        print(i.name,"the",i.element+"bender -",i.health)
+    #print("----------")
+    #turnPlayers.sort(key=lambda x: x.initiative, reverse=True)
+                        #run combat per player for each team
+    
 
     #t1W=0
     #t2W=0
+    print("----- NEW MATCH ROUND -----")
     while len(team1)>0 and len(team2)>0:
         global yP, xP, yPP
         totalHP1 = 0
@@ -71,16 +102,17 @@ def match(team1,team2):
 
         for i in team1:
             if i.health<0 or i.health==0:
-                print("-----")
-                print(i.name,"from",firstTeamName,"has been knocked out!")
+                #print("-----")
+                #print(i.name,"from",firstTeamName,"has been knocked out!")
                 team1.remove(i)
                 yP-=1
+                
             else:
                 totalHP1 += i.health
         for i in team2:
             if i.health<0 or i.health==0:
-                print("-----")
-                print(i.name,"from",secondTeamName,"has been knocked out!")
+                #print("-----")
+                #print(i.name,"from",secondTeamName,"has been knocked out!")
                 team2.remove(i)
                 yP+=1
             else:
@@ -101,7 +133,7 @@ def match(team1,team2):
 
 
 
-
+        turnPlayers = []
         turnPlayers = team1 + team2
         #turnPlayers.clear()
         #turnPlayers.insert(team1)
@@ -118,41 +150,89 @@ def match(team1,team2):
                 roundsPassed += 1
                 totalRoundsPassed += 1
         
-                print("----- Turn",roundsPassed,"-----")
+                #print("----- Turn",roundsPassed,"-----")
 
                 for i in team1:
                     i.turnChoice(team2)
                 for i in team2:
                     i.turnChoice(team1)
+
+
+
+
                 #print out all players for first team
-                print(firstTeamName)
-                for i in team1:
-                    print(i.name,"the",i.element+"bender -",i.health)
-                print("-----")
-                #print out all players for second team
-                print(secondTeamName)
-                for i in team2:
-                    print(i.name,"the",i.element+"bender -",i.health)
-                print("----------")
-                turnPlayers.sort(key=lambda x: x.initiative, reverse=True)
-                #run combat per player for each team
+                if True:
+                    if random.randrange(1,100) <= 50:
+                        print(firstTeamName)
+                        for i in team1:
+                            print(i.name,"the",i.element+"bender -",i.health)
+                        print("-----")
+                        #print out all players for second team
+                        print(secondTeamName)
+                        for i in team2:
+                            print(i.name,"the",i.element+"bender -",i.health)
+                        print("----------")
+                        turnPlayers.sort(key=lambda x: x.initiative, reverse=True)
+                        #run combat per player for each team
+                else:
+                    print(firstTeamName)
+                    for i in team1:
+                        print(i.name,"the",i.element+"bender -",i.health)
+                    print("-----")
+                    #print out all players for second team
+                    print(secondTeamName)
+                    for i in team2:
+                        print(i.name,"the",i.element+"bender -",i.health)
+                    print("----------")
+                    turnPlayers.sort(key=lambda x: x.initiative, reverse=True)
+                    #run combat per player for each team
 
+
+
+
+
+                #player selects a opponent to target
                 for i in turnPlayers:
-                    print("-")
-                    print(i.name,"-",i.health)
-                    compareStats(i,i.target)
-                    if i.target.health<0 or i.target.health == 0:
-                        if i.target in team1:
-                            print(i.target.name,"from",firstTeamName,"has been knocked out!")
-                            team1.remove(i.target)
-                            turnPlayers.remove(i.target)
-                            yP-=1
-                        if i.target in team2:
-                            print(i.target.name,"from",secondTeamName,"has been knocked out!")
-                            team2.remove(i.target)
-                            turnPlayers.remove(i.target)
-                            yP+=1 
+                    if not team1:
+                        pass
+                    elif not team2:
+                        pass
+                    else:
+                        print("-")
+                        print(i.name,"-",i.health)
+                        if not team1 and not team2:
+                            pass
+                        else:
+                            if i in team1: ########## KEEP EYE ON THIS
+                                i.chooseRandomOpponent(team2)
+                            else:
+                                i.chooseRandomOpponent(team1)
 
+                        #combat per player
+                        compareStats(i,i.target)
+                        if i.target.health<0 or i.target.health == 0:
+                            if i.target in team1:
+                                #print(i.target.name,"from",firstTeamName,"has been knocked out!")
+                                team1.remove(i.target)
+                                turnPlayers.remove(i.target)
+                                yP-=1
+                            if i.target in team2:
+                                #print(i.target.name,"from",secondTeamName,"has been knocked out!")
+                                team2.remove(i.target)
+                                turnPlayers.remove(i.target)
+                                yP+=1 
+                            i.knockedoutAmount += 1
+
+                        if plotGen == True:
+                            global amountOfRandomPlot
+                            if amountOfRandomPlot != amountOfRandomPlotTarget:
+                                if random.randint(1,100) <= chancesOfDescription:
+                                    amountOfRandomPlot+=1
+                                    #generateText(i,random.choice(turnPlayers),None)
+                                    rCharacter = random.choice(turnPlayers)
+                                    while rCharacter == i:
+                                        rCharacter = random.choice(turnPlayers)
+                                    generateText(i,rCharacter,None)
 
 
 
@@ -172,19 +252,6 @@ def match(team1,team2):
 
 
 
-        print("-----")
-        for i in team1:
-            if i.health<0 or i.health==0:
-                print(i.name,"from",firstTeamName,"has been knocked out!")
-                team1.remove(i)
-                yP-=1
-                
-        print("-----")
-        for i in team2:
-            if i.health<0 or i.health==0:
-                print(i.name,"from",secondTeamName,"has been knocked out!")
-                team2.remove(i)
-                yP+=1
 
 
 
@@ -198,123 +265,210 @@ def match(team1,team2):
 
 
     winners = []
+
+    print("----- ROUND FINISH -----")
+
+
+    def printWinners():
+        print(winners)
+        print(len(team1),":",len(team2))
+
     if len(team1)>len(team2):
-        global t1W,t2W
+        global t1W,t2W,winningTeam,winningName
         print(firstTeamName,"Wins!")
         for i in team1:
             winners.append(i.name)
-        print(winners)
-        print(len(team1),":",len(team2))
+            #knockoutAmounts.extend((i.name,i.knockedoutAmount))
+        printWinners()
         t1W +=1
     elif len(team1)<len(team2):
         print(secondTeamName,"Wins!")
         for i in team2:
             winners.append(i.name)
-        print(winners)
-        print(len(team1),":",len(team2))
+            #knockoutAmounts.extend((i.name,i.knockedoutAmount))
+        printWinners()
         t2W +=1
     else:
         print("Draw!")
     roundResults = [(len(team1),len(team2))]
     potMVPs.append(winners)
+
+
+    #for i in potMVPs:
+        #knockoutAmounts.append((i.name,":",i.knockedoutAmount))
+
+
+
+
     resultsList.append(roundResults)
-    print("----- Round Finish -----")
+
+    print("----- ROUND FINISH -----")
 
 
 
 #FIGHT HAPPENS
-for i in range(runs):
-    for u in RedTeam:
-        u.health = baseHitTarget
-    for u in BlueTeam:
-        u.health = baseHitTarget
-    teamA = RedTeam.copy()
-    teamB = BlueTeam.copy()
-    match(teamA,teamB)
+def program(aTeamName,a,bTeamName,b):
+    global winningTeam,winningName, firstTeamName, secondTeamName
+    firstTeamName = aTeamName
+    secondTeamName = bTeamName
+    #knockoutAmounts = []
 
-    if not teamA and not teamB: #IF A DRAW HAPPENS
-        for u in RedTeam:
+
+    #for i in both teams
+        #append playermove list with "Special move" so everyone has 1 for the whole match. Or maybe even roll a chance and if > chance then they get special move.
+
+
+
+
+    if plotGen == True:
+        generateText(random.choice(a+b),random.choice(a+b),7)
+        for i in range(4):
+            if random.randint(1,100) <= chancesOfDescription:
+                generateText(random.choice(a+b),random.choice(a+b),None)
+
+
+    for i in range(runs):
+        for u in a:
             u.health = baseHitTarget
-        for u in BlueTeam:
+        for u in b:
             u.health = baseHitTarget
-        teamA = RedTeam.copy()
-        teamB = BlueTeam.copy()
-        elementChosen = random.choice(["Earth","Fire","Water"])
-        for p in teamA:
-            if p.element != elementChosen:
-                teamA.remove(p)
-        for p in teamB:
-            if p.element != elementChosen:
-                teamB.remove(p)
-        print("A draw!",elementChosen+"benders are going to battle this one out!")
+        teamA = a.copy()
+        teamB = b.copy()
         match(teamA,teamB)
 
+        if not teamA and not teamB: #IF A DRAW HAPPENS
+            for u in a:
+                u.health = baseHitTarget
+            for u in b:
+                u.health = baseHitTarget
+            teamA = a.copy()
+            teamB = b.copy()
+            elementChosen = random.choice(["Earth","Fire","Water"])
+            for p in teamA:
+                if p.element != elementChosen:
+                    teamA.remove(p)
+            for p in teamB:
+                if p.element != elementChosen:
+                    teamB.remove(p)
+            print("A draw!",elementChosen+"benders are going to battle this one out!")
+            match(teamA,teamB)
 
 
 
 
 
-yPPAverage = [sum(yPP[:i+1]) / (i+1) for i in range(len(yPP))]
+
+    yPPAverage = [sum(yPP[:i+1]) / (i+1) for i in range(len(yPP))]
 
 
-#yPPAverage = []########################### ##### WORKING ON HERE to get average and show a second plot of average throughout the match
-#for i in yPP:
-#    tempi = sum(yPP[0:i+1]) / len(yPP[0:i+1])
+    #yPPAverage = []########################### ##### WORKING ON HERE to get average and show a second plot of average throughout the match
+    #for i in yPP:
+    #    tempi = sum(yPP[0:i+1]) / len(yPP[0:i+1])
 
-#    yPPAverage.append(tempi)
-
-
-
-
-
-if displayStoryText == True: ################################### IF DISPLAYSTORYTEXT IS FALSE OR TRUE, CHANGE THIS TOOO
-    print("Match Finish!")
-else:
-    print("Match Finish!")
-    print(firstTeamName,":",secondTeamName)
-    print((t1W),":",((t2W)))
-    print(((t1W/runs)*100),"win %:win %",(((t2W)/runs))*100)
-    print("Potential MVPs:",potMVPs)
-    print("Round Results:",resultsList)
-    print("seed:",seed)
-
-    #PLOTTING PLOT
-    plt.figure(figsize=(10, 6))
-
-
-    #x_smooth = np.linspace(min(xP), max(xP), 100)  # Create a smoother x-axis
-    #array1_smooth = make_interp_spline(xP, yPP)(x_smooth)
-    #array2_smooth = make_interp_spline(xP, yPPAverage)(x_smooth)
+    #    yPPAverage.append(tempi)
 
 
 
 
+    if displayStoryText == "run": ################################### IF DISPLAYSTORYTEXT IS FALSE OR TRUE, CHANGE THIS TOOO
+        print("Match Finish!")
 
-    
-    #plt.plot(xP, yPP,marker='o',markersize=3)
-    plt.plot(xP, yPPAverage)
-
-
-    #plt.plot(x_smooth, array1_smooth)
-    #plt.plot(x_smooth, array2_smooth)
-
-    # naming the x axis
-    plt.xlabel('Rounds')
-    # naming the y axis
-    plt.ylabel('Advantage')
+    else:
+        print("MATCH FINISH!")
 
 
-    plt.annotate(f'{yPPAverage[-1]:.2f}', (xP[-1], yPPAverage[-1]), textcoords="offset points", xytext=(0, 10), ha='center')
+        if plotGen == True:
+            generateText(random.choice(a+b),random.choice(a+b),7)
+            for i in range(4):
+                if random.randint(1,100) <= chancesOfDescription:
+                    generateText(random.choice(a+b),random.choice(a+b),None)
+
+
+        
+        print(firstTeamName,":",secondTeamName)
+        print((t1W),":",((t2W)))
+        print(((t1W/runs)*100),"win %:win %",(((t2W)/runs))*100)
+        print("Potential MVPs:",potMVPs)
+        teamA = a.copy()
+        teamB = b.copy()
+        print(aTeamName+"\n----")
+        for i in teamA:
+            print(i.name+":",i.knockedoutAmount)
+        print("\n"+bTeamName+"\n----")
+        for i in teamB:
+            print(i.name+":",i.knockedoutAmount)
+            
 
 
 
 
-    if matchesN == 1:
-        plt.xticks(xP)
-    # giving a title to my graph
-    plt.title('Advantage Plot')
-    
+        #for i in teamA and teamB: ########################################WORK ON THIS TOO
+            #knockoutAmounts.extend((i.name,i.knockedoutAmount))
+        #print(knockoutAmounts)
 
 
-    # function to show the plot
-    #plt.show()
+        print("----\nRound Results:",resultsList)
+        print("seed:",seed)
+
+        #MVPRanking = []
+        #for i in potMVPs:
+        #    MVPRanking
+
+        
+        if t1W>t2W:
+            winningName = "A"
+        elif t2W>t1W:
+            winningName = "B"
+
+
+
+
+
+
+
+
+        #PLOTTING PLOt
+        plt.figure(figsize=(10, 6))
+
+
+        #x_smooth = np.linspace(min(xP), max(xP), 100)  # Create a smoother x-axis
+        #array1_smooth = make_interp_spline(xP, yPP)(x_smooth)
+        #array2_smooth = make_interp_spline(xP, yPPAverage)(x_smooth)
+
+
+
+
+
+        
+        #plt.plot(xP, yPP,marker='o',markersize=3)
+        plt.plot(xP, yPPAverage)
+
+
+        #plt.plot(x_smooth, array1_smooth)
+        #plt.plot(x_smooth, array2_smooth)
+
+        # naming the x axis
+        plt.xlabel('Rounds')
+        # naming the y axis
+        plt.ylabel('Advantage')
+
+
+        plt.annotate(f'{yPPAverage[-1]:.2f}', (xP[-1], yPPAverage[-1]), textcoords="offset points", xytext=(0, 10), ha='center')
+
+
+
+
+        if matchesN == 1:
+            plt.xticks(xP)
+        # giving a title to my graph
+        plt.title('Advantage Plot')
+        
+
+
+        # function to show the plot
+        #plt.show()
+    if t1W>t2W:
+        winningName = "A"
+    elif t2W>t1W:
+        winningName = "B"
+    winningTeam = winningName
