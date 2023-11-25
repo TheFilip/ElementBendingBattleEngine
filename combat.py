@@ -16,7 +16,11 @@ baseHitTarget = 3
 
 displayStoryText = True
         
-
+#zone thresholds
+#print(i.name,"the",i.element+"bender - zone",i.health)
+innerZone = 3
+middleZone = 2
+outsideZone = 1
 
 
 
@@ -25,9 +29,21 @@ displayStoryText = True
 elementBonus = 1.1
 
 
+critRate = 20
+
 
 
 def compareStats(player1,player2):
+    attackSuccessfulText = False
+    print("-")
+    if True:
+        #print("-")
+        if player1.health == innerZone:
+            print(player1.name,"currently in - Inner Zone")
+        elif player1.health == middleZone:
+            print(player1.name,"currently in - Middle Zone")
+        elif player1.health == outsideZone:
+            print(player1.name,"currently in - Outside Zone")
     
     if displayStoryText == "run":
         global dialogAmount
@@ -58,9 +74,12 @@ def compareStats(player1,player2):
                 player2.health -= 1
                 if random.randrange(1,10) <= 7:
                     print(player1.name,"hits",player2.name,"with their",player1.element+"bending")
+                elif random.randrange(1,10) <= 5:
+                    print(player1.name+"'s attacks are stronger than",player2.name+"'s",player2.element+"bending attacks")
                 else:
                     print(player1.name+"'s",player1.element+"bending shots outperform",player2.name+"'s",player2.element+"bending attacks")
-                print(player2.name,"gets pushed back to zone",player2.health)
+                #print(player2.name,"gets pushed back to zone",player2.health)
+                attackSuccessfulText = True
             else:
                 print(player1.name,"tries to hit",player2.name,"with a",player1.element+"bending attack","but the shots cancel out")
         #user beats
@@ -68,11 +87,13 @@ def compareStats(player1,player2):
             if player1.movePower >= player2.movePower:
                 player2.health -= 2
                 print(player1.name,"lands a strong hit on",player2.name,"with their",player1.element+"bending","while",player2.name,"is distracted")
-                print(player2.name,"gets pushed back to zone",player2.health)
+                #print(player2.name,"gets pushed back to zone",player2.health)
+                attackSuccessfulText = True
             else:
                 player2.health -= 1
                 print(player1.name,"hits",player2.name,"with their",player1.element+"bending","while",player2.name,"is distracted")
-                print(player2.name,"gets pushed back to zone",player2.health)
+                #print(player2.name,"gets pushed back to zone",player2.health)
+                attackSuccessfulText = True
         #beats user
         elif player2.moveChoice == "block":
             print(player1.name,"tries to hit",player2.name,"with their",player1.element+"bending","but gets blocked")
@@ -84,7 +105,8 @@ def compareStats(player1,player2):
             if player1.movePower >= player2.movePower:
                 player2.health -= 1
                 print(player1.name,"hits",player2.name,"with their",player1.element+"bending")
-                print(player2.name,"gets pushed back to zone",player2.health)
+                #print(player2.name,"gets pushed back to zone",player2.health)
+                attackSuccessfulText = True
             else:
                 print(player2.name,"manages to block",player1.name+"'s",player1.element+"bending attacks")
         #user beats
@@ -92,11 +114,13 @@ def compareStats(player1,player2):
             if player1.movePower >= player2.movePower:
                 player2.health -= 2
                 print(player1.name,"counters and staggers",player2.name,"with their",player1.element+"bending")
-                print(player2.name,"gets pushed back to zone",player2.health)
+                #print(player2.name,"gets pushed back to zone",player2.health)
+                attackSuccessfulText = True
             else:
                 player2.health -= 1
                 print(player1.name,"counters",player2.name+"'s",player2.element+"bending attack with their",player1.element+"bending")
-                print(player2.name,"gets pushed back to zone",player2.health)
+                #print(player2.name,"gets pushed back to zone",player2.health)
+                attackSuccessfulText = True
         #beats user
         elif player2.moveChoice == "observe":
             print(player1.name+"'s",player1.element+"bending attack gets read by",player2.name)
@@ -108,28 +132,59 @@ def compareStats(player1,player2):
             if player1.movePower >= player2.movePower:
                 player2.health -= 1
                 print(player1.name,"gets a clean",player1.element+"bending hit against",player2.name)
-                print(player2.name,"gets pushed back to zone",player2.health)
+                #print(player2.name,"gets pushed back to zone",player2.health)
+                attackSuccessfulText = True
             else:
                 print(player1.name,"tries to hit",player2.name,"with their",player1.element+"bending","but misses")
         #user beats
         elif player2.moveChoice == "block":
             if player1.movePower >= player2.movePower:
                 player2.health -= 2
-                print(player1.name,"pinpoints",player2.name,"with their",player1.element+"bending")
-                print(player2.name,"gets pushed back to zone",player2.health)
+                if random.randrange(1,10) <= 2:
+                    print(player1.name,"notices that",player2.name,"is planning on being on the defensive and adjusts their",player1.element+"bending attacking technique")
+                else:
+                    print(player1.name,"pinpoints",player2.name+"'s weakpoints with their",player1.element+"bending")
+                #print(player2.name,"gets pushed back to zone",player2.health)
+                attackSuccessfulText = True
             else:
                 player2.health -= 1
                 print(player1.name,"rapid fires",player1.element+"bending attacks and hits",player2.name)
-                print(player2.name,"gets pushed back to zone",player2.health)
+                #print(player2.name,"gets pushed back to zone",player2.health)
+                attackSuccessfulText = True
         #beats user
         elif player2.moveChoice == "attack":
-            if random.randrange(1,3) <= 2:
+            if random.randrange(1,10) <= 6:
                 print(player1.name,"tries to hit",player2.name+", but isn't fast enough")
+            elif random.randrange(1,10) <= 3:
+                print(player1.name,"makes an attampt to attack, but",player2.name+"'s attacks are too aggressive and cancel shots out")
             else:
-                print(player1.name+"'s",player1.element+"bending attacks are too slow for ",player2.name+", all shots miss")
+                print(player1.name+"'s",player1.element+"bending attacks are too slow for",player2.name+", all shots miss")
+
+
+
+
+
+    #print text for when the attack has been successful and the opponent player gets pushed back
+    if attackSuccessfulText == True:
+        if False: #test out critical hits
+            if random.randint(1,critRate) == critRate:
+                player2.health -= 1
+                print("critical hit!")
+
+        
+        if player2.health == innerZone:
+            print(player2.name,"gets pushed back to the inner zone")
+        elif player2.health == middleZone:
+            print(player2.name,"gets pushed back to the middle zone")
+        elif player2.health == outsideZone:
+            print(player2.name,"gets pushed back to the outside zone")
+        #print(player2.name,"gets pushed back to zone",player2.health)
+
+
+
     if player2.health <= 0:
         if random.randrange(1,10) <= 6:
-            print(player2.name,"has been knocked out!")
+            print(player2.name,"gets knocked out of the arena!")
         #elif random.randrange(1,10) <= 4:
             #print(player2.name,"has been knocked out!")
         else:
@@ -178,9 +233,9 @@ def generateText(currentCharacter,targetCharacter,specificOne):
         ran = specificOne
     if ran <= 4:
         if random.randint(1,100)<=65:
-            print("["+currentCharacter.name+" has a "+random.choice(attitude),"conversation with",targetCharacter.name+", "+random.choice(eventActions)+" "+random.choice(eventSubject)+"]")
+            print("["+currentCharacter.name+" has a "+random.choice(attitude),"conversation with",targetCharacter.name+", Topic: "+random.choice(eventActions)+" "+random.choice(eventSubject)+"]")
         else:
-            print("["+currentCharacter.name+" has a "+random.choice(attitude),"monologue about",targetCharacter.name+", "+random.choice(eventActions)+" "+random.choice(eventSubject)+"]")
+            print("["+currentCharacter.name+" has a "+random.choice(attitude),"monologue about",targetCharacter.name+", Topic: "+random.choice(eventActions)+" "+random.choice(eventSubject)+"]")
     elif ran <= 7:
         #randomScenePlots(currentCharacter)
         print("[Scene Description: "+random.choice(eventActions)+" "+random.choice(eventSubject)+"]")

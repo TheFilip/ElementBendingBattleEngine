@@ -17,12 +17,18 @@ winningName = "xx"
 #winningTeam="2"
 homeTeam = [Yuka,Asuka,Mei]
 awayTeam = [JinHo,Kaito,Renji]
+#homeTeam=[JinHo,Kaito,Renji]#[Caikoge,Leichi,Ohwang]
+#awayTeam=[Shoukim,Wenchoi,Chunpang]#[Sun,Pangka,Sueyru]
+
+
+
+
 
 program("Home",homeTeam,"Away",awayTeam)
 
 
 
-while False:
+while True:
     generateText(random.choice(homeTeam+awayTeam),random.choice(homeTeam+awayTeam),7)
     generateText(random.choice(homeTeam+awayTeam),random.choice(homeTeam+awayTeam),None)
 

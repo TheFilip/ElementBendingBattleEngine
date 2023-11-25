@@ -79,12 +79,22 @@ def match(team1,team2):
     #team2 = b.copy()
     print(firstTeamName)
     for i in team1:
-        print(i.name,"the",i.element+"bender -",i.health)
+        if i.health == innerZone:
+            print(i.name,"the",i.element+"bender - Inner Zone")
+        elif i.health == middleZone:
+            print(i.name,"the",i.element+"bender - Middle Zone")
+        elif i.health == outsideZone:
+            print(i.name,"the",i.element+"bender - Outside Zone")
     print("-----")
         #print out all players for second team
     print(secondTeamName)
     for i in team2:
-        print(i.name,"the",i.element+"bender -",i.health)
+        if i.health == innerZone:
+            print(i.name,"the",i.element+"bender - Inner Zone")
+        elif i.health == middleZone:
+            print(i.name,"the",i.element+"bender - Middle Zone")
+        elif i.health == outsideZone:
+            print(i.name,"the",i.element+"bender - Outside Zone")
     #print("----------")
     #turnPlayers.sort(key=lambda x: x.initiative, reverse=True)
                         #run combat per player for each team
@@ -139,7 +149,7 @@ def match(team1,team2):
         #turnPlayers.insert(team1)
         #turnPlayers.insert(team2)
         #PRINT HEALTH OF PLAYERS AT START OF ROUND
-        print("----------")
+        #print("----------")
         if len(team1) == 0:
             break
         else:
@@ -160,17 +170,33 @@ def match(team1,team2):
 
 
 
+                
+
+
+
+
                 #print out all players for first team
                 if True:
                     if random.randrange(1,100) <= 50:
+                        print("----------")
                         print(firstTeamName)
                         for i in team1:
-                            print(i.name,"the",i.element+"bender -",i.health)
+                            if i.health == innerZone:
+                                print(i.name,"the",i.element+"bender - Inner Zone")
+                            elif i.health == middleZone:
+                                print(i.name,"the",i.element+"bender - Middle Zone")
+                            elif i.health == outsideZone:
+                                print(i.name,"the",i.element+"bender - Outside Zone")
                         print("-----")
                         #print out all players for second team
                         print(secondTeamName)
                         for i in team2:
-                            print(i.name,"the",i.element+"bender -",i.health)
+                            if i.health == innerZone:
+                                print(i.name,"the",i.element+"bender - Inner Zone")
+                            elif i.health == middleZone:
+                                print(i.name,"the",i.element+"bender - Middle Zone")
+                            elif i.health == outsideZone:
+                                print(i.name,"the",i.element+"bender - Outside Zone")
                         print("----------")
                         turnPlayers.sort(key=lambda x: x.initiative, reverse=True)
                         #run combat per player for each team
@@ -198,8 +224,8 @@ def match(team1,team2):
                     elif not team2:
                         pass
                     else:
-                        print("-")
-                        print(i.name,"-",i.health)
+                        
+                        #print(i.name,"- currently in zone",i.health) #print out what zones the player is on.
                         if not team1 and not team2:
                             pass
                         else:
@@ -302,7 +328,7 @@ def match(team1,team2):
 
     resultsList.append(roundResults)
 
-    print("----- ROUND FINISH -----")
+    #print("----- ROUND FINISH -----")
 
 
 
