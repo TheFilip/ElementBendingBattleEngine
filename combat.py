@@ -59,12 +59,25 @@ def compareStats(player1,player2):
 
 
 
+
+
+
+    #Element Bonuses
     if player1.element == "Earth" and player2.element == "Water":
         player1.movePower *= elementBonus
     elif player1.element == "Water" and player2.element == "Fire":
         player1.movePower *= elementBonus
-    elif player1.element == "Fire" and player2.element == "Earth":
+    elif player1.element == "Fire" and player2.element == "Earth" or player1.element == "Fire" and player2.element == "Air":
         player1.movePower *= elementBonus
+    elif player1.element == "Air" and player2.element == "Earth" or player1.element == "Air" and player2.element == "Water":
+        player1.movePower *= elementBonus
+
+
+
+
+
+
+
 
 #Player Choice being Attack
     if player1.moveChoice == "attack":

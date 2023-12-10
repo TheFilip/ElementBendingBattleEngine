@@ -15,20 +15,20 @@ from main import *
 
 winningName = "xx"
 #winningTeam="2"
-homeTeam = [Yuka,Asuka,Mei]
-awayTeam = [JinHo,Kaito,Renji]
-#homeTeam=[JinHo,Kaito,Renji]#[Caikoge,Leichi,Ohwang]
-#awayTeam=[Shoukim,Wenchoi,Chunpang]#[Sun,Pangka,Sueyru]
+#homeTeam = [Yuka,Asuka,Mei]
+#awayTeam = [JinHo,Kaito,Renji]
+homeTeam=[JinHo,Kaito,Renji]#[Caikoge,Leichi,Ohwang]
+awayTeam=[Wenchoi,Chunpang,Shoukim]#[Sun,Pangka,Sueyru]
 
 
 
 
 
-program("Home",homeTeam,"Away",awayTeam)
+#program("Home",homeTeam,"Away",awayTeam)
 
 
 
-while True:
+while False:
     generateText(random.choice(homeTeam+awayTeam),random.choice(homeTeam+awayTeam),7)
     generateText(random.choice(homeTeam+awayTeam),random.choice(homeTeam+awayTeam),None)
 
