@@ -13,6 +13,8 @@ from matchInfo import *
 random.seed(int(seed), version=2)
 
 baseHitTarget = 3
+elementList = ["Earth","Fire","Water"]
+
 global RedTeam,BlueTeam
 
 
@@ -69,6 +71,25 @@ totalHP1 = 0
 totalHP2 = 0
 potMVPs = []
 turnPlayers = []
+
+
+#timer for rounds
+maxRoundTime = 7
+currentRoundTime = 0
+timerActive = False
+
+def roundTimeAdd():
+    if timerActive == True:
+        global currentRoundTime
+        print(str(currentRoundTime)+" minutes has passed")
+        currentRoundTime += random.randrange(2,12)
+    
+
+
+
+
+
+
 def match(team1,team2):
     global teamA, teamB
     global totalHP1, totalHP2, totalRoundsPassed
@@ -77,7 +98,7 @@ def match(team1,team2):
     roundResults = []
     #team1 = a.copy()
     #team2 = b.copy()
-    print(firstTeamName)
+    print("----------\n"+firstTeamName)
     for i in team1:
         if i.health == innerZone:
             print(i.name,"the",i.element+"bender - Inner Zone")
@@ -85,9 +106,8 @@ def match(team1,team2):
             print(i.name,"the",i.element+"bender - Middle Zone")
         elif i.health == outsideZone:
             print(i.name,"the",i.element+"bender - Outside Zone")
-    print("-----")
         #print out all players for second team
-    print(secondTeamName)
+    print("-----\n"+secondTeamName)
     for i in team2:
         if i.health == innerZone:
             print(i.name,"the",i.element+"bender - Inner Zone")
@@ -95,14 +115,28 @@ def match(team1,team2):
             print(i.name,"the",i.element+"bender - Middle Zone")
         elif i.health == outsideZone:
             print(i.name,"the",i.element+"bender - Outside Zone")
-    #print("----------")
+    print("----------")
     #turnPlayers.sort(key=lambda x: x.initiative, reverse=True)
                         #run combat per player for each team
     
 
     #t1W=0
     #t2W=0
+    
     print("----- NEW MATCH ROUND -----")
+
+
+
+
+
+
+    global currentRoundTime
+    currentRoundTime = 0 #timer resets to 0 at start of round
+
+
+
+
+
     while len(team1)>0 and len(team2)>0:
         global yP, xP, yPP
         totalHP1 = 0
@@ -150,6 +184,21 @@ def match(team1,team2):
         #turnPlayers.insert(team2)
         #PRINT HEALTH OF PLAYERS AT START OF ROUND
         #print("----------")
+
+
+
+
+        if currentRoundTime >= maxRoundTime: #if the current time that passed in round is more than maximum allowed, end round.
+            print("Time ran out!")
+            break
+        else:
+            roundTimeAdd()
+
+
+
+
+
+
         if len(team1) == 0:
             break
         else:
@@ -354,6 +403,8 @@ def program(aTeamName,a,bTeamName,b):
 
 
     for i in range(runs):
+        if t1W == 2 or t2W == 2:
+            break
         for u in a:
             u.health = baseHitTarget
         for u in b:
@@ -362,21 +413,17 @@ def program(aTeamName,a,bTeamName,b):
         teamB = b.copy()
         match(teamA,teamB)
 
-        if not teamA and not teamB: #IF A DRAW HAPPENS
-            for u in a:
-                u.health = baseHitTarget
-            for u in b:
-                u.health = baseHitTarget
+        if len(teamA) == len(teamB): #IF A DRAW HAPPENS #not teamA and not teamB
             teamA = a.copy()
             teamB = b.copy()
-            elementChosen = random.choice(["Earth","Fire","Water"])
+            elementChosen = random.choice(elementList)
             for p in teamA:
                 if p.element != elementChosen:
                     teamA.remove(p)
             for p in teamB:
                 if p.element != elementChosen:
                     teamB.remove(p)
-            print("A draw!",elementChosen+"benders are going to battle this one out!")
+            print("A draw has happened!",elementChosen+"benders are going to battle this one out!")
             match(teamA,teamB)
 
 
@@ -413,7 +460,7 @@ def program(aTeamName,a,bTeamName,b):
         
         print(firstTeamName,":",secondTeamName)
         print((t1W),":",((t2W)))
-        print(((t1W/runs)*100),"win %:win %",(((t2W)/runs))*100)
+        print(((t1W/(t1W+t2W))*100),"win %:win %",(((t2W)/(t1W+t2W)))*100)
         print("Potential MVPs:",potMVPs)
         teamA = a.copy()
         teamB = b.copy()

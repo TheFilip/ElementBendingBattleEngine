@@ -30,6 +30,14 @@ elementBonus = 1.1
 
 
 critRate = 20
+critsActive = False
+
+
+
+
+
+
+
 
 
 
@@ -67,9 +75,9 @@ def compareStats(player1,player2):
         player1.movePower *= elementBonus
     elif player1.element == "Water" and player2.element == "Fire":
         player1.movePower *= elementBonus
-    elif player1.element == "Fire" and player2.element == "Earth" or player1.element == "Fire" and player2.element == "Air":
+    elif player1.element == "Fire" and player2.element == "Air": #oringally + future potentially: Earth
         player1.movePower *= elementBonus
-    elif player1.element == "Air" and player2.element == "Earth" or player1.element == "Air" and player2.element == "Water":
+    elif player1.element == "Air" and player2.element == "Earth":
         player1.movePower *= elementBonus
 
 
@@ -77,13 +85,13 @@ def compareStats(player1,player2):
 
 
 
-
+#Player Choosing Action for Turn
 
 #Player Choice being Attack
     if player1.moveChoice == "attack":
         #same as user
         if player2.moveChoice == "attack":
-            if player1.movePower >= player2.movePower:
+            if player1.movePower > player2.movePower:
                 player2.health -= 1
                 if random.randrange(1,10) <= 7:
                     print(player1.name,"hits",player2.name,"with their",player1.element+"bending")
@@ -96,8 +104,8 @@ def compareStats(player1,player2):
             else:
                 print(player1.name,"tries to hit",player2.name,"with a",player1.element+"bending attack","but the shots cancel out")
         #user beats
-        elif player2.moveChoice == "observe":
-            if player1.movePower >= player2.movePower:
+        elif player2.moveChoice == "observe" or player2.moveChoice == "bending":
+            if player1.movePower > player2.movePower:
                 player2.health -= 2
                 print(player1.name,"lands a strong hit on",player2.name,"with their",player1.element+"bending","while",player2.name,"is distracted")
                 #print(player2.name,"gets pushed back to zone",player2.health)
@@ -108,14 +116,14 @@ def compareStats(player1,player2):
                 #print(player2.name,"gets pushed back to zone",player2.health)
                 attackSuccessfulText = True
         #beats user
-        elif player2.moveChoice == "block":
+        elif player2.moveChoice == "block" or player2.moveChoice == "maneuver":
             print(player1.name,"tries to hit",player2.name,"with their",player1.element+"bending","but gets blocked")
 
 #Player Choice being Block
     elif player1.moveChoice == "block":
         #same as user
         if player2.moveChoice == "block":
-            if player1.movePower >= player2.movePower:
+            if player1.movePower > player2.movePower:
                 player2.health -= 1
                 print(player1.name,"hits",player2.name,"with their",player1.element+"bending")
                 #print(player2.name,"gets pushed back to zone",player2.health)
@@ -123,8 +131,8 @@ def compareStats(player1,player2):
             else:
                 print(player2.name,"manages to block",player1.name+"'s",player1.element+"bending attacks")
         #user beats
-        elif player2.moveChoice == "attack":
-            if player1.movePower >= player2.movePower:
+        elif player2.moveChoice == "attack" or player2.moveChoice == "observe":
+            if player1.movePower > player2.movePower:
                 player2.health -= 2
                 print(player1.name,"counters and staggers",player2.name,"with their",player1.element+"bending")
                 #print(player2.name,"gets pushed back to zone",player2.health)
@@ -135,14 +143,14 @@ def compareStats(player1,player2):
                 #print(player2.name,"gets pushed back to zone",player2.health)
                 attackSuccessfulText = True
         #beats user
-        elif player2.moveChoice == "observe":
+        elif player2.moveChoice == "maneuver" or player2.moveChoice == "bending":
             print(player1.name+"'s",player1.element+"bending attack gets read by",player2.name)
 
 #Player Choice being Observe
     elif player1.moveChoice == "observe":
         #same as user
         if player2.moveChoice == "observe":
-            if player1.movePower >= player2.movePower:
+            if player1.movePower > player2.movePower:
                 player2.health -= 1
                 print(player1.name,"gets a clean",player1.element+"bending hit against",player2.name)
                 #print(player2.name,"gets pushed back to zone",player2.health)
@@ -150,8 +158,8 @@ def compareStats(player1,player2):
             else:
                 print(player1.name,"tries to hit",player2.name,"with their",player1.element+"bending","but misses")
         #user beats
-        elif player2.moveChoice == "block":
-            if player1.movePower >= player2.movePower:
+        elif player2.moveChoice == "bending" or player2.moveChoice == "maneuver":
+            if player1.movePower > player2.movePower:
                 player2.health -= 2
                 if random.randrange(1,10) <= 2:
                     print(player1.name,"notices that",player2.name,"is planning on being on the defensive and adjusts their",player1.element+"bending attacking technique")
@@ -165,7 +173,7 @@ def compareStats(player1,player2):
                 #print(player2.name,"gets pushed back to zone",player2.health)
                 attackSuccessfulText = True
         #beats user
-        elif player2.moveChoice == "attack":
+        elif player2.moveChoice == "attack" or player2.moveChoice == "block":
             if random.randrange(1,10) <= 6:
                 print(player1.name,"tries to hit",player2.name+", but isn't fast enough")
             elif random.randrange(1,10) <= 3:
@@ -173,13 +181,72 @@ def compareStats(player1,player2):
             else:
                 print(player1.name+"'s",player1.element+"bending attacks are too slow for",player2.name+", all shots miss")
 
+#Player Choice being Maneuver
+    elif player1.moveChoice == "maneuver":
+        #same as user
+        if player2.moveChoice == "maneuver":
+            if player1.movePower > player2.movePower:
+                player2.health -= 1
+                print(player1.name, "skillfully maneuvers and lands a precise", player1.element + "bending hit against", player2.name)
+                #print(player2.name,"gets pushed back to zone",player2.health)
+                attackSuccessfulText = True
+            else:
+                print(player1.name,"attempts to hit",player2.name,"with their",player1.element+"bending","but misses")
+        #user beats
+        elif player2.moveChoice == "block" or player2.moveChoice == "attack":
+            if player1.movePower > player2.movePower:
+                player2.health -= 2
+                print(player1.name, "skillfully maneuvers and lands a precise", player1.element + "bending hit against", player2.name)
+                #print(player2.name,"gets pushed back to zone",player2.health)
+                attackSuccessfulText = True
+            else:
+                player2.health -= 1
+                print(player1.name,"rapid fires",player1.element+"bending attacks and hits",player2.name)
+                #print(player2.name,"gets pushed back to zone",player2.health)
+                attackSuccessfulText = True
+        #beats user
+        elif player2.moveChoice == "bending" or player2.moveChoice == "observe":
+            print(player1.name,"tries to hit",player2.name+", but isn't fast enough")
+
+#Player Choice being Bending
+    elif player1.moveChoice == "bending":
+        #same as user
+        if player2.moveChoice == "bending":
+            if player1.movePower > player2.movePower:
+                player2.health -= 1
+                print(player1.name+"'s",player1.element+"bending is superior to",player2.name+"'s bending")
+                #print(player2.name,"gets pushed back to zone",player2.health)
+                attackSuccessfulText = True
+            else:
+                print(player1.name,"tries to hit",player2.name,"with their",player1.element+"bending","but misses")
+        #user beats
+        elif player2.moveChoice == "block" or player2.moveChoice == "maneuver":
+            if player1.movePower > player2.movePower:
+                player2.health -= 2
+                print(player1.name,"notices that",player2.name,"is planning on being on the defensive and adjusts their",player1.element+"bending attacking technique")
+                #print(player2.name,"gets pushed back to zone",player2.health)
+                attackSuccessfulText = True
+            else:
+                player2.health -= 1
+                print(player1.name,"rapid fires",player1.element+"bending attacks and hits",player2.name)
+                #print(player2.name,"gets pushed back to zone",player2.health)
+                attackSuccessfulText = True
+        #beats user
+        elif player2.moveChoice == "attack" or player2.moveChoice == "observe":
+            print(player1.name,"tries to hit",player2.name+", but isn't fast enough")
+
+
+
+
+
+
 
 
 
 
     #print text for when the attack has been successful and the opponent player gets pushed back
-    if attackSuccessfulText == True:
-        if False: #test out critical hits
+    if attackSuccessfulText:
+        if critsActive: #test out critical hits
             if random.randint(1,critRate) == critRate:
                 player2.health -= 1
                 print("critical hit!")
@@ -191,6 +258,7 @@ def compareStats(player1,player2):
             print(player2.name,"gets pushed back to the middle zone")
         elif player2.health == outsideZone:
             print(player2.name,"gets pushed back to the outside zone")
+        player1.successfulHits+=1
         #print(player2.name,"gets pushed back to zone",player2.health)
 
 
@@ -255,3 +323,7 @@ def generateText(currentCharacter,targetCharacter,specificOne):
     else:
         print("["+currentCharacter.name,"Character Action Description: "+random.choice(eventActions)+" "+random.choice(eventSubject)+"]")
     #print("generating text")
+
+
+def generateConversation(currentCharacter,targetCharacter):
+    print("conversation")
