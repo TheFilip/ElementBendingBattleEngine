@@ -8,17 +8,24 @@ from main import *
 
 
 
-
-homeTeam = [Yuka,Asuka,Mei]
-awayTeam = [JinHo,Kaito,Renji]
-
+homeTeam = [Wangchunlei,Nida,Sado]#[Yuka,Asuka,Mei]
+awayTeam = [Laokhan,Shoushao,Yiega]#[JinHo,Kaito,Renji]
 
 
 
 
 
 
-program("Home",homeTeam,"Away",awayTeam)
+
+phase1("Home",homeTeam,"Away",awayTeam)
+
+#outputStats(homeTeam,awayTeam)
+
+
+
+
+
+
 
 
 while False:

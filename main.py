@@ -5,6 +5,8 @@
 #team stat too, sum all and divide by 150(?) and thats a stat multiplier before comparesent.
 #picks random opponent, each needs to be hit 9 times to be knocked off. (time limit?)
 import random, sys, matplotlib.pyplot as plt, numpy as np
+import plotly.express as px
+import pandas as pd
 from statistics import mean
 from scipy.interpolate import make_interp_spline
 from combat import *
@@ -106,7 +108,7 @@ def match(team1,team2):
             print(i.name,"the",i.element+"bender - Middle Zone")
         elif i.health == outsideZone:
             print(i.name,"the",i.element+"bender - Outside Zone")
-        #print out all players for second team
+    #print out all players for second team
     print("-----\n"+secondTeamName)
     for i in team2:
         if i.health == innerZone:
@@ -354,6 +356,7 @@ def match(team1,team2):
         for i in team1:
             winners.append(i.name)
             #knockoutAmounts.extend((i.name,i.knockedoutAmount))
+
         printWinners()
         t1W +=1
     elif len(team1)<len(team2):
@@ -361,6 +364,7 @@ def match(team1,team2):
         for i in team2:
             winners.append(i.name)
             #knockoutAmounts.extend((i.name,i.knockedoutAmount))
+
         printWinners()
         t2W +=1
     else:
@@ -382,7 +386,7 @@ def match(team1,team2):
 
 
 #FIGHT HAPPENS
-def program(aTeamName,a,bTeamName,b):
+def phase1(aTeamName,a,bTeamName,b):
     global winningTeam,winningName, firstTeamName, secondTeamName
     firstTeamName = aTeamName
     secondTeamName = bTeamName
@@ -466,10 +470,10 @@ def program(aTeamName,a,bTeamName,b):
         teamB = b.copy()
         print(aTeamName+"\n----")
         for i in teamA:
-            print(i.name+":",i.knockedoutAmount)
+            print(i.name+":",i.knockedoutAmount," - successful hits:",i.successfulHits)
         print("\n"+bTeamName+"\n----")
         for i in teamB:
-            print(i.name+":",i.knockedoutAmount)
+            print(i.name+":",i.knockedoutAmount," - successful hits:",i.successfulHits)
             
 
 
@@ -545,3 +549,53 @@ def program(aTeamName,a,bTeamName,b):
     elif t2W>t1W:
         winningName = "B"
     winningTeam = winningName
+
+
+
+
+
+#output stats and generate scatter radar graphs for all players
+def outputStats(a, b):  
+    for i in a:
+        df = pd.DataFrame(dict(
+            r=[i.attackStat, i.blockStat, i.bendingStat, i.maneuverStat, i.observeStat],
+            theta=['Offense', 'Defense', 'Bending', 'Maneuver', 'Vision'],
+        ))
+        fig = px.line_polar(df, r='r', theta='theta', line_close=True)
+        fig.update_polars(
+            radialaxis_tickvals=[0, 20, 40, 60, 80, 100],
+            radialaxis_tickmode="array",
+            radialaxis_range=[0, 100],
+        )
+        fig.update_layout(
+            font=dict(size=20),
+            title=i.name,
+            title_x=0.5,
+        )
+        # Add fill to the polar area
+        fig.update_traces(fill='toself')  # Added fill='toself'
+        fig.show()
+
+    for i in b:
+        df = pd.DataFrame(dict(
+            r=[i.attackStat, i.blockStat, i.bendingStat, i.maneuverStat, i.observeStat],
+            theta=['Offense', 'Defense', 'Bending', 'Maneuver', 'Vision'],
+        ))
+        fig = px.line_polar(df, r='r', theta='theta', line_close=True)
+        fig.update_polars(
+            radialaxis_tickvals=[0, 20, 40, 60, 80, 100],
+            radialaxis_tickmode="array",
+            radialaxis_range=[0, 100],
+        )
+        fig.update_layout(
+            font=dict(size=20),
+            title=i.name,
+            title_x=0.5,
+        )
+        # Add fill to the polar area
+        fig.update_traces(fill='toself')  # Added fill='toself'
+        fig.show()
+    for i in a:
+        print(i.name,"-","Offense:",i.attackStat,"Defense:",i.blockStat,"Bending:",i.bendingStat,"Maneuver:",i.maneuverStat,"Vision:",i.observeStat)
+    for i in b:
+        print(i.name,"-","Offense:",i.attackStat,"Defense:",i.blockStat,"Bending:",i.bendingStat,"Maneuver:",i.maneuverStat,"Vision:",i.observeStat)

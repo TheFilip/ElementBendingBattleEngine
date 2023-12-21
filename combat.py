@@ -8,7 +8,6 @@ global dialogAmount
 dialogAmount = 0
 dialogAmountTarget = ((random.randint(45,55))*runs)
 
-baseHitTarget = 3
 
 
 
@@ -18,8 +17,8 @@ displayStoryText = True
         
 #zone thresholds
 #print(i.name,"the",i.element+"bender - zone",i.health)
-innerZone = 3
-middleZone = 2
+innerZone = baseHitTarget
+middleZone = round(baseHitTarget/2)
 outsideZone = 1
 
 
@@ -30,7 +29,8 @@ elementBonus = 1.1
 
 
 critRate = 20
-critsActive = False
+criticalHitText = random.choice(["Flow has been awakened for this attack which causes opponent to get knocked back further!","Which strengthened the attack!"])
+critsActive = True
 
 
 
@@ -249,7 +249,7 @@ def compareStats(player1,player2):
         if critsActive: #test out critical hits
             if random.randint(1,critRate) == critRate:
                 player2.health -= 1
-                print("critical hit!")
+                print(criticalHitText)
 
         
         if player2.health == innerZone:
