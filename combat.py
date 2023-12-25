@@ -28,7 +28,7 @@ outsideZone = 1
 elementBonus = 1.1
 
 
-critRate = 20
+critRate = 100
 criticalHitText = random.choice(["Flow has been awakened for this attack which causes opponent to get knocked back further!","Which strengthened the attack!"])
 critsActive = True
 
