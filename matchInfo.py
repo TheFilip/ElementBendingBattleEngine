@@ -72,9 +72,15 @@ class character_:
     def __init__(self,name,element,role,preference,initiativeBonus,ElementalPrecision,BendingSpeed,AdaptiveStrategy,TacticalAwareness,Composure,Adaptability,Resilience,PrecisionBlocking,Balance,ElementalDistortion,ElementalReserves,MentalToughness,Agility,Speed,Strength):
         self.name = name
         self.element = element
+
+
+
         self.health = baseHitTarget
+        #self.health = baseHitTarget+round(Resilience/16.66666667)
 
 
+
+        self.role = role
         #role bonus change
         ####DEFENSIVE
         if role == "Wall":
@@ -189,7 +195,8 @@ class character_:
         #apply stats
         self.level = 1
         self.star = 1
-
+        allStats = [initiativeBonus,ElementalPrecision,BendingSpeed,AdaptiveStrategy,TacticalAwareness,Composure,Adaptability,Resilience,PrecisionBlocking,Balance,ElementalDistortion,ElementalReserves,MentalToughness,Agility,Speed,Strength]
+        self.value = sum(allStats)/len(allStats)*(random.randrange(75,125)/100)
 
         self.attackStat = round((ElementalPrecision+BendingSpeed+AdaptiveStrategy+Agility+Speed+Strength)/6)
         self.blockStat = round((PrecisionBlocking+Resilience+Composure+Adaptability+ElementalReserves+MentalToughness)/6)
@@ -197,6 +204,7 @@ class character_:
         self.maneuverStat = round((Agility+Speed+Balance+Adaptability+ElementalDistortion)/5)
         self.bendingStat = round((BendingSpeed+ElementalPrecision+ElementalDistortion+ElementalReserves)/4)
         self.playmakeStat = round((AdaptiveStrategy+TacticalAwareness+Composure+Adaptability)/4)
+        #self.playmakeStat = round(((AdaptiveStrategy+TacticalAwareness+Composure+Adaptability)/4)*((self.level/10)+(self.star/100)+1)) <add stars+levels
 
 
 

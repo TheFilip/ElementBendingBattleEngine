@@ -5,22 +5,17 @@ from main import *
 
 
 
-
-
-
-homeTeam = [Wangchunlei,Nida,Sado]#[Yuka,Asuka,Mei]
-awayTeam = [Laokhan,Shoushao,Yiega]#[JinHo,Kaito,Renji]
-
-
-
+    
+homeTeam = [Yuka,Asuka,Mei]#ANGRYGEESE#[Lamcheung,Kim,Udeoru]#[Yuka,Asuka,Mei]
+awayTeam = [JinHo,Kaito,Renji]#IndustrialHeightsIronclads#[JinHo,Kaito,Renji]#[JinHo,Kaito,Renji]
+#createOwnTeam()
 
 
 
 
-phase1("Home",homeTeam,"Away",awayTeam)
+phase1("A",homeTeam,"B",awayTeam)
 
 #outputStats(homeTeam,awayTeam)
-
 
 
 

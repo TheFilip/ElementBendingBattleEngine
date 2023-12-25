@@ -75,17 +75,27 @@ potMVPs = []
 turnPlayers = []
 
 
+
+
 #timer for rounds
 maxRoundTime = 7
 currentRoundTime = 0
-timerActive = False
+totalTimePassed = 0
+timerActive = True
+timerRunOutActive = False
 
 def roundTimeAdd():
     if timerActive == True:
         global currentRoundTime
-        print(str(currentRoundTime)+" minutes has passed")
-        currentRoundTime += random.randrange(2,12)
+        currentRoundTime += random.randrange(1,6)+random.randrange(1,6)
+        print("---")
+        #print(str(currentRoundTime)+" minutes has passed")
+        print("Round Time: "+str(currentRoundTime)+" minutes")
+        print("---")
+        
     
+
+
 
 
 
@@ -94,12 +104,38 @@ def roundTimeAdd():
 
 def match(team1,team2):
     global teamA, teamB
-    global totalHP1, totalHP2, totalRoundsPassed
+    global totalHP1, totalHP2, totalRoundsPassed, totalTimePassed
     global winningTeam,winningName
     roundsPassed = 0
     roundResults = []
     #team1 = a.copy()
     #team2 = b.copy()
+    print("----------\n"+firstTeamName)
+    for i in team1:
+        if i.health == innerZone:
+            print(i.name,"the",i.element+"bending "+i.role)
+        elif i.health == middleZone:
+            print(i.name,"the",i.element+"bending "+i.role)
+        elif i.health == outsideZone:
+            print(i.name,"the",i.element+"bending "+i.role)
+    #print out all players for second team
+    print("-----\n"+secondTeamName)
+    for i in team2:
+        if i.health == innerZone:
+            print(i.name,"the",i.element+"bending "+i.role)
+        elif i.health == middleZone:
+            print(i.name,"the",i.element+"bending "+i.role)
+        elif i.health == outsideZone:
+            print(i.name,"the",i.element+"bending "+i.role)
+    print("----------")
+    #turnPlayers.sort(key=lambda x: x.initiative, reverse=True)
+                        #run combat per player for each team
+    
+
+    #t1W=0
+    #t2W=0
+    
+    print("----- NEW MATCH ROUND -----")
     print("----------\n"+firstTeamName)
     for i in team1:
         if i.health == innerZone:
@@ -118,15 +154,6 @@ def match(team1,team2):
         elif i.health == outsideZone:
             print(i.name,"the",i.element+"bender - Outside Zone")
     print("----------")
-    #turnPlayers.sort(key=lambda x: x.initiative, reverse=True)
-                        #run combat per player for each team
-    
-
-    #t1W=0
-    #t2W=0
-    
-    print("----- NEW MATCH ROUND -----")
-
 
 
 
@@ -189,12 +216,7 @@ def match(team1,team2):
 
 
 
-
-        if currentRoundTime >= maxRoundTime: #if the current time that passed in round is more than maximum allowed, end round.
-            print("Time ran out!")
-            break
-        else:
-            roundTimeAdd()
+        
 
 
 
@@ -323,7 +345,12 @@ def match(team1,team2):
                     #print("-")
                     #print(i.name,"-",i.health)
                     #compareStats(i,i.target)
-
+                if timerRunOutActive:
+                    if currentRoundTime >= maxRoundTime: #if the current time that passed in round is more than maximum allowed, end round.
+                        print("Time ran out!")
+                        break
+                else:
+                    roundTimeAdd()
 
 
 
@@ -344,6 +371,7 @@ def match(team1,team2):
     winners = []
 
     print("----- ROUND FINISH -----")
+    print("This round lastested",str(currentRoundTime),"minutes")
 
 
     def printWinners():
@@ -370,6 +398,7 @@ def match(team1,team2):
     else:
         print("Draw!")
     roundResults = [(len(team1),len(team2))]
+    totalTimePassed += currentRoundTime
     potMVPs.append(winners)
 
 
@@ -463,6 +492,7 @@ def phase1(aTeamName,a,bTeamName,b):
 
         
         print(firstTeamName,":",secondTeamName)
+        print("Match Time: "+str(totalTimePassed)+" minutes")
         print((t1W),":",((t2W)))
         print(((t1W/(t1W+t2W))*100),"win %:win %",(((t2W)/(t1W+t2W)))*100)
         print("Potential MVPs:",potMVPs)
@@ -558,8 +588,10 @@ def phase1(aTeamName,a,bTeamName,b):
 def outputStats(a, b):  
     for i in a:
         df = pd.DataFrame(dict(
-            r=[i.attackStat, i.blockStat, i.bendingStat, i.maneuverStat, i.observeStat],
-            theta=['Offense', 'Defense', 'Bending', 'Maneuver', 'Vision'],
+            #r=[i.attackStat, i.blockStat, i.bendingStat, i.maneuverStat, i.observeStat],
+            r=[i.bendingStat, i.attackStat, i.observeStat, i.maneuverStat, i.blockStat],
+            #theta=['Offense', 'Defense', 'Bending', 'Maneuver', 'Vision'],
+            theta=['Bending', 'Offense', 'Vision', 'Maneuver', 'Defense'],
         ))
         fig = px.line_polar(df, r='r', theta='theta', line_close=True)
         fig.update_polars(
@@ -578,8 +610,8 @@ def outputStats(a, b):
 
     for i in b:
         df = pd.DataFrame(dict(
-            r=[i.attackStat, i.blockStat, i.bendingStat, i.maneuverStat, i.observeStat],
-            theta=['Offense', 'Defense', 'Bending', 'Maneuver', 'Vision'],
+            r=[i.bendingStat, i.attackStat, i.observeStat, i.maneuverStat, i.blockStat],
+            theta=['Bending', 'Offense', 'Vision', 'Maneuver', 'Defense'],
         ))
         fig = px.line_polar(df, r='r', theta='theta', line_close=True)
         fig.update_polars(
@@ -599,3 +631,59 @@ def outputStats(a, b):
         print(i.name,"-","Offense:",i.attackStat,"Defense:",i.blockStat,"Bending:",i.bendingStat,"Maneuver:",i.maneuverStat,"Vision:",i.observeStat)
     for i in b:
         print(i.name,"-","Offense:",i.attackStat,"Defense:",i.blockStat,"Bending:",i.bendingStat,"Maneuver:",i.maneuverStat,"Vision:",i.observeStat)
+
+
+
+
+
+balance = 150
+def createOwnTeam():
+    global homeTeam,awayTeam, balance
+    #create own random team\
+    print(balance)
+    r1 = random.choice(playerList)
+    r2 = random.choice(playerList)
+    r3 = random.choice(playerList)
+    print(r1.name,"- Role:",r1.role,"~",r1.value,"\n"+r2.name,"- Role:",r2.role,"~",r2.value,"\n"+r3.name,"- Role:",r3.role,"~",r3.value)
+    p1 = input("Choose Player 1: ")
+    if p1 == r1.name:
+        p1 = r1
+        balance -= r1.value
+    elif p1 == r2.name:
+        p1 = r2
+        balance -= r2.value
+    elif p1 == r3.name:
+        p1 = r3
+        balance -= r3.value
+    print(balance)
+    r1 = random.choice(playerList)
+    r2 = random.choice(playerList)
+    r3 = random.choice(playerList)
+    print(r1.name,"- Role:",r1.role,"~",r1.value,"\n"+r2.name,"- Role:",r2.role,"~",r2.value,"\n"+r3.name,"- Role:",r3.role,"~",r3.value)
+    p2 = input("Choose Player 2: ")
+    if p2 == r1.name:
+        p2 = r1
+        balance -= r1.value
+    elif p2 == r2.name:
+        p2 = r2
+        balance -= r2.value
+    elif p2 == r3.name:
+        p2 = r3
+        balance -= r3.value
+    print(balance)
+    r1 = random.choice(playerList)
+    r2 = random.choice(playerList)
+    r3 = random.choice(playerList)
+    print(r1.name,"- Role:",r1.role,"~",r1.value,"\n"+r2.name,"- Role:",r2.role,"~",r2.value,"\n"+r3.name,"- Role:",r3.role,"~",r3.value)
+    p3 = input("Choose Player 3: ")
+    if p3 == r1.name:
+        p3 = r1
+        balance -= r1.value
+    elif p3 == r2.name:
+        p3 = r2
+        balance -= r2.value
+    elif p3 == r3.name:
+        p3 = r3
+        balance -= r3.value
+    homeTeam=[p1,p2,p3]
+    awayTeam = [random.choice(playerList),random.choice(playerList),random.choice(playerList)]
