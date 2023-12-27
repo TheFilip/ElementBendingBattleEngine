@@ -11,6 +11,7 @@ from statistics import mean
 from scipy.interpolate import make_interp_spline
 from combat import *
 from matchInfo import *
+from characterDB import *
 
 random.seed(int(seed), version=2)
 
