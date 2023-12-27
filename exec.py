@@ -6,16 +6,16 @@ from main import *
 
 
     
-homeTeam = [AputiOkafor, ChewYeongSu, YiYunJi]#[Lamcheung,Kim,Udeoru]#ANGRYGEESE#[Lamcheung,Kim,Udeoru]#[Yuka,Asuka,Mei]
-awayTeam = [ChoeJeongHo, ReehSangHoon, MoonSuMin]#[JinHo,Kaito,Renji]#IndustrialHeightsIronclads#[JinHo,Kaito,Renji]#[JinHo,Kaito,Renji]
+homeTeam = [Yuka,Asuka,Mei]
+awayTeam = [JinHo,Kaito,Renji]
 #createOwnTeam()
 
 
 
 
-#phase1("A",homeTeam,"B",awayTeam)
+phase1("A",homeTeam,"B",awayTeam)
 
-outputStats(homeTeam,awayTeam)
+#outputStats(homeTeam,awayTeam)
 
 
 
