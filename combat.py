@@ -3,10 +3,10 @@ from matchInfo import *
 
 random.seed(int(seed), version=2)
 
-chancesOfDescription = 13#65#/100%
+chancesOfDescription = 15#65#/100%
 global dialogAmount
 dialogAmount = 0
-dialogAmountTarget = ((random.randint(45,55))*runs)
+dialogAmountTarget = ((random.randint(47,60))*runs)
 
 
 
@@ -28,10 +28,17 @@ outsideZone = 1
 elementBonus = 1.1
 
 
+damageBeingTaken = 0
+#Critical Hits
 critRate = 100
-criticalHitText = random.choice(["Flow has been awakened for this attack which causes opponent to get knocked back further!","Which strengthened the attack!"])
+criticalHitText = random.choice(["Flow has been awakened for this attack which causes opponent to get knocked back further!"])
 critsActive = True
-
+def criticalAttack(damageBeingTaken,player):
+    if player.movePower >= 75:
+        #global damageBeingTaken
+        damageBeingTaken += 1
+        print(criticalHitText)
+        return damageBeingTaken
 
 
 
@@ -41,11 +48,11 @@ critsActive = True
 
 def printCurrentZone(player):
     if player.health == outsideZone:
-        print(player.name,"currently in - Inner Zone")
+        print(player.name,"currently in - Outside Zone")
     elif player.health <= middleZone:
         print(player.name,"currently in - Middle Zone")
     elif player.health <= innerZone:
-        print(player.name,"currently in - Outside Zone")
+        print(player.name,"currently in - Inner Zone")
 
 
 
@@ -63,31 +70,31 @@ def compareStats(player1,player2):
 
         printCurrentZone(player1)
     
-    if displayStoryText == "run":
+    if displayStoryText:
         global dialogAmount
-        if dialogAmount < dialogAmountTarget:
-            if random.randint(1,100) <= chancesOfDescription:
-                dialogAmount += 1
-                #print(dialogAmount,"/",dialogAmountTarget)
-                generateText(player1)
-            if random.randint(1,100) <= chancesOfDescription:
-                dialogAmount += 1
-                #print(dialogAmount,"/",dialogAmountTarget)
-                generateText(player2)
 
+        # if dialogAmount < dialogAmountTarget:
+        #     dialogAmount += 1
+        #     if random.randint(1,100) <= chancesOfDescription:
+        #         #print(dialogAmount,"/",dialogAmountTarget)
+        #         generateText(player1,player2,random.choice(["Monologue","Conversation"]))
+        if random.randint(1,10) <= 5:
+            generateText(player1,player2,random.choice(["Monologue","Conversation"]))
 
 
 
 
 
     #Element Bonuses
-    if player1.element == "Earth" and player2.element == "Water":
+    if player1.element == "Nature" and player2.element in ["Air","Water"]:
         player1.movePower *= elementBonus
-    elif player1.element == "Water" and player2.element == "Fire":
+    elif player1.element == "Air" and player2.element in ["Water","Earth"]:
         player1.movePower *= elementBonus
-    elif player1.element == "Fire" and player2.element == "Air":
+    elif player1.element == "Water" and player2.element in ["Earth","Fire"]:
         player1.movePower *= elementBonus
-    elif player1.element == "Air" and player2.element == "Earth":
+    elif player1.element == "Earth" and player2.element in ["Fire","Nature"]:
+        player1.movePower *= elementBonus
+    elif player1.element == "Fire" and player2.element in ["Nature","Air"]:
         player1.movePower *= elementBonus
 
 
@@ -143,7 +150,7 @@ def compareStats(player1,player2):
             if player2.moveChoice == "maneuver":
                 print(player2.name+" outmaneuvers "+player1.name+"'s defensive moves")
             else:
-                print(player1.name+"'s defensive form doesn't match up to "+player1.name+"'s bending skills")
+                print(player1.name+"'s defensive form doesn't match up to "+player2.name+"'s bending skills")
 
 #Player Choice being Observe
     elif player1.moveChoice == "observe":
@@ -226,17 +233,17 @@ def compareStats(player1,player2):
 
 
 
-    #print text for when the attack has been successful and the opponent player gets pushed back
+    #Activate when attack is successful
     if attackSuccessfulText:
         damageBeingTaken = 0
         damageBeingTaken += 1
-        if player1.movePower > player2.movePower and player1.moveChoice != player2.moveChoice:
+        if player1.movePower > player2.defensiveStat and player1.moveChoice != player2.moveChoice:
             print("That was an exceptionally strong move!")
             damageBeingTaken += 1
-        if critsActive: #test out critical hits
-            if random.randint(1,critRate) == critRate and player1.moveChoice != player2.moveChoice:
-                damageBeingTaken += 1
-                print(criticalHitText)
+
+            if critsActive: #test out critical hits
+                if random.randint(1,critRate) == critRate:
+                    damageBeingTaken = criticalAttack(damageBeingTaken,player1)
 
         player2.health -= damageBeingTaken
 
@@ -303,24 +310,22 @@ amountOfRandomPlot = 0
 
 
 
+listOfTextOptions = ["Character Action", "Monologue", "Conversation", "Scene Description"]
 
-def generateText(currentCharacter,targetCharacter,specificOne):
-    
-    if specificOne == None:
-        ran = random.randint(1,9)
-    else:
-        ran = specificOne
-    if ran <= 4:
-        if random.randint(1,100)<=65:
-            print("["+currentCharacter.name+" has a "+random.choice(attitude),"conversation with",targetCharacter.name+", Topic: "+random.choice(eventActions)+" "+random.choice(eventSubject)+"]")
-        else:
-            print("["+currentCharacter.name+" has a "+random.choice(attitude),"monologue about",targetCharacter.name+", Topic: "+random.choice(eventActions)+" "+random.choice(eventSubject)+"]")
-    elif ran <= 7:
-        #randomScenePlots(currentCharacter)
+def generateText(currentCharacter, targetCharacter, textToGenerate):
+    if textToGenerate is None:
+        textToGenerate = random.choice(listOfTextOptions)
+
+    if textToGenerate == "Conversation":
+        print("["+currentCharacter.name+" has a "+random.choice(attitude)+" conversation with "+targetCharacter.name+", Topic: "+random.choice(eventActions)+" "+random.choice(eventSubject)+"]")
+    elif textToGenerate == "Monologue":
+        print("["+currentCharacter.name+" has a "+random.choice(attitude)+" monologue about "+targetCharacter.name+", Topic: "+random.choice(eventActions)+" "+random.choice(eventSubject)+"]")
+    elif textToGenerate == "Scene Description":
+        # randomScenePlots(currentCharacter)
         print("[Scene Description: "+random.choice(eventActions)+" "+random.choice(eventSubject)+"]")
     else:
-        print("["+currentCharacter.name,"Character Action Description: "+random.choice(eventActions)+" "+random.choice(eventSubject)+"]")
-    #print("generating text")
+        print("["+currentCharacter.name+" Character Action Description: "+random.choice(eventActions)+" "+random.choice(eventSubject)+"]")
+
 
 
 def generateConversation(currentCharacter,targetCharacter):
