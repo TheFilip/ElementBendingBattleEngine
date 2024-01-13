@@ -89,12 +89,27 @@ def roundTimeAdd():
     if timerActive == True:
         global currentRoundTime
         currentRoundTime += random.randrange(1,6)+random.randrange(1,6)
-        print("---")
-        #print(str(currentRoundTime)+" minutes has passed")
-        print("Round Time: "+str(currentRoundTime)+" minutes")
-        print("---")
+        if random.randrange(1,10)<=8:
+            print("---")
+            #print(str(currentRoundTime)+" minutes has passed")
+            print("Round Time: "+str(currentRoundTime)+" minutes")
+            print("---")
         
     
+
+
+
+
+
+def playerSubstitute(listOfPlayers):
+    if True: #activate Substitues
+        subChance = 10#/100
+        while random.randint(1,100)<=subChance:
+            player = random.choice(listOfPlayers)
+            print(player.name,"should be substituted")
+            input()
+
+
 
 
 
@@ -109,8 +124,10 @@ def match(team1,team2):
     global winningTeam,winningName
     roundsPassed = 0
     roundResults = []
-    #team1 = a.copy()
-    #team2 = b.copy()
+    playerSubstitute(team1 + team2)
+
+
+
     print("----------\n"+firstTeamName)
     for i in team1:
         if i.health == innerZone:
@@ -135,8 +152,8 @@ def match(team1,team2):
 
     #t1W=0
     #t2W=0
-    
-    print("----- NEW MATCH ROUND -----")
+
+    print("----- NEW MATCH ROUND STARTS -----")
     print("----------\n"+firstTeamName)
     for i in team1:
         if i.health == innerZone:
@@ -251,29 +268,32 @@ def match(team1,team2):
 
                 #print out all players for first team
                 if True:
-                    if random.randrange(1,100) <= 50:
-                        print("----------")
-                        print(firstTeamName)
-                        for i in team1:
-                            if i.health == innerZone:
-                                print(i.name,"the",i.element+"bender - Inner Zone")
-                            elif i.health == middleZone:
-                                print(i.name,"the",i.element+"bender - Middle Zone")
-                            elif i.health == outsideZone:
-                                print(i.name,"the",i.element+"bender - Outside Zone")
-                        print("-----")
-                        #print out all players for second team
-                        print(secondTeamName)
-                        for i in team2:
-                            if i.health == innerZone:
-                                print(i.name,"the",i.element+"bender - Inner Zone")
-                            elif i.health == middleZone:
-                                print(i.name,"the",i.element+"bender - Middle Zone")
-                            elif i.health == outsideZone:
-                                print(i.name,"the",i.element+"bender - Outside Zone")
-                        print("----------")
-                        turnPlayers.sort(key=lambda x: x.initiative, reverse=True)
-                        #run combat per player for each team
+                    if currentRoundTime == 0:
+                        pass
+                    else:
+                        if random.randrange(1,100) <= 50:
+                            print("----------")
+                            print(firstTeamName)
+                            for i in team1:
+                                if i.health == innerZone:
+                                    print(i.name,"the",i.element+"bender - Inner Zone")
+                                elif i.health == middleZone:
+                                    print(i.name,"the",i.element+"bender - Middle Zone")
+                                elif i.health == outsideZone:
+                                    print(i.name,"the",i.element+"bender - Outside Zone")
+                            print("-----")
+                            #print out all players for second team
+                            print(secondTeamName)
+                            for i in team2:
+                                if i.health == innerZone:
+                                    print(i.name,"the",i.element+"bender - Inner Zone")
+                                elif i.health == middleZone:
+                                    print(i.name,"the",i.element+"bender - Middle Zone")
+                                elif i.health == outsideZone:
+                                    print(i.name,"the",i.element+"bender - Outside Zone")
+                            print("----------")
+                            turnPlayers.sort(key=lambda x: x.initiative, reverse=True)
+                            #run combat per player for each team
                 else:
                     print(firstTeamName)
                     for i in team1:
@@ -323,16 +343,6 @@ def match(team1,team2):
                                 yP+=1 
                             i.knockedoutAmount += 1
 
-                        if plotGen == True:
-                            global amountOfRandomPlot
-                            if amountOfRandomPlot != amountOfRandomPlotTarget:
-                                if random.randint(1,100) <= chancesOfDescription:
-                                    amountOfRandomPlot+=1
-                                    #generateText(i,random.choice(turnPlayers),None)
-                                    rCharacter = random.choice(turnPlayers)
-                                    while rCharacter == i:
-                                        rCharacter = random.choice(turnPlayers)
-                                    generateText(i,rCharacter,None)
 
 
 
@@ -372,7 +382,7 @@ def match(team1,team2):
     winners = []
 
     print("----- ROUND FINISH -----")
-    print("This round lastested",str(currentRoundTime),"minutes")
+    print("This round lasted",str(currentRoundTime),"minutes")
 
 
     def printWinners():
@@ -418,6 +428,19 @@ def match(team1,team2):
 #FIGHT HAPPENS
 def phase1(aTeamName,a,bTeamName,b):
     global winningTeam,winningName, firstTeamName, secondTeamName
+
+    def init():
+        global t1W,t2W,potMVPs,roundsPassed,totalRoundsPassed,totalTimePassed,roundResults,resultsList
+        t1W = 0
+        t2W = 0
+        potMVPs = []
+        roundResults = []
+        resultsList = []
+        roundsPassed = 0
+        totalRoundsPassed = 0
+        totalTimePassed = 0
+    init()
+
     firstTeamName = aTeamName
     secondTeamName = bTeamName
     #knockoutAmounts = []
@@ -495,6 +518,7 @@ def phase1(aTeamName,a,bTeamName,b):
         print(firstTeamName,":",secondTeamName)
         print("Match Time: "+str(totalTimePassed)+" minutes")
         print((t1W),":",((t2W)))
+        
         print(((t1W/(t1W+t2W))*100),"win %:win %",(((t2W)/(t1W+t2W)))*100)
         print("Potential MVPs:",potMVPs)
         teamA = a.copy()
@@ -502,10 +526,14 @@ def phase1(aTeamName,a,bTeamName,b):
         print(aTeamName+"\n----")
         for i in teamA:
             print(i.name+":",i.knockedoutAmount," - successful hits:",i.successfulHits)
+            i.knockedoutAmount = 0
+            i.successfulHits = 0
         print("\n"+bTeamName+"\n----")
         for i in teamB:
             print(i.name+":",i.knockedoutAmount," - successful hits:",i.successfulHits)
-            
+            i.knockedoutAmount = 0
+            i.successfulHits = 0
+        
 
 
 
@@ -586,7 +614,7 @@ def phase1(aTeamName,a,bTeamName,b):
 
 
 #output stats and generate scatter radar graphs for all players
-def outputStats(a, b):  
+def outputStats(a):  
     for i in a:
         df = pd.DataFrame(dict(
             #r=[i.attackStat, i.blockStat, i.bendingStat, i.maneuverStat, i.observeStat],
@@ -609,28 +637,7 @@ def outputStats(a, b):
         fig.update_traces(fill='toself')  # Added fill='toself'
         fig.show()
 
-    for i in b:
-        df = pd.DataFrame(dict(
-            r=[i.bendingStat, i.attackStat, i.observeStat, i.maneuverStat, i.blockStat],
-            theta=['Bending', 'Offense', 'Vision', 'Maneuver', 'Defense'],
-        ))
-        fig = px.line_polar(df, r='r', theta='theta', line_close=True)
-        fig.update_polars(
-            radialaxis_tickvals=[0, 20, 40, 60, 80, 100],
-            radialaxis_tickmode="array",
-            radialaxis_range=[0, 100],
-        )
-        fig.update_layout(
-            font=dict(size=20),
-            title=i.name,
-            title_x=0.5,
-        )
-        # Add fill to the polar area
-        fig.update_traces(fill='toself')  # Added fill='toself'
-        fig.show()
     for i in a:
-        print(i.name,"-","Offense:",i.attackStat,"Defense:",i.blockStat,"Bending:",i.bendingStat,"Maneuver:",i.maneuverStat,"Vision:",i.observeStat)
-    for i in b:
         print(i.name,"-","Offense:",i.attackStat,"Defense:",i.blockStat,"Bending:",i.bendingStat,"Maneuver:",i.maneuverStat,"Vision:",i.observeStat)
 
 

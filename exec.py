@@ -13,18 +13,14 @@ awayTeam = [JinHo,Kaito,Renji]
 
 
 
-phase1("A",homeTeam,"B",awayTeam)
+phase1("Team A",homeTeam,"Team B",awayTeam)
 
-#outputStats(homeTeam,awayTeam)
-
-
-
-
-
+#outputStats(homeTeam)
+#outputStats(awayTeam)
 
 
 while False:
-    generateText(random.choice(homeTeam+awayTeam),random.choice(homeTeam+awayTeam),7)
+    generateText(random.choice(homeTeam+awayTeam),random.choice(homeTeam+awayTeam),"Scene Description")
     generateText(random.choice(homeTeam+awayTeam),random.choice(homeTeam+awayTeam),None)
 
 

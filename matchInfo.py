@@ -20,7 +20,7 @@ variance = 20 #percentage since it adjusts to 100 total
 
 
 chooseSeed = False
-customSeed = 6916933039216240636
+customSeed = 3748094240235785835
 
 if chooseSeed == True:
     seed = customSeed
@@ -34,17 +34,6 @@ necessaryBonus = 1.2
 importantBonus = 1.1
 goodBonus = 1.05
 
-roleList = {
-    "Wall": [],
-    "Lockdown Sweeper": [],
-    "Zoner": [],
-    "Artist": [],
-    "Tactician": [],
-    "Playmaker": [],
-    "Bully": [],
-    "Cutman": [],
-    "Brawler": []
-}
 
 
 
@@ -54,9 +43,13 @@ roleList = {
 
 
 
-
-
-
+#supportPositions,defensePositions,offensePositions
+#Offense Positions
+offensePositions = ["Cutman","Bully","Brawler","Destroyer","Leviathan","Tempest"]
+#Defense Positions
+defensePositions = ["Zoner","Lockdown Sweeper","Wall","Guardian","Sentinel","Reaper"]
+#Support Positions
+supportPositions = ["Playmaker","Tactician","Artist","Phantom","Shadow Assassin","Manipulator"]
 
 
 
@@ -185,6 +178,116 @@ class character_:
             Resilience*=goodBonus
             AdaptiveStrategy*=goodBonus
 
+        ##Newest Roles
+        elif role == "Leviathan":
+            # necessary
+            PrecisionBlocking *= necessaryBonus
+            # important
+            Strength *= importantBonus
+            Resilience *= importantBonus
+            ElementalDistortion *= importantBonus
+            # good
+            Speed *= goodBonus
+            ElementalReserves *= goodBonus
+            MentalToughness *= goodBonus
+
+        elif role == "Tempest":
+            # necessary
+            ElementalPrecision *= necessaryBonus
+            # important
+            BendingSpeed *= importantBonus
+            Speed *= importantBonus
+            Adaptability *= importantBonus
+            # good
+            MentalToughness *= goodBonus
+            TacticalAwareness *= goodBonus
+            ElementalReserves *= goodBonus
+
+        elif role == "Phantom":
+            # necessary
+            Agility *= necessaryBonus
+            # important
+            Speed *= importantBonus
+            ElementalDistortion *= importantBonus
+            Balance *= importantBonus
+            # good
+            MentalToughness *= goodBonus
+            TacticalAwareness *= goodBonus
+            Adaptability *= goodBonus
+
+        elif role == "Guardian":
+            # Necessary
+            Resilience *= necessaryBonus
+            # Important
+            Composure *= importantBonus
+            Balance *= importantBonus
+            ElementalReserves *= importantBonus
+            # Good
+            TacticalAwareness *= goodBonus
+            MentalToughness *= goodBonus
+            Adaptability *= goodBonus
+
+        elif role == "Sentinel":
+            # Necessary
+            Balance *= necessaryBonus
+            # Important
+            Resilience *= necessaryBonus
+            PrecisionBlocking *= importantBonus
+            ElementalPrecision *= importantBonus
+            # Good
+            TacticalAwareness *= goodBonus
+            MentalToughness *= goodBonus
+            Speed *= goodBonus
+
+        elif role == "Manipulator":
+            # Necessary
+            ElementalDistortion *= necessaryBonus
+            # Important
+            AdaptiveStrategy *= necessaryBonus
+            MentalToughness *= importantBonus
+            Agility *= importantBonus
+            # Good
+            ElementalReserves *= goodBonus
+            PrecisionBlocking *= goodBonus
+            BendingSpeed *= goodBonus
+
+        # AGGRESSIVE
+        elif role == "Destroyer":
+            # Necessary
+            Strength *= necessaryBonus
+            # Important
+            ElementalPrecision *= necessaryBonus
+            Speed *= importantBonus
+            ElementalDistortion *= importantBonus
+            # Good
+            Resilience *= goodBonus
+            Adaptability *= goodBonus
+            TacticalAwareness *= goodBonus
+
+        elif role == "Shadow Assassin":
+            # Necessary
+            BendingSpeed *= necessaryBonus
+            # Important
+            ElementalPrecision *= necessaryBonus
+            Speed *= importantBonus
+            Agility *= importantBonus
+            # Good
+            MentalToughness *= goodBonus
+            PrecisionBlocking *= goodBonus
+            ElementalReserves *= goodBonus
+
+        elif role == "Reaper":
+            # necessary
+            ElementalDistortion *= necessaryBonus
+            # important
+            MentalToughness *= importantBonus
+            BendingSpeed *= importantBonus
+            Agility *= importantBonus
+            # good
+            TacticalAwareness *= goodBonus
+            ElementalPrecision *= goodBonus
+            Adaptability *= goodBonus
+
 
 
 
@@ -195,16 +298,28 @@ class character_:
         #apply stats
         self.level = 1
         self.star = 1
-        allStats = [initiativeBonus,ElementalPrecision,BendingSpeed,AdaptiveStrategy,TacticalAwareness,Composure,Adaptability,Resilience,PrecisionBlocking,Balance,ElementalDistortion,ElementalReserves,MentalToughness,Agility,Speed,Strength]
-        self.value = sum(allStats)/len(allStats)*(random.randrange(75,125)/100)
+
+
+
+        self.allStats = [initiativeBonus,ElementalPrecision,BendingSpeed,AdaptiveStrategy,TacticalAwareness,Composure,Adaptability,Resilience,PrecisionBlocking,Balance,ElementalDistortion,ElementalReserves,MentalToughness,Agility,Speed,Strength]
+        self.allStatsAverage = sum(self.allStats)/len(self.allStats)
+        self.value = sum(self.allStats)/len(self.allStats)*(random.randrange(75,125)/100)
+
+
+
+
+
 
         self.attackStat = round((ElementalPrecision+BendingSpeed+AdaptiveStrategy+Agility+Speed+Strength)/6)
         self.blockStat = round((PrecisionBlocking+Resilience+Composure+Adaptability+ElementalReserves+MentalToughness)/6)
         self.observeStat = round((TacticalAwareness+ElementalPrecision+AdaptiveStrategy+Composure+MentalToughness)/5)
         self.maneuverStat = round((Agility+Speed+Balance+Adaptability+ElementalDistortion)/5)
         self.bendingStat = round((BendingSpeed+ElementalPrecision+ElementalDistortion+ElementalReserves)/4)
-        self.playmakeStat = round((AdaptiveStrategy+TacticalAwareness+Composure+Adaptability)/4)
-        #self.playmakeStat = round(((AdaptiveStrategy+TacticalAwareness+Composure+Adaptability)/4)*((self.level/10)+(self.star/100)+1)) <add stars+levels
+        #self.playmakeStat = round((AdaptiveStrategy+TacticalAwareness+Composure+Adaptability)/4)
+        self.playmakeStat = round(((AdaptiveStrategy + TacticalAwareness + Composure + Adaptability) / 4) * (1 + ((self.level - 1) / 10) + ((self.star - 1) / 100))) #<add stars+levels
+
+        
+        self.defensiveStat = round((Resilience+MentalToughness+Composure+Balance)/4)
 
 
 
@@ -212,9 +327,14 @@ class character_:
 
 
         self.movelist = ["attack","block","observe","maneuver","bending"]#baseMoveList
+        #supportPositions,defensePositions,offensePositions
+        if role in offensePositions:
+            self.movelist.append(random.choice(["attack","bending"]))
+        elif role in defensePositions:
+            self.movelist.append(random.choice(["block","observe"]))
 
         for i in range(1): #test out doing this twice, odds: 1/6-17%, 2/7-29%, 3/9-33%
-            self.movelist.append(preference)
+            self.movelist.extend(preference)
 
 
 
