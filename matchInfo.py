@@ -8,7 +8,7 @@ baseMoveList = ["attack","block","observe","maneuver","bending"]
  
 baseHitTarget = 3
 matchesN = 1
-roundsN = 3
+roundsN = 1
 
 
 runs = matchesN*roundsN

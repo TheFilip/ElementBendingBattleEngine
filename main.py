@@ -64,6 +64,7 @@ resultsList = []
 
 #generate plot ideas
 plotGen = True
+useEmotes = True
 knockoutAmounts = []
 
 
@@ -131,20 +132,20 @@ def match(team1,team2):
     print("----------\n"+firstTeamName)
     for i in team1:
         if i.health == innerZone:
-            print(i.name,"the",i.element+"bending "+i.role)
+            print(random.choice(emoticonsFaces),i.name,"the",i.element+"bending "+i.role)
         elif i.health == middleZone:
-            print(i.name,"the",i.element+"bending "+i.role)
+            print(random.choice(emoticonsFaces),i.name,"the",i.element+"bending "+i.role)
         elif i.health == outsideZone:
-            print(i.name,"the",i.element+"bending "+i.role)
+            print(random.choice(emoticonsFaces),i.name,"the",i.element+"bending "+i.role)
     #print out all players for second team
     print("-----\n"+secondTeamName)
     for i in team2:
         if i.health == innerZone:
-            print(i.name,"the",i.element+"bending "+i.role)
+            print(random.choice(emoticonsFaces),i.name,"the",i.element+"bending "+i.role)
         elif i.health == middleZone:
-            print(i.name,"the",i.element+"bending "+i.role)
+            print(random.choice(emoticonsFaces),i.name,"the",i.element+"bending "+i.role)
         elif i.health == outsideZone:
-            print(i.name,"the",i.element+"bending "+i.role)
+            print(random.choice(emoticonsFaces),i.name,"the",i.element+"bending "+i.role)
     print("----------")
     #turnPlayers.sort(key=lambda x: x.initiative, reverse=True)
                         #run combat per player for each team

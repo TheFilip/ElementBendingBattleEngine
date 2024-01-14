@@ -6,8 +6,8 @@ from main import *
 
 
     
-homeTeam = [Yuka,Asuka,Mei]
-awayTeam = [JinHo,Kaito,Renji]
+homeTeam = [Yuka,Asuka,Mei,Khanmi,AscanioSinagra]
+awayTeam = [JinHo,Kaito,Renji,Wenchoi,Lamno]
 #createOwnTeam()
 
 

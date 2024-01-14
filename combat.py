@@ -8,12 +8,18 @@ global dialogAmount
 dialogAmount = 0
 dialogAmountTarget = ((random.randint(47,60))*runs)
 
+dialogPlacementRate = 6#/10
+
 
 
 
 
 
 displayStoryText = True
+typeOfText = "emoticon" #emoticon/text
+
+
+
         
 #zone thresholds
 #print(i.name,"the",i.element+"bender - zone",i.health)
@@ -25,25 +31,25 @@ outsideZone = 1
 
 
 
+
+
 elementBonus = 1.1
-
-
 damageBeingTaken = 0
 #Critical Hits
 critRate = 100
-criticalHitText = random.choice(["Flow has been awakened for this attack which causes opponent to get knocked back further!"])
+
+criticalHitText = random.choice(["👹", "👺", "👻", "👽", "👾", "🤖", "🐝", "🐉", "🦬"])
+# ["Flow has been awakened for this attack which causes opponent to get knocked back further!"]
+# ["👹", "👺", "👻", "👽", "👾", "🤖"]
+
 critsActive = True
-def criticalAttack(damageBeingTaken,player):
+
+def criticalAttack(damageBeingTaken, player):
     if player.movePower >= 75:
-        #global damageBeingTaken
+        # global damageBeingTaken
         damageBeingTaken += 1
-        print(criticalHitText)
+        print("Flow Awakened to strengthen attack", criticalHitText)
         return damageBeingTaken
-
-
-
-
-
 
 
 def printCurrentZone(player):
@@ -61,25 +67,24 @@ def printCurrentZone(player):
 
 
 
-
 def compareStats(player1,player2):
     attackSuccessfulText = False
+
+
+
+    
+
     print("-")
     if True:
         #print("-")
 
         printCurrentZone(player1)
-    
+    #emoticon reactions set, check if to print at start or end
+    dialogPlacement = random.choice(["start","end"])
     if displayStoryText:
-        global dialogAmount
-
-        # if dialogAmount < dialogAmountTarget:
-        #     dialogAmount += 1
-        #     if random.randint(1,100) <= chancesOfDescription:
-        #         #print(dialogAmount,"/",dialogAmountTarget)
-        #         generateText(player1,player2,random.choice(["Monologue","Conversation"]))
-        if random.randint(1,10) <= 5:
-            generateText(player1,player2,random.choice(["Monologue","Conversation"]))
+        if dialogPlacement == "start":
+            if random.randint(1,10) <= dialogPlacementRate:
+                    generateText(player1,player2,random.choice(["Monologue","Conversation"]))
 
 
 
@@ -120,7 +125,7 @@ def compareStats(player1,player2):
             if player2.moveChoice == "observe":
                 print(player1.name+" manages to hit "+player2.name+" with "+player1.element+" attacks while "+player2.name+" is distracted")
             else:
-                print(player2.name+"'s bending doesn't match up to "+player1.name+"'s offensive attacks")
+                print(player1.name+"'s offensive attack form overwhelms "+player2.name+"'s inferior bending shots")
         #beats user
         elif player2.moveChoice == "block" or player2.moveChoice == "maneuver":
             if player2.moveChoice == "block":
@@ -150,7 +155,7 @@ def compareStats(player1,player2):
             if player2.moveChoice == "maneuver":
                 print(player2.name+" outmaneuvers "+player1.name+"'s defensive moves")
             else:
-                print(player1.name+"'s defensive form doesn't match up to "+player2.name+"'s bending skills")
+                print(player1.name+"'s defensive moves aren't enought to break "+player2.name+"'s bending shots")
 
 #Player Choice being Observe
     elif player1.moveChoice == "observe":
@@ -196,7 +201,7 @@ def compareStats(player1,player2):
         #beats user
         elif player2.moveChoice == "bending" or player2.moveChoice == "observe":
             if player2.moveChoice == "bending":
-                print(player2.name+"'s bending anticipates and counters "+player1.name+"'s movements")
+                print(player2.name+" is prepared to anticipate and adjust their bending to "+player1.name+"'s movements")
             else:
                 print(player1.name+"'s movements were anazlysed by "+player2.name)
 
@@ -220,7 +225,7 @@ def compareStats(player1,player2):
         #beats user
         elif player2.moveChoice == "attack" or player2.moveChoice == "observe":
             if player2.moveChoice == "attack":
-                print(player2.name+"'s "+player1.element+"bending doesn't match up to "+player1.name+"'s offensive attacks")
+                print(player2.name+"'s "+player2.element+"bending doesn't match up to "+player1.name+"'s offensive attacks")
             else:
                 print(player2.name+" analyzes "+player1.name+"'s "+player1.element+" bending habits")
 
@@ -233,38 +238,48 @@ def compareStats(player1,player2):
 
 
 
-    #Activate when attack is successful
+    # Activate when the attack is successful
     if attackSuccessfulText:
         damageBeingTaken = 0
         damageBeingTaken += 1
+
+        # Check if player1's move power is greater than player2's defensive stat and the move choices are different
         if player1.movePower > player2.defensiveStat and player1.moveChoice != player2.moveChoice:
             print("That was an exceptionally strong move!")
             damageBeingTaken += 1
 
-            if critsActive: #test out critical hits
-                if random.randint(1,critRate) == critRate:
-                    damageBeingTaken = criticalAttack(damageBeingTaken,player1)
+            # Check if critical hits are active
+            if critsActive:
+                # Test for critical hit with a chance based on critRate
+                if random.randint(1, critRate) == critRate:
+                    damageBeingTaken = criticalAttack(damageBeingTaken, player1)
 
+        # Reduce player2's health by the calculated damage
         player2.health -= damageBeingTaken
 
-
-        #print out what zone player has been pushed back to (adjust to be modular)
+        # Print out the zone player2 has been pushed back to (adjust to be modular)
         if player2.health > 0:
             if player2.health == outsideZone:
-                print(player2.name,"gets pushed back to the outside zone")
+                print(player2.name, "gets pushed back to the outside zone")
             elif player2.health <= middleZone:
-                print(player2.name,"gets pushed into the middle zone")
+                print(player2.name, "gets pushed into the middle zone")
             elif player2.health <= innerZone:
-                print(player2.name,"gets pushed back further into the inner zone")
-        if False:
-            if player2.health == innerZone:
-                print(player2.name,"gets pushed back to the inner zone")
-            elif player2.health == middleZone:
-                print(player2.name,"gets pushed back to the middle zone")
-            elif player2.health == outsideZone:
-                print(player2.name,"gets pushed back to the outside zone")
-        player1.successfulHits+=1
-        #print(player2.name,"gets pushed back to zone",player2.health)
+                print(player2.name, "gets pushed back further into the inner zone")
+
+        # TODO: The following block seems to be commented out, consider removing or adjusting it
+        # if False:
+        #     if player2.health == innerZone:
+        #         print(player2.name, "gets pushed back to the inner zone")
+        #     elif player2.health == middleZone:
+        #         print(player2.name, "gets pushed back to the middle zone")
+        #     elif player2.health == outsideZone:
+        #         print(player2.name, "gets pushed back to the outside zone")
+
+        # Increment the count of successful hits for player1
+        player1.successfulHits += 1
+        # TODO: Uncomment the following line if needed
+        # print(player2.name, "gets pushed back to zone", player2.health)
+
 
 
 
@@ -276,32 +291,41 @@ def compareStats(player1,player2):
         else:
             print(player1.name+"'s last attack managed to knock",player2.name,"out of the arena")
         #player1.knockedoutAmount += 1
+    
+
+
+
+
+    if displayStoryText:
+        if dialogPlacement == "end":
+            if random.randint(1,10) <= dialogPlacementRate:
+                    generateText(player1,player2,random.choice(["Monologue","Conversation"]))
 
 
 
 
 
-def randomScenePlots(currentCharacter):
-    listOfPlotIdeas = [(currentCharacter.name,"awakens their power during the fight"),(currentCharacter.name,"has a pivital character moment")]
-    print(random.choice(listOfPlotIdeas))
+# List of attitudes for characters in a conversation
+attitude = ["withdrawn", "guarded", "cautious", "neutral", "sociable", "helpful", "forthcoming","positive","neutral","negative"] #basic ["positive","neutral","negative"]
 
-
-attitude = ["positive","neutral","negative"]
+# Topics that can be discussed in various situations
 topics = ["personality","actions","connection","goals"]
 
-
-
-#mythicType Generation
-
+# Types of actions that can occur in different events or situations
 eventActions = ["Attainment","Starting","Neglect","Fight","Recruit","Triumph","Violate","Oppose","Malice","Communicate","Persecute","Increase","Decrease","Abandon","Gratify","Inquire","Antagonise","Move","Waste","Truce","Release","Befriend","Judge","Desert","Dominate","Procrastinate","Praise","Separate","Take","Break","Heal","Delay","Stop","Lie","Return","Immitate","Struggle","Inform","Bestow","Postpone","Expose","Haggle","Imprison","Release","Celebrate","Develop","Travel","Block","Harm","Debase","Overindulge","Adjourn","Adversity","Kill","Disrupt","Usurp","Create","Betray","Agree","Abuse","Oppress","Inspect","Ambush","Spy","Attach","Carry","Open","Carelessness","Ruin","Extravagance","Trick","Arrive","Propose","Divide","Refuse","Mistrust","Deceive","Cruelty","Intolerance","Trust","Excitement","Activity","Assist","Care","Negligence","Passion","Workhard","Control","Attract","Failure","Pursue","Vengeance","Proceedings","Dispute","Punish","Guide","Transform","Overthrow","Oppress","Change"]
+
+# Subjects or themes that events can revolve around
 eventSubject = ["Goals","Dreams","Environment","Outside","Inside","Reality","Allies","Enemies","Evil","Good","Emotions","Opposition","War","Peace","The innocent","Love","The spiritual","The intellectual","New ideas","Joy","Messages","Energy","Balance","Tension","Friendship","The physical","A project","Pleasures","Pain","Possessions","Benefits","Plans","Lies","Expectations","Legal matters","Bureaucracy","Business","Apath","News","Exterior factors","Advice","A plot","Competition","Prison","Illness","Food","Attention","Success","Failure","Travel","Jealousy","Dispute","Home","Investment","Suffering","Wishes","Tactics","Stalemate","Randomness","Misfortune","Death","Disruption","Power","Aburden","Intrigues","Fears","Ambush","Rumor","Wounds","Extravagance","A representative","Adversities","Opulence","Liberty","Military","The mundane","Trials","Masses","Vehicle","Art","Victory","Dispute","Riches","Status quo","Technology","Hope","Magic","Illusions","Portals","Danger","Weapons","Animals","Weather","Elements","Nature","The public","Leadership","Fame","Anger","Information"]
 
+# Moods for characters in a conversation
+conversationMoods = ["withdrawn", "guarded", "cautious", "neutral", "sociable", "helpful", "forthcoming","positive","neutral","negative"]
 
+# Different bearings characters can have in non-conversation situations
+npcBearing = ["intent", "madness", "alliance", "death", "bargain", "fear", "comfort", "capture", "means", "accident", "gratitude", "judgment", "proposition", "chaos", "shelter", "combat", "plan", "idiocy", "happiness", "surrender", "compromise", "illusion", "support", "rage", "agenda", "turmoil", "promise", "resentment", "arrangement", "confusion", "delight", "submission", "negotiation", "façade", "aid", "injury", "plot", "bewilderment", "celebration", "destruction", "questions", "report", "rumor", "reputation", "investigation", "effects", "uncertainty", "doubt", "interest", "examination", "secrets", "bias", "demand", "records", "misdirection", "dislike", "suspicion", "account", "whispers", "partiality", "request", "news", "lies", "belief", "curiosity", "history", "shadows", "view", "skepticism", "telling", "enigma", "discrimination", "command", "discourse", "obscurity", "assessment", "petition", "speech", "conundrum", "difference"]
 
-
-
-
-
+# Emoticons for use in conversations
+emoticons = ["😀", "😃", "😄", "😁", "😆", "😅", "🤣", "😂", "🙂", "😉", "😊", "😇", "🥰", "😍", "🤩", "😘","😗", "☺️", "😚", "😙", "🥲", "😏", "😋", "😛", "😜", "🤪", "😝", "🤗", "🤭", "🫢", "🫣", "🤫", "🤔", "🫡", "🤤", "🤠", "🥳", "🥸", "😎", "🤓", "🧐", "🙃", "🫠", "🤐", "🤨", "😐", "😑", "😶", "🫥", "😶‍🌫️", "😒", "🙄", "😬", "😮‍💨", "🤥", "😌", "😔", "😪", "😴", "😷", "🤒", "🤕", "🤢", "🤮", "🤧", "🥵", "🥶", "🥴", "😵", "😵‍💫", "🤯", "🥱", "😕", "🫤", "😟", "🙁", "☹️", "😮", "😯", "😲", "😳", "🥺", "🥹", "😦", "😧", "😨", "😰", "😥", "😢", "😭", "😱", "😖", "😣", "😞", "😓", "😩", "😫", "😤", "😡", "😠", "🤬", "👿", "😈", "👿", "💀", "☠️", "💩", "🤡", "😼", "😽", "🙀", "😾", "🙈", "🙉", "🙊", "🐀", "🐓", "🐥", "🐈", "🦊", "🦥", "🪰", "🦄", "🐆","🐌", "🦝", "🪳", "🦐", "🐍", "🦎", "🐢"]
+emoticonsFaces = ["😀", "😃", "😄", "😁", "😆", "😅", "🤣", "😂", "🙂", "😉", "😊", "😇", "🥰", "😍", "🤩", "😘","😗", "☺️", "😚", "😙", "🥲", "😏", "😋", "😛", "😜", "🤪", "😝", "🤗", "🤭", "🫢", "🫣", "🤫", "🤔", "🫡", "🤤", "🤠", "🥳", "🥸", "😎", "🤓", "🧐", "🙃", "🫠", "🤐", "🤨", "😐", "😑", "😶", "🫥", "😶‍🌫️", "😒", "🙄", "😬", "😮‍💨", "🤥", "😌", "😔", "😪", "😴", "😷", "🤒", "🤕", "🤢", "🤮", "🤧", "🥵", "🥶", "🥴", "😵", "😵‍💫", "🤯", "🥱", "😕", "🫤", "😟", "🙁", "☹️", "😮", "😯", "😲", "😳", "🥺", "🥹", "😦", "😧", "😨", "😰", "😥", "😢", "😭", "😱", "😖", "😣", "😞", "😓", "😩", "😫", "😤", "😡", "😠", "🤬", "👿", "😈", "👿", "☠️", "🤡", "😼", "😽", "🙀", "😾", "🙈", "🙉", "🙊"]
 
 
 amountOfRandomPlotTarget = 5
@@ -312,18 +336,34 @@ amountOfRandomPlot = 0
 
 listOfTextOptions = ["Character Action", "Monologue", "Conversation", "Scene Description"]
 
-def generateText(currentCharacter, targetCharacter, textToGenerate):
-    if textToGenerate is None:
-        textToGenerate = random.choice(listOfTextOptions)
 
-    if textToGenerate == "Conversation":
-        print("["+currentCharacter.name+" has a "+random.choice(attitude)+" conversation with "+targetCharacter.name+", Topic: "+random.choice(eventActions)+" "+random.choice(eventSubject)+"]")
-    elif textToGenerate == "Monologue":
-        print("["+currentCharacter.name+" has a "+random.choice(attitude)+" monologue about "+targetCharacter.name+", Topic: "+random.choice(eventActions)+" "+random.choice(eventSubject)+"]")
-    elif textToGenerate == "Scene Description":
-        # randomScenePlots(currentCharacter)
+
+def generateText(currentCharacter, targetCharacter, situation):
+    # If situation is not provided, choose a random one from listOfTextOptions
+    if situation is None:
+        situation = random.choice(listOfTextOptions)  # Assuming listOfTextOptions is defined somewhere
+
+    # Check the situation and generate text accordingly
+    if situation == "Conversation":
+        # Check the type of text (text or emoticon) and print accordingly
+        if typeOfText == "text":  # Assuming typeOfText is defined somewhere
+            print("["+currentCharacter.name+" has a "+random.choice(attitude)+" conversation with "+targetCharacter.name+", Topic: "+random.choice(npcBearing)+" "+random.choice(eventSubject)+"]")
+        elif typeOfText == "emoticon":  # Assuming typeOfText is defined somewhere
+            print(currentCharacter.name+":", random.choice(emoticons))
+            print(targetCharacter.name+":", random.choice(emoticons))
+
+    elif situation == "Monologue":
+        if typeOfText == "text":
+            print("["+currentCharacter.name+" has a "+random.choice(attitude)+" monologue about "+targetCharacter.name+", Topic: "+random.choice(npcBearing)+" "+random.choice(eventSubject)+"]")
+        elif typeOfText == "emoticon":
+            print(currentCharacter.name+" monologues", random.choice(emoticons))
+
+    elif situation == "Scene Description":
+        # randomScenePlots(currentCharacter)  # Assuming this function is defined somewhere
         print("[Scene Description: "+random.choice(eventActions)+" "+random.choice(eventSubject)+"]")
+    
     else:
+        # Default case for other situations
         print("["+currentCharacter.name+" Character Action Description: "+random.choice(eventActions)+" "+random.choice(eventSubject)+"]")
 
 
