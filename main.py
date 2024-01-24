@@ -9,9 +9,11 @@ import plotly.express as px
 import pandas as pd
 from statistics import mean
 from scipy.interpolate import make_interp_spline
+from collections import Counter
 from combat import *
 from matchInfo import *
 from characterDB import *
+
 
 random.seed(int(seed), version=2)
 
@@ -103,12 +105,50 @@ def roundTimeAdd():
 
 
 def playerSubstitute(listOfPlayers):
-    if True: #activate Substitues
+    if False: #activate Substitues
         subChance = 10#/100
         while random.randint(1,100)<=subChance:
             player = random.choice(listOfPlayers)
             print(player.name,"should be substituted")
             input()
+
+
+
+
+
+
+
+
+
+def count_items(input_list):
+    # Flatten the list of lists
+    flat_list = [item for sublist in input_list for item in sublist]
+
+    # Use Counter to count the occurrences of each item
+    item_counts = Counter(flat_list)
+
+    # Sort items by count in descending order
+    sorted_items = sorted(item_counts.items(), key=lambda x: x[1], reverse=True)
+
+    # Print the result
+    for item, count in sorted_items:
+        print(f"{item}: {count}")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -131,21 +171,37 @@ def match(team1,team2):
 
     print("----------\n"+firstTeamName)
     for i in team1:
-        if i.health == innerZone:
-            print(random.choice(emoticonsFaces),i.name,"the",i.element+"bending "+i.role)
-        elif i.health == middleZone:
-            print(random.choice(emoticonsFaces),i.name,"the",i.element+"bending "+i.role)
-        elif i.health == outsideZone:
-            print(random.choice(emoticonsFaces),i.name,"the",i.element+"bending "+i.role)
+        if useEmotes:
+            if i.health == innerZone:
+                print(random.choice(emoticonsFaces),i.name,"the",i.element+"bending "+i.role)
+            elif i.health == middleZone:
+                print(random.choice(emoticonsFaces),i.name,"the",i.element+"bending "+i.role)
+            elif i.health == outsideZone:
+                print(random.choice(emoticonsFaces),i.name,"the",i.element+"bending "+i.role)
+        else:
+            if i.health == innerZone:
+                print(i.name,"the",i.element+"bending "+i.role)
+            elif i.health == middleZone:
+                print(i.name,"the",i.element+"bending "+i.role)
+            elif i.health == outsideZone:
+                print(i.name,"the",i.element+"bending "+i.role)
     #print out all players for second team
     print("-----\n"+secondTeamName)
     for i in team2:
-        if i.health == innerZone:
-            print(random.choice(emoticonsFaces),i.name,"the",i.element+"bending "+i.role)
-        elif i.health == middleZone:
-            print(random.choice(emoticonsFaces),i.name,"the",i.element+"bending "+i.role)
-        elif i.health == outsideZone:
-            print(random.choice(emoticonsFaces),i.name,"the",i.element+"bending "+i.role)
+        if useEmotes:
+            if i.health == innerZone:
+                print(random.choice(emoticonsFaces),i.name,"the",i.element+"bending "+i.role)
+            elif i.health == middleZone:
+                print(random.choice(emoticonsFaces),i.name,"the",i.element+"bending "+i.role)
+            elif i.health == outsideZone:
+                print(random.choice(emoticonsFaces),i.name,"the",i.element+"bending "+i.role)
+        else:
+            if i.health == innerZone:
+                print(i.name,"the",i.element+"bending "+i.role)
+            elif i.health == middleZone:
+                print(i.name,"the",i.element+"bending "+i.role)
+            elif i.health == outsideZone:
+                print(i.name,"the",i.element+"bending "+i.role)
     print("----------")
     #turnPlayers.sort(key=lambda x: x.initiative, reverse=True)
                         #run combat per player for each team
@@ -272,7 +328,7 @@ def match(team1,team2):
                     if currentRoundTime == 0:
                         pass
                     else:
-                        if random.randrange(1,100) <= 50:
+                        if random.randrange(1,100) <= 40:
                             print("----------")
                             print(firstTeamName)
                             for i in team1:
@@ -295,18 +351,6 @@ def match(team1,team2):
                             print("----------")
                             turnPlayers.sort(key=lambda x: x.initiative, reverse=True)
                             #run combat per player for each team
-                else:
-                    print(firstTeamName)
-                    for i in team1:
-                        print(i.name,"the",i.element+"bender -",i.health)
-                    print("-----")
-                    #print out all players for second team
-                    print(secondTeamName)
-                    for i in team2:
-                        print(i.name,"the",i.element+"bender -",i.health)
-                    print("----------")
-                    turnPlayers.sort(key=lambda x: x.initiative, reverse=True)
-                    #run combat per player for each team
 
 
 
@@ -427,8 +471,12 @@ def match(team1,team2):
 
 
 #FIGHT HAPPENS
-def phase1(aTeamName,a,bTeamName,b):
-    global winningTeam,winningName, firstTeamName, secondTeamName
+def phase1(aTeamName,a,bTeamName,b,amountOfRounds=1):
+    roundsN = amountOfRounds
+    runs = matchesN*roundsN
+    print("seed:",seed)
+    global winningTeam,winningName, firstTeamName, secondTeamName, displayStoryText
+    displayStoryText = True
 
     def init():
         global t1W,t2W,potMVPs,roundsPassed,totalRoundsPassed,totalTimePassed,roundResults,resultsList
@@ -459,9 +507,9 @@ def phase1(aTeamName,a,bTeamName,b):
             if random.randint(1,100) <= chancesOfDescription:
                 generateText(random.choice(a+b),random.choice(a+b),None)
 
-
+    targetToWin = (roundsN+1)/2
     for i in range(runs):
-        if t1W == 2 or t2W == 2:
+        if t1W == targetToWin or t2W == targetToWin:
             break
         for u in a:
             u.health = baseHitTarget
@@ -501,10 +549,7 @@ def phase1(aTeamName,a,bTeamName,b):
 
 
 
-    if displayStoryText == "run": ################################### IF DISPLAYSTORYTEXT IS FALSE OR TRUE, CHANGE THIS TOOO
-        print("Match Finish!")
-
-    else:
+    if True:
         print("MATCH FINISH!")
 
 
@@ -521,10 +566,13 @@ def phase1(aTeamName,a,bTeamName,b):
         print((t1W),":",((t2W)))
         
         print(((t1W/(t1W+t2W))*100),"win %:win %",(((t2W)/(t1W+t2W)))*100)
-        print("Potential MVPs:",potMVPs)
+        
+        print("-Potential MVPs-")
+        count_items(potMVPs)
+        #print("Potential MVPs:",potMVPs)
         teamA = a.copy()
         teamB = b.copy()
-        print(aTeamName+"\n----")
+        print("\n\n"+aTeamName+"\n----")
         for i in teamA:
             print(i.name+":",i.knockedoutAmount," - successful hits:",i.successfulHits)
             i.knockedoutAmount = 0
@@ -545,7 +593,7 @@ def phase1(aTeamName,a,bTeamName,b):
 
 
         print("----\nRound Results:",resultsList)
-        print("seed:",seed)
+        
 
         #MVPRanking = []
         #for i in potMVPs:
@@ -617,6 +665,7 @@ def phase1(aTeamName,a,bTeamName,b):
 #output stats and generate scatter radar graphs for all players
 def outputStats(a):  
     for i in a:
+        mainTitle = f"{i.name} - {i.element} {i.role}"
         df = pd.DataFrame(dict(
             #r=[i.attackStat, i.blockStat, i.bendingStat, i.maneuverStat, i.observeStat],
             r=[i.bendingStat, i.attackStat, i.observeStat, i.maneuverStat, i.blockStat],
@@ -631,7 +680,7 @@ def outputStats(a):
         )
         fig.update_layout(
             font=dict(size=20),
-            title=i.name,
+            title=mainTitle,
             title_x=0.5,
         )
         # Add fill to the polar area
@@ -645,9 +694,11 @@ def outputStats(a):
 
 
 
-balance = 150
+
 def createOwnTeam():
+    
     global homeTeam,awayTeam, balance
+    balance = 150
     #create own random team\
     print(balance)
     r1 = random.choice(playerList)

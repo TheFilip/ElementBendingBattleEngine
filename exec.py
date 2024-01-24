@@ -5,15 +5,15 @@ from main import *
 
 
 
-    
-homeTeam = [Yuka,Asuka,Mei,Khanmi,AscanioSinagra]
-awayTeam = [JinHo,Kaito,Renji,Wenchoi,Lamno]
+
+
+homeTeam = [Yuka,Asuka,Mei]
+awayTeam = [JinHo,Kaito,Renji]
 #createOwnTeam()
 
 
 
-
-phase1("Team A",homeTeam,"Team B",awayTeam)
+phase1("Team A",homeTeam,"Team B",awayTeam,amountOfRounds=3)
 
 #outputStats(homeTeam)
 #outputStats(awayTeam)
@@ -21,7 +21,7 @@ phase1("Team A",homeTeam,"Team B",awayTeam)
 
 while False:
     generateText(random.choice(homeTeam+awayTeam),random.choice(homeTeam+awayTeam),"Scene Description")
-    generateText(random.choice(homeTeam+awayTeam),random.choice(homeTeam+awayTeam),None)
+    generateText(random.choice(homeTeam+awayTeam),random.choice(homeTeam+awayTeam), None)
 
 
 

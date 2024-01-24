@@ -8,19 +8,19 @@ baseMoveList = ["attack","block","observe","maneuver","bending"]
  
 baseHitTarget = 3
 matchesN = 1
-roundsN = 1
+#roundsN = 3
 
 
-runs = matchesN*roundsN
+#runs = matchesN*roundsN
 
 
 variance = 20 #percentage since it adjusts to 100 total
-
+modifier = 5 #1 for /100, 5 for /20 stats
 
 
 
 chooseSeed = False
-customSeed = 3748094240235785835
+customSeed = 2258881327718708404
 
 if chooseSeed == True:
     seed = customSeed
@@ -50,6 +50,9 @@ offensePositions = ["Cutman","Bully","Brawler","Destroyer","Leviathan","Tempest"
 defensePositions = ["Zoner","Lockdown Sweeper","Wall","Guardian","Sentinel","Reaper"]
 #Support Positions
 supportPositions = ["Playmaker","Tactician","Artist","Phantom","Shadow Assassin","Manipulator"]
+
+analyticalPositions = ["Tactician","Zoner","Cutman"]
+movementPositions = ["Phantom","Shadow Assassin","Tempest","Reaper"]
 
 
 
@@ -310,16 +313,16 @@ class character_:
 
 
 
-        self.attackStat = round((ElementalPrecision+BendingSpeed+AdaptiveStrategy+Agility+Speed+Strength)/6)
-        self.blockStat = round((PrecisionBlocking+Resilience+Composure+Adaptability+ElementalReserves+MentalToughness)/6)
-        self.observeStat = round((TacticalAwareness+ElementalPrecision+AdaptiveStrategy+Composure+MentalToughness)/5)
-        self.maneuverStat = round((Agility+Speed+Balance+Adaptability+ElementalDistortion)/5)
-        self.bendingStat = round((BendingSpeed+ElementalPrecision+ElementalDistortion+ElementalReserves)/4)
+        self.attackStat = round(((ElementalPrecision+BendingSpeed+AdaptiveStrategy+Agility+Speed+Strength)/6)/modifier)
+        self.blockStat = round(((PrecisionBlocking+Resilience+Composure+Adaptability+ElementalReserves+MentalToughness)/6)/modifier)
+        self.observeStat = round(((TacticalAwareness+ElementalPrecision+AdaptiveStrategy+Composure+MentalToughness)/5)/modifier)
+        self.maneuverStat = round(((Agility+Speed+Balance+Adaptability+ElementalDistortion)/5)/modifier)
+        self.bendingStat = round(((BendingSpeed+ElementalPrecision+ElementalDistortion+ElementalReserves)/4)/modifier)
         #self.playmakeStat = round((AdaptiveStrategy+TacticalAwareness+Composure+Adaptability)/4)
-        self.playmakeStat = round(((AdaptiveStrategy + TacticalAwareness + Composure + Adaptability) / 4) * (1 + ((self.level - 1) / 10) + ((self.star - 1) / 100))) #<add stars+levels
+        self.playmakeStat = round((((AdaptiveStrategy + TacticalAwareness + Composure + Adaptability) / 4) * (1 + ((self.level - 1) / 10) + ((self.star - 1) / 100)))/modifier) #<add stars+levels
 
         
-        self.defensiveStat = round((Resilience+MentalToughness+Composure+Balance)/4)
+        self.defensiveStat = round(((Resilience+MentalToughness+Composure+Balance)/4)/modifier)
 
 
 
@@ -338,7 +341,7 @@ class character_:
 
 
 
-        self.initiativeBonus = round((initiativeBonus+((Speed+Agility)/5)))
+        self.initiativeBonus = round(((initiativeBonus+((Speed+Agility)/5)))/modifier)
         self.initiative = 0
 
         self.knockedoutAmount = 0
@@ -346,21 +349,22 @@ class character_:
 
     def chooseRandomOpponent(self, opponentTeam):
         self.target = random.choice(opponentTeam)
+        self.initiative = (random.randint(1,variance))+self.initiativeBonus
 
     def turnChoice(self, opponentTeam):
         #self.target = random.choice(opponentTeam)
         self.initiative = (random.randint(1,variance))+self.initiativeBonus
         self.moveChoice = random.choice(self.movelist)
         if self.moveChoice == "attack":
-            self.movePower = random.randrange(1,self.attackStat)+(random.randint(1,variance))
+            self.movePower = random.randrange(1,self.attackStat)+(random.randint((0-variance),variance))
         if self.moveChoice == "block":
-            self.movePower = random.randrange(1,self.blockStat)+(random.randint(1,variance))
+            self.movePower = random.randrange(1,self.blockStat)+(random.randint((0-variance),variance))
         if self.moveChoice == "observe":
-            self.movePower = random.randrange(1,self.observeStat)+(random.randint(1,variance))
+            self.movePower = random.randrange(1,self.observeStat)+(random.randint((0-variance),variance))
         if self.moveChoice == "maneuver":
-            self.movePower = random.randrange(1,self.maneuverStat)+(random.randint(1,variance))
+            self.movePower = random.randrange(1,self.maneuverStat)+(random.randint((0-variance),variance))
         if self.moveChoice == "bending":
-            self.movePower = random.randrange(1,self.bendingStat)+(random.randint(1,variance))
+            self.movePower = random.randrange(1,self.bendingStat)+(random.randint((0-variance),variance))
         #print(self.name,self.moveChoice,self.movePower,target.name)
     
 
