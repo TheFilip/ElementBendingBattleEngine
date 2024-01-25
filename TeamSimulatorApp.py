@@ -24,12 +24,13 @@ def update_available_characters():
 
 def generate_simulation():
     global selected_characters
+    selected_characters = {}  # Reset the dictionary
 
     # Retrieve the selected player objects from the dropdowns
     available_characters = update_available_characters()
-    team_a_players = [next((character for character in available_characters if character and character.name == left_comboboxes[i].get()), None) for i in range(5) if left_comboboxes[i].get() != 'None']
-    team_b_players = [next((character for character in available_characters if character and character.name == right_comboboxes[i].get()), None) for i in range(5) if right_comboboxes[i].get() != 'None']
-
+    team_a_players = [character for i in range(5) if left_comboboxes[i].get() != 'None' and (character := next((char for char in available_characters if char and char.name == left_comboboxes[i].get()), None)) is not None]
+    team_b_players = [character for i in range(5) if right_comboboxes[i].get() != 'None' and (character := next((char for char in available_characters if char and char.name == right_comboboxes[i].get()), None)) is not None]
+    
     # Check if each team has at least one player
     if not team_a_players or not team_b_players:
         messagebox.showwarning("Team Incomplete", "Each team must have at least one player.")
@@ -59,7 +60,7 @@ def generate_simulation():
     global seed
 
     # Define the folder name
-    folder_name = "Generated Matches"
+    folder_name = "Matches"
 
     # Check if the folder exists, if not, create it
     if not os.path.exists(folder_name):
