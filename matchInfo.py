@@ -4,8 +4,18 @@ import random, sys
 
 
 
-baseMoveList = ["attack","block","observe","maneuver","bending"]
- 
+baseMoveList = [["Swift Strike", "attack"],["Flair Spike Shield", "block"],["Swift Eyes", "observe"],["Flair Glide", "maneuver"],["Flair Surge", "bending"]]
+
+
+
+
+
+
+
+
+
+
+
 baseHitTarget = 3
 matchesN = 1
 #roundsN = 3
@@ -329,12 +339,12 @@ class character_:
 
 
 
-        self.movelist = ["attack","block","observe","maneuver","bending"]#baseMoveList
+        self.movelist = baseMoveList = [["Swift Strike", "attack"],["Elemental Spike Shield", "block"],["Swift Eyes", "observe"],["Elemental Glide", "maneuver"],["Elemental Surge", "bending"]]#baseMoveList
         #supportPositions,defensePositions,offensePositions
         if role in offensePositions:
-            self.movelist.append(random.choice(["attack","bending"]))
+            self.movelist.append(random.choice([["Swift Strike", "attack"],["Elemental Surge", "bending"]]))
         elif role in defensePositions:
-            self.movelist.append(random.choice(["block","observe"]))
+            self.movelist.append(random.choice([["Elemental Spike Shield", "block"],["Swift Eyes", "observe"]]))
 
         for i in range(1): #test out doing this twice, odds: 1/6-17%, 2/7-29%, 3/9-33%
             self.movelist.extend(preference)
@@ -355,15 +365,15 @@ class character_:
         #self.target = random.choice(opponentTeam)
         self.initiative = (random.randint(1,variance))+self.initiativeBonus
         self.moveChoice = random.choice(self.movelist)
-        if self.moveChoice == "attack":
+        if self.moveChoice[1] == "attack":
             self.movePower = random.randrange(1,self.attackStat)+(random.randint((0-variance),variance))
-        if self.moveChoice == "block":
+        if self.moveChoice[1] == "block":
             self.movePower = random.randrange(1,self.blockStat)+(random.randint((0-variance),variance))
-        if self.moveChoice == "observe":
+        if self.moveChoice[1] == "observe":
             self.movePower = random.randrange(1,self.observeStat)+(random.randint((0-variance),variance))
-        if self.moveChoice == "maneuver":
+        if self.moveChoice[1] == "maneuver":
             self.movePower = random.randrange(1,self.maneuverStat)+(random.randint((0-variance),variance))
-        if self.moveChoice == "bending":
+        if self.moveChoice[1] == "bending":
             self.movePower = random.randrange(1,self.bendingStat)+(random.randint((0-variance),variance))
         #print(self.name,self.moveChoice,self.movePower,target.name)
     

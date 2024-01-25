@@ -13,7 +13,8 @@ awayTeam = [JinHo,Kaito,Renji]
 
 
 
-phase1("Team A",homeTeam,"Team B",awayTeam,amountOfRounds=3)
+
+phase1("Team A",homeTeam,"Team B",awayTeam,amountOfRounds=1)
 
 #outputStats(homeTeam)
 #outputStats(awayTeam)
