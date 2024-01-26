@@ -4,7 +4,8 @@ import random, sys
 
 
 
-baseMoveList = [["Swift Strike", "attack"],["Flair Spike Shield", "block"],["Swift Eyes", "observe"],["Flair Glide", "maneuver"],["Flair Surge", "bending"]]
+baseMoveList = [["Basic Swift Strike", "attack"],["Basic Flair Spike Shield", "block"],["Basic Swift Eyes", "observe"],["Basic Flair Glide", "maneuver"],["Basic Flair Surge", "bending"]]
+#baseMoveList = [["Basic Swift Strike", "attack"],["Basic Elemental Spike Shield", "block"],["Basic Swift Eyes", "observe"],["Basic Elemental Glide", "maneuver"],["Basic Elemental Surge", "bending"]]
 
 
 
@@ -339,7 +340,7 @@ class character_:
 
 
 
-        self.movelist = baseMoveList = [["Swift Strike", "attack"],["Elemental Spike Shield", "block"],["Swift Eyes", "observe"],["Elemental Glide", "maneuver"],["Elemental Surge", "bending"]]#baseMoveList
+        self.movelist = [["Basic Swift Strike", "attack"],["Basic Elemental Spike Shield", "block"],["Basic Swift Eyes", "observe"],["Basic Elemental Glide", "maneuver"],["Basic Elemental Surge", "bending"]]#baseMoveList
         #supportPositions,defensePositions,offensePositions
         if role in offensePositions:
             self.movelist.append(random.choice([["Swift Strike", "attack"],["Elemental Surge", "bending"]]))

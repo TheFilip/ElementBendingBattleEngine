@@ -121,19 +121,20 @@ def playerSubstitute(listOfPlayers):
 
 
 def count_items(input_list):
-    # Flatten the list of lists
-    flat_list = [item for sublist in input_list for item in sublist]
+    # Convert objects to tuples with additional attributes for hashability
+    input_tuples = [(item.name, item.successfulHits, item.knockedoutAmount) for sublist in input_list for item in sublist]
 
     # Use Counter to count the occurrences of each item
-    item_counts = Counter(flat_list)
+    item_counts = Counter(input_tuples)
 
     # Sort items by count in descending order
-    sorted_items = sorted(item_counts.items(), key=lambda x: x[1], reverse=True)
+    sorted_items = sorted(item_counts.items(), key=lambda x: sum(x[0][1:]) + x[1], reverse=True)
 
     # Print the result
     for item, count in sorted_items:
-        print(f"{item}: {count}")
-
+        total_count = sum(item[1:]) + count
+        #print(f"{item[0]}: {total_count}")
+        print(f"{item[0]}")
 
 
 
@@ -431,14 +432,17 @@ def match(team1,team2):
 
 
     def printWinners():
-        print(winners)
-        print(len(team1),":",len(team2))
+        print("-Players Left In Round-")
+        for i, winner in enumerate(winners):
+            print(winner.name, end=', ' if i < len(winners) - 1 else '\n')
+        print()
+        #print(len(team1),":",len(team2))
 
     if len(team1)>len(team2):
         global t1W,t2W,winningTeam,winningName
         print(firstTeamName,"Wins!")
         for i in team1:
-            winners.append(i.name)
+            winners.append(i)
             #knockoutAmounts.extend((i.name,i.knockedoutAmount))
 
         printWinners()
@@ -446,7 +450,7 @@ def match(team1,team2):
     elif len(team1)<len(team2):
         print(secondTeamName,"Wins!")
         for i in team2:
-            winners.append(i.name)
+            winners.append(i)
             #knockoutAmounts.extend((i.name,i.knockedoutAmount))
 
         printWinners()
