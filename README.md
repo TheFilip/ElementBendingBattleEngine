@@ -8,21 +8,15 @@ Element Bending Battle Engine & Onyx Control are  little hobby projects to keep 
 
 The Battle Engine handles combat between either individual characters or teams of multiple.
 
-To run EBBE:
+**To run EBBE:**
 
-  -Download newest Release + allow running, or download source code
-  
-  -Change names of teams
-  
-  -Add players for each teams
-  
-  -Set # of rounds to simulate
-  
-  -Press Simulate Match to generate a text file with the generated match
-  
-  -???
-  
-  -Profit!
+  - Download newest Release + allow running, or download source code
+  - Change names of teams
+  - Add players for each teams
+  - Set # of rounds to simulate
+  - Press Simulate Match to generate a text file with the generated match
+  - ???
+  - Profit!
   
 
 ![alt text](https://i.imgur.com/yQu4kP1.png)
