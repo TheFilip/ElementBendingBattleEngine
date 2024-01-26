@@ -1,0 +1,4 @@
+v 240126
+-----
+-added 12 characters to customise simulations with
+-uploaded exe file to github
