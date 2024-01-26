@@ -14,7 +14,7 @@ The Battle Engine handles combat between either individual characters or teams o
   - Change names of teams
   - Add players for each teams
   - Set # of rounds to simulate
-  - Press Simulate Match to generate a text file with the generated match
+  - Press 'Simulate Match' to generate a text file in a Match folder in the same location as the exe
   - ???
   - Profit!
   
