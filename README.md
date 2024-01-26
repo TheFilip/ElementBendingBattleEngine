@@ -28,7 +28,7 @@ Not Included in the Repo:
 
   - Easily editable (not cleaned up sheet however)
 
-  - Ranking of all characters (of all 3 elements), by their stats.
+  - Ranking of all characters (of all 4 elements), by their stats.
 
 ![alt text](https://i.imgur.com/iGiPjkN.png)
 ![alt text](https://i.imgur.com/nCI88Lk.png)
