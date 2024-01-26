@@ -8,28 +8,15 @@ Element Bending Battle Engine & Onyx Control are  little hobby projects to keep 
 
 The Battle Engine handles combat between either individual characters or teams of multiple.
 
+To run EBBE:
+  -Download newest Release + allow running, or download source code
+  -Change names of teams
+  -Add players for each teams
+  -Set # of rounds to simulate
+  -Press Simulate Match to generate a text file with the generated match
+  -???
+  -Profit!
 
-Edit the exec.py file with the team names and characters from matchInfo file.
-
-
-
-
-
-
-
-
-
-
-Not Included in the Repo:
-
-- A accompaning Excel sheet of all characters and their stats. All individual stats are generated for characters, each specific for different turn options (attack, defend, observe/maneuver). Then averages of all appropriate ones dictate player stats.
-
-  - Easy to copy-paste column of generated python text of all charcter stats to generate character objects.
-
-  - Easily editable (not cleaned up sheet however)
-
-  - Ranking of all characters (of all 4 elements), by their stats.
-
-![alt text](https://i.imgur.com/iGiPjkN.png)
-![alt text](https://i.imgur.com/nCI88Lk.png)
-![alt text](https://i.imgur.com/I0a2gpk.png)
+![alt text](https://i.imgur.com/yQu4kP1.png)
+![alt text](https://i.imgur.com/InP6h7A.png)
+![alt text](https://i.imgur.com/sCjdUWU.png)
