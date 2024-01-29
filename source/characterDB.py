@@ -24,7 +24,7 @@ Lamcheung = character_("Lamcheung","Earth","Bully",[["Elemental Surge", "bending
 Korra = character_("Korra","Water","Bully",[["Super Elemental Surge", "bending"],["Super Elemental Surge", "bending"]],99,99,99,99,99,99,99,99,99,99,99,99,67,63,54,72)
 
 
-earthBenders = [Yuka, Asuka, Mei, JinHo, Kaito, Renji, Kim,Wenchoi, Shoukim, Chunpang, Udeoru, Lamcheung]
+earthBenders = [Korra,Yuka, Asuka, Mei, JinHo, Kaito, Renji, Kim,Wenchoi, Shoukim, Chunpang, Udeoru, Lamcheung]
 earthBenders.sort(key=lambda x: x.name, reverse=False)
 characterList = [None]
 characterList.extend(earthBenders)
