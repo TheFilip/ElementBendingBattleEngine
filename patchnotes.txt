@@ -1,4 +1,4 @@
-a-v0.2--240129
+v0.2-240129
 -----
 -added feature of using github characterDB for character use
 -added blackbox logic to move choice
