@@ -1,3 +1,9 @@
+a-v0.2--290126
+-----
+-added feature of using github characterDB for character use
+-added blackbox logic to move choice
+
+
 v0.1a-240126
 -----
 -added 12 characters to customise simulations with
