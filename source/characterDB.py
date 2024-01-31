@@ -32,7 +32,7 @@ earthBenders = []
 waterBenders = []
 airBenders = []
 fireBenders = []
-natureBenders = []
+
 
 # Sort characters into corresponding element lists
 for character in bendersMasterList:
@@ -44,15 +44,12 @@ for character in bendersMasterList:
         airBenders.append(character)
     elif character.element == 'Fire':
         fireBenders.append(character)
-    elif character.element == 'Nature':
-        natureBenders.append(character)
 
 # Sort each element list by name
 earthBenders.sort(key=lambda x: x.name, reverse=False)
 waterBenders.sort(key=lambda x: x.name, reverse=False)
 airBenders.sort(key=lambda x: x.name, reverse=False)
 fireBenders.sort(key=lambda x: x.name, reverse=False)
-natureBenders.sort(key=lambda x: x.name, reverse=False)
 
 # Combine lists into characterList with separators
 characterList = [None]
@@ -68,6 +65,3 @@ if airBenders:
 
 if fireBenders:
     characterList.extend(fireBenders)
-
-if natureBenders:
-    characterList.extend(natureBenders)
