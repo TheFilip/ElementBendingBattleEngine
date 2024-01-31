@@ -1,8 +1,9 @@
-v0.2-240129
+v0.2a-240131
 -----
 -added feature of using github characterDB for character use
 -added blackbox logic to move choice
-
+-added tickbox for emote conversations
+-all players are displaying their elements
 
 v0.1a-240126
 -----
