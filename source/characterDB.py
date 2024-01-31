@@ -24,8 +24,51 @@ Lamcheung = character_("Lamcheung","Earth","Bully",[["Elemental Surge", "bending
 Korra = character_("Korra","Water","Bully",[["Super Elemental Surge", "bending"],["Super Elemental Surge", "bending"]],99,99,99,99,99,99,99,99,99,99,99,99,67,63,54,72)
 
 
-earthBenders = [Korra,Yuka, Asuka, Mei, JinHo, Kaito, Renji, Kim,Wenchoi, Shoukim, Chunpang, Udeoru, Lamcheung]
-earthBenders.sort(key=lambda x: x.name, reverse=False)
-characterList = [None]
-characterList.extend(earthBenders)
 
+
+bendersMasterList = [Korra,Yuka, Asuka, Mei, JinHo, Kaito, Renji, Kim,Wenchoi, Shoukim, Chunpang, Udeoru, Lamcheung]
+
+# Separate lists for each element
+earthBenders = []
+waterBenders = []
+airBenders = []
+fireBenders = []
+natureBenders = []
+
+# Sort characters into corresponding element lists
+for character in bendersMasterList:
+    if character.element == 'Earth':
+        earthBenders.append(character)
+    elif character.element == 'Water':
+        waterBenders.append(character)
+    elif character.element == 'Air':
+        airBenders.append(character)
+    elif character.element == 'Fire':
+        fireBenders.append(character)
+    elif character.element == 'Nature':
+        natureBenders.append(character)
+
+# Sort each element list by name
+earthBenders.sort(key=lambda x: x.name, reverse=False)
+waterBenders.sort(key=lambda x: x.name, reverse=False)
+airBenders.sort(key=lambda x: x.name, reverse=False)
+fireBenders.sort(key=lambda x: x.name, reverse=False)
+natureBenders.sort(key=lambda x: x.name, reverse=False)
+
+# Combine lists into characterList with separators
+characterList = [None]
+
+if earthBenders:
+    characterList.extend(earthBenders)
+    
+if waterBenders:
+    characterList.extend(waterBenders)
+
+if airBenders:
+    characterList.extend(airBenders)
+
+if fireBenders:
+    characterList.extend(fireBenders)
+
+if natureBenders:
+    characterList.extend(natureBenders)
