@@ -21,12 +21,11 @@ Chunpang = character_("Chunpang","Earth","Bully",[["Swift Strike", "attack"]],72
 Udeoru = character_("Udeoru","Earth","Wall",[["Swift Eyes", "observe"]],74,78,73,69,61,39,35,38,68,72,66,29,76,45,68,73)
 Lamcheung = character_("Lamcheung","Earth","Bully",[["Elemental Surge", "bending"]],49,56,77,46,40,52,59,63,63,65,58,50,67,63,54,72)
 
-Korra = character_("Korra","Water","Bully",[["Super Elemental Surge", "bending"],["Super Elemental Surge", "bending"]],99,99,99,99,99,99,99,99,99,99,99,99,67,63,54,72)
 
 
 
 
-bendersMasterList = [Korra,Yuka, Asuka, Mei, JinHo, Kaito, Renji, Kim,Wenchoi, Shoukim, Chunpang, Udeoru, Lamcheung]
+bendersMasterList = [Yuka, Asuka, Mei, JinHo, Kaito, Renji, Kim,Wenchoi, Shoukim, Chunpang, Udeoru, Lamcheung]
 
 # Separate lists for each element
 earthBenders = []
