@@ -12,7 +12,57 @@ from scipy.interpolate import make_interp_spline
 from collections import Counter
 from combat import *
 from matchInfo import *
-from characterDB import *
+
+
+import sys
+import requests
+import importlib.util
+
+
+
+
+
+
+#####################################################################Database
+if True:
+    # GitHub URL
+    github_url = 'https://raw.githubusercontent.com/TheFilip/ElementBendingBattleEngine/main/source/characterDB.py'
+
+    # Fetch the content of the file
+    response = requests.get(github_url)
+    character_db_code = response.text
+
+    # Create a temporary module
+    temp_module_name = 'temp_characterDB'
+    spec = importlib.util.spec_from_loader(temp_module_name, loader=None)
+    temp_module = importlib.util.module_from_spec(spec)
+
+    # Execute the code from the GitHub file in the temporary module
+    exec(character_db_code, temp_module.__dict__)
+
+    # Add the temporary module to sys.modules
+    sys.modules[temp_module_name] = temp_module
+
+    from temp_characterDB import *
+else:
+    # Local use of character Database
+    from characterDB import *
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 random.seed(int(seed), version=2)
@@ -48,7 +98,8 @@ t2W=0
 
 winningTeam = "winner"
 winningName = "x"
-
+defaultEmoticonConversations = False
+setEmoticonConversations = False
 
 
 roundsPassed = 0
@@ -133,8 +184,8 @@ def count_items(input_list):
     # Print the result
     for item, count in sorted_items:
         total_count = sum(item[1:]) + count
-        #print(f"{item[0]}: {total_count}")
-        print(f"{item[0]}")
+        print(f"{item[0]}: knocked out {item[2]} - successful hits {item[1]}")
+        #print(f"{item[0]}")
 
 
 
@@ -160,7 +211,7 @@ def count_items(input_list):
 
 
 
-def match(team1,team2):
+def match(team1,team2,setEmoticonConversations):
     global teamA, teamB
     global totalHP1, totalHP2, totalRoundsPassed, totalTimePassed
     global winningTeam,winningName
@@ -375,7 +426,7 @@ def match(team1,team2):
                                 i.chooseRandomOpponent(team1)
 
                         #combat per player
-                        compareStats(i,i.target)
+                        compareStats(i,i.target,setEmoticonConversations)
                         if i.target.health<0 or i.target.health == 0:
                             if i.target in team1:
                                 #print(i.target.name,"from",firstTeamName,"has been knocked out!")
@@ -444,7 +495,6 @@ def match(team1,team2):
         for i in team1:
             winners.append(i)
             #knockoutAmounts.extend((i.name,i.knockedoutAmount))
-
         printWinners()
         t1W +=1
     elif len(team1)<len(team2):
@@ -475,7 +525,9 @@ def match(team1,team2):
 
 
 #FIGHT HAPPENS
-def phase1(aTeamName,a,bTeamName,b,amountOfRounds=1):
+def phase1(aTeamName,a,bTeamName,b,amountOfRounds=1,setEmoticonConversations=defaultEmoticonConversations):
+    a = [player for player in a if player is not None]
+    b = [player for player in b if player is not None]
     roundsN = amountOfRounds
     runs = matchesN*roundsN
     print("seed:",seed)
@@ -521,7 +573,7 @@ def phase1(aTeamName,a,bTeamName,b,amountOfRounds=1):
             u.health = baseHitTarget
         teamA = a.copy()
         teamB = b.copy()
-        match(teamA,teamB)
+        match(teamA,teamB,setEmoticonConversations)
 
         if len(teamA) == len(teamB): #IF A DRAW HAPPENS #not teamA and not teamB
             teamA = a.copy()
@@ -534,7 +586,7 @@ def phase1(aTeamName,a,bTeamName,b,amountOfRounds=1):
                 if p.element != elementChosen:
                     teamB.remove(p)
             print("A draw has happened!",elementChosen+"benders are going to battle this one out!")
-            match(teamA,teamB)
+            match(teamA,teamB,setEmoticonConversations)
 
 
 
@@ -578,12 +630,12 @@ def phase1(aTeamName,a,bTeamName,b,amountOfRounds=1):
         teamB = b.copy()
         print("\n\n"+aTeamName+"\n----")
         for i in teamA:
-            print(i.name+":",i.knockedoutAmount," - successful hits:",i.successfulHits)
+            print(i.name+": knocked out:",i.knockedoutAmount," - successful hits:",i.successfulHits)
             i.knockedoutAmount = 0
             i.successfulHits = 0
         print("\n"+bTeamName+"\n----")
         for i in teamB:
-            print(i.name+":",i.knockedoutAmount," - successful hits:",i.successfulHits)
+            print(i.name+": knocked out:",i.knockedoutAmount," - successful hits:",i.successfulHits)
             i.knockedoutAmount = 0
             i.successfulHits = 0
         

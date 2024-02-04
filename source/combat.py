@@ -8,13 +8,21 @@ global dialogAmount
 dialogAmount = 0
 dialogAmountTarget = 55
 
-dialogPlacementRate = 6#/10
+dialogPlacementRate = 3#/10  needs to roll same or higher to succeed
+
+def printDialog(player1,player2):
+    if random.randint(1,10) >= dialogPlacementRate:
+        generateText(player1,player2,random.choice(["Monologue","Conversation"]))
+        while round(random.randint(1,10)/2) >= dialogPlacementRate:
+            generateText(player1,player2,random.choice(["Monologue","Conversation","Conversation"]))
 
 
 
 
 
-displayStoryText = True
+
+
+#displayStoryText = True
 typeOfText = "emoticon" #emoticon/text
 
 
@@ -66,7 +74,9 @@ def printCurrentZone(player):
 
 
 
-def compareStats(player1,player2):
+
+
+def compareStats(player1,player2,displayStoryText=False):
     attackSuccessfulText = False
 
 
@@ -82,8 +92,7 @@ def compareStats(player1,player2):
     dialogPlacement = random.choice(["start","end"])
     if displayStoryText:
         if dialogPlacement == "start":
-            if random.randint(1,10) <= dialogPlacementRate:
-                    generateText(player1,player2,random.choice(["Monologue","Conversation"]))
+            printDialog(player1,player2)
 
 
 
@@ -91,15 +100,15 @@ def compareStats(player1,player2):
 
     #Element Bonuses
     if player1.element == "Nature" and player2.element in ["Air","Water"]:
-        player1.movePower *= elementBonus
+        player1.movePower = round(player1.movePower*elementBonus)
     elif player1.element == "Air" and player2.element in ["Water","Earth"]:
-        player1.movePower *= elementBonus
+        player1.movePower = round(player1.movePower*elementBonus)
     elif player1.element == "Water" and player2.element in ["Earth","Fire"]:
-        player1.movePower *= elementBonus
+        player1.movePower = round(player1.movePower*elementBonus)
     elif player1.element == "Earth" and player2.element in ["Fire","Nature"]:
-        player1.movePower *= elementBonus
+        player1.movePower = round(player1.movePower*elementBonus)
     elif player1.element == "Fire" and player2.element in ["Nature","Air"]:
-        player1.movePower *= elementBonus
+        player1.movePower = round(player1.movePower*elementBonus)
 
 
 
@@ -306,8 +315,7 @@ def compareStats(player1,player2):
 
     if displayStoryText:
         if dialogPlacement == "end":
-            if random.randint(1,10) <= dialogPlacementRate:
-                    generateText(player1,player2,random.choice(["Monologue","Conversation"]))
+            printDialog(player1,player2)
 
 
 
@@ -335,10 +343,11 @@ npcBearing = ["intent", "madness", "alliance", "death", "bargain", "fear", "comf
 emoticons = ["😀", "😃", "😄", "😁", "😆", "😅", "🤣", "😂", "🙂", "😉", "😊", "😇", "🥰", "😍", "🤩", "😘","😗", "☺️", "😚", "😙", "🥲", "😏", "😋", "😛", "😜", "🤪", "😝", "🤗", "🤭", "🫣", "🤫", "🤔", "🫡", "🤤", "🤠", "🥳", "🥸", "😎", "🤓", "🧐", "🙃", "🫠", "🤐", "🤨", "😐", "😑", "😶", "🫥", "😶‍🌫️", "😒", "🙄", "😬", "😮‍💨", "🤥", "😌", "😔", "😪", "😴", "😷", "🤒", "🤕", "🤢", "🤮", "🤧", "🥵", "🥶", "🥴", "😵", "😵‍💫", "🤯", "🥱", "😕", "🫤", "😟", "🙁", "☹️", "😮", "😯", "😲", "😳", "🥺", "🥹", "😦", "😧", "😨", "😰", "😥", "😢", "😭", "😱", "😖", "😣", "😞", "😓", "😩", "😫", "😤", "😡", "😠", "🤬", "👿", "😈", "👿", "💀", "☠️", "💩", "🤡", "😼", "😽", "🙀", "😾", "🙈", "🙉", "🙊", "🐀", "🐓", "🐥", "🐈", "🦊", "🦥", "🪰", "🦄", "🐆","🐌", "🦝", "🪳", "🦐", "🐍", "🦎", "🐢"]
 emoticonsFaces = ["😀", "😃", "😄", "😁", "😆", "😅", "🤣", "😂", "🙂", "😉", "😊", "😇", "🥰", "😍", "🤩", "😘","😗", "☺️", "😚", "😙", "🥲", "😏", "😋", "😛", "😜", "🤪", "😝", "🤗", "🤭", "🫣", "🤫", "🤔", "🫡", "🤤", "🤠", "🥳", "🥸", "😎", "🤓", "🧐", "🙃", "🫠", "🤐", "🤨", "😐", "😑", "😶", "🫥", "😶‍🌫️", "😒", "🙄", "😬", "😮‍💨", "🤥", "😌", "😔", "😪", "😴", "😷", "🤒", "🤕", "🤢", "🤮", "🤧", "🥵", "🥶", "🥴", "😵", "😵‍💫", "🤯", "🥱", "😕", "🫤", "😟", "🙁", "☹️", "😮", "😯", "😲", "😳", "🥺", "🥹", "😦", "😧", "😨", "😰", "😥", "😢", "😭", "😱", "😖", "😣", "😞", "😓", "😩", "😫", "😤", "😡", "😠", "🤬", "👿", "😈", "👿", "☠️", "🤡", "😼", "😽", "🙀", "😾", "🙈", "🙉", "🙊"]
 
-positiveFaces = ["😀", "😃", "😄", "😁", "😆", "😅", "🤣", "😂", "🙂", "😉", "😊", "😇", "🥰", "😍", "🤩", "😘","😗", "☺️", "😚", "😙", "🥲", "😏", "😋", "😛", "😜", "🤪", "😝", "🤗", "🤭", "🫢", "🫣", "🤫", "🤔", "🫡", "🤤", "🤠", "🥳", "🥸", "😎", "🤓", "🧐", "🙃", "🫠", "🤐", "🤨", "😐", "😑", "😶", "🫥", "😶‍🌫️", "😒", "🙄", "😬", "😮‍💨", "🤥", "😌", "😔", "😪", "😴", "😷", "🤒", "🤕", "🤢", "🤮", "🤧", "🥵", "🥶", "🥴", "😵", "😵‍💫", "🤯", "🥱", "😕", "🫤", "😟", "🙁", "☹️", "😮", "😯", "😲", "😳", "🥺", "🥹", "😦", "😧", "😨", "😰", "😥", "😢", "😭", "😱", "😖", "😣", "😞", "😓", "😩", "😫", "😤", "😡", "😠", "🤬", "👿", "😈", "👿", "☠️", "🤡", "😼", "😽", "🙀", "😾", "🙈", "🙉", "🙊"]
-negativeFaces = ["😀", "😃", "😄", "😁", "😆", "😅", "🤣", "😂", "🙂", "😉", "😊", "😇", "🥰", "😍", "🤩", "😘","😗", "☺️", "😚", "😙", "🥲", "😏", "😋", "😛", "😜", "🤪", "😝", "🤗", "🤭", "🫢", "🫣", "🤫", "🤔", "🫡", "🤤", "🤠", "🥳", "🥸", "😎", "🤓", "🧐", "🙃", "🫠", "🤐", "🤨", "😐", "😑", "😶", "🫥", "😶‍🌫️", "😒", "🙄", "😬", "😮‍💨", "🤥", "😌", "😔", "😪", "😴", "😷", "🤒", "🤕", "🤢", "🤮", "🤧", "🥵", "🥶", "🥴", "😵", "😵‍💫", "🤯", "🥱", "😕", "🫤", "😟", "🙁", "☹️", "😮", "😯", "😲", "😳", "🥺", "🥹", "😦", "😧", "😨", "😰", "😥", "😢", "😭", "😱", "😖", "😣", "😞", "😓", "😩", "😫", "😤", "😡", "😠", "🤬", "👿", "😈", "👿", "☠️", "🤡", "😼", "😽", "🙀", "😾", "🙈", "🙉", "🙊"]
-angryFaces = []
-insultFaces = []
+positiveFaces = ["😀", "😃", "😄", "😁", "😆", "😅", "🤣", "😂", "🙂", "😉", "😊", "😇", "🥰", "😍", "🤩", "😘", "😗", "☺️", "😚", "😙", "🥲", "😌"]
+negativeFaces = ["😞", "😓", "😩", "😫", "😤", "😡", "😠", "🤬", "👿", "😈", "👿", "☠️", "🤡", "😼", "😽", "🙀", "😾", "🙈", "🙉", "🙊"]
+angryFaces = ["😡", "😠", "🤬", "👿", "😈", "👿", "☠️", "🤡"]
+insultFaces = ["😡", "😠", "🤬", "👿", "😈", "👿", "☠️", "🤡", "😼", "😽", "🙀", "😾"]
+sadFaces = ["😞", "😓", "😩", "😫", "😤", "😡", "😠", "🤬", "👿", "😈", "👿", "☠️", "😔", "😪", "😢", "😭", "😱", "😖", "😣"]
 
 
 
@@ -365,14 +374,14 @@ def generateText(currentCharacter, targetCharacter, situation):
         if typeOfText == "text":  # Assuming typeOfText is defined somewhere
             print("["+currentCharacter.name+" has a "+random.choice(attitude)+" conversation with "+targetCharacter.name+", Topic: "+random.choice(npcBearing)+" "+random.choice(eventSubject)+"]")
         elif typeOfText == "emoticon":  # Assuming typeOfText is defined somewhere
-            print(currentCharacter.name+":", random.choice(emoticons))
-            print(targetCharacter.name+":", random.choice(emoticons))
+            print("<"+currentCharacter.name+":", random.choice(emoticons)+">")
+            print("<"+targetCharacter.name+":", random.choice(emoticons)+">")
 
     elif situation == "Monologue":
         if typeOfText == "text":
             print("["+currentCharacter.name+" has a "+random.choice(attitude)+" monologue about "+targetCharacter.name+", Topic: "+random.choice(npcBearing)+" "+random.choice(eventSubject)+"]")
         elif typeOfText == "emoticon":
-            print(currentCharacter.name+" monologues", random.choice(emoticons))
+            print("<<"+currentCharacter.name+" monologues", random.choice(emoticons)+">>")
 
     elif situation == "Scene Description":
         # randomScenePlots(currentCharacter)  # Assuming this function is defined somewhere
