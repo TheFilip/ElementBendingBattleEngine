@@ -1,3 +1,10 @@
+v0.25a-240204
+-----
+~bug fixes
+--fixed issue where selected players wouldn't be read correctly
+~changes
+--modified dialog system
+
 v0.2a-240131
 -----
 -added feature of using github characterDB for character use
