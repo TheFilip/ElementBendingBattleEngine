@@ -1,22 +1,26 @@
 #Match Info
 import random, sys
+from collections import Counter
 
 
+basicFAttackMove  = ["Basic Swift Strike", "attack"]
+basicFBlockMove = ["Basic Flair Spike Shield", "block"]
+basicFObserveMove = ["Basic Swift Eyes", "observe"]
+basicFManeuverMove =["Basic Flair Glide", "maneuver"]
+basicFBendingMove = ["Basic Flair Surge", "bending"]
 
+basicAttackMove  = ["Basic Swift Strike", "attack"]
+basicBlockMove = ["Basic Elemental Spike Shield", "block"]
+basicObserveMove = ["Basic Swift Eyes", "observe"]
+basicManeuverMove =["Basic Elemental Glide", "maneuver"]
+basicBendingMove = ["Basic Elemental Surge", "bending"]
+baseMoveList = [basicAttackMove,basicBlockMove,basicObserveMove,basicManeuverMove,basicBendingMove]
 
-baseMoveList = [["Basic Swift Strike", "attack"],["Basic Flair Spike Shield", "block"],["Basic Swift Eyes", "observe"],["Basic Flair Glide", "maneuver"],["Basic Flair Surge", "bending"]]
 #baseMoveList = [["Basic Swift Strike", "attack"],["Basic Elemental Spike Shield", "block"],["Basic Swift Eyes", "observe"],["Basic Elemental Glide", "maneuver"],["Basic Elemental Surge", "bending"]]
 
 
 
-
-
-
-
-
-
-
-
+global baseHitTarget
 baseHitTarget = 3
 matchesN = 1
 #roundsN = 3
@@ -25,9 +29,8 @@ matchesN = 1
 #runs = matchesN*roundsN
 
 
-variance = 20 #percentage since it adjusts to 100 total
 modifier = 5 #1 for /100, 5 for /20 stats
-
+variance = 20/modifier #percentage since it adjusts to 100 total
 
 
 chooseSeed = False
@@ -341,11 +344,12 @@ class character_:
 
 
         self.movelist = [["Basic Swift Strike", "attack"],["Basic Elemental Spike Shield", "block"],["Basic Swift Eyes", "observe"],["Basic Elemental Glide", "maneuver"],["Basic Elemental Surge", "bending"]]#baseMoveList
+        #self.movelist = [["Basic Swift Strike", "attack"],["Basic Elemental Spike Shield", "block"],["Basic Swift Eyes", "observe"],["Basic Elemental Glide", "maneuver"],["Basic Elemental Surge", "bending"]]#baseMoveList
         #supportPositions,defensePositions,offensePositions
         if role in offensePositions:
-            self.movelist.append(random.choice([["Swift Strike", "attack"],["Elemental Surge", "bending"]]))
+            self.movelist.append(random.choice([basicAttackMove,basicBendingMove]))
         elif role in defensePositions:
-            self.movelist.append(random.choice([["Elemental Spike Shield", "block"],["Swift Eyes", "observe"]]))
+            self.movelist.append(random.choice([basicBlockMove,basicObserveMove]))
 
         for i in range(1): #test out doing this twice, odds: 1/6-17%, 2/7-29%, 3/9-33%
             self.movelist.extend(preference)
@@ -360,24 +364,75 @@ class character_:
 
     def chooseRandomOpponent(self, opponentTeam):
         self.target = random.choice(opponentTeam)
-        self.initiative = (random.randint(1,variance))+self.initiativeBonus
+        #self.initiative = (random.randint(1,variance))+self.initiativeBonus ##
 
     def turnChoice(self, opponentTeam):
+        self.chooseRandomOpponent(opponentTeam)
         #self.target = random.choice(opponentTeam)
         self.initiative = (random.randint(1,variance))+self.initiativeBonus
-        self.moveChoice = random.choice(self.movelist)
+        self.moveChoice = self.blackboxDecision(opponentTeam)#random.choice(self.movelist)
+
         if self.moveChoice[1] == "attack":
-            self.movePower = random.randrange(1,self.attackStat)+(random.randint((0-variance),variance))
+            self.movePower = random.randrange(1,self.attackStat)
         if self.moveChoice[1] == "block":
-            self.movePower = random.randrange(1,self.blockStat)+(random.randint((0-variance),variance))
+            self.movePower = random.randrange(1,self.blockStat)
         if self.moveChoice[1] == "observe":
-            self.movePower = random.randrange(1,self.observeStat)+(random.randint((0-variance),variance))
+            self.movePower = random.randrange(1,self.observeStat)
         if self.moveChoice[1] == "maneuver":
-            self.movePower = random.randrange(1,self.maneuverStat)+(random.randint((0-variance),variance))
+            self.movePower = random.randrange(1,self.maneuverStat)
         if self.moveChoice[1] == "bending":
-            self.movePower = random.randrange(1,self.bendingStat)+(random.randint((0-variance),variance))
+            self.movePower = random.randrange(1,self.bendingStat)
+        self.movePower += (random.randint((0-variance),variance))#+moveChoice[2]
         #print(self.name,self.moveChoice,self.movePower,target.name)
     
+
+        
+    def blackboxDecision(self, opponentTeam):
+        tempMoveList = self.movelist.copy()
+
+        # Calculate the average health of all objects in opponent team
+        total_opponent_health = sum([opponent.health for opponent in opponentTeam]) if opponentTeam else 0
+        opponent_team_health_average = total_opponent_health / len(opponentTeam) if opponentTeam else 0
+
+        if self.health > opponent_team_health_average:
+            tempMoveList.append(basicAttackMove)
+        elif self.health < opponent_team_health_average:
+            tempMoveList.append(basicBlockMove)
+        else:
+            tempMoveList.append(basicObserveMove)
+
+        player_stat_weights = {
+            "attack": self.attackStat,
+            "block": self.blockStat,
+            "observe": self.observeStat,
+            "maneuver": self.maneuverStat,
+            "bending": self.bendingStat
+        }
+
+        # Scale the player stat weights based on random values between 0.8 and 1.2
+        for move_type in player_stat_weights:
+            player_stat_weights[move_type] *= random.uniform(0.8, 1.2)
+
+        # Count occurrences of each move type in tempMoveList
+        move_counts = Counter(move[1] for move in tempMoveList)
+
+        # Calculate appearance weights based on move counts
+        move_appearance_weights = {move_type: 1.0 + move_counts.get(move_type, 0) for move_type in player_stat_weights}
+
+        # Combine player stat weights and move appearance weights
+        combined_weights = {move_type: player_stat_weights[move_type] * move_appearance_weights[move_type]
+                            for move_type in player_stat_weights}
+
+        # Choose the move type with the highest combined weighted score
+        chosen_move_type = max(combined_weights, key=combined_weights.get)
+
+        # Filter out moves not present in the movelist
+        valid_moves = [move for move in tempMoveList if move[1] == chosen_move_type]
+
+        # Choose a move randomly from the valid_moves list
+        choice = random.choice(valid_moves) if valid_moves else random.choice(tempMoveList)
+        return choice
+        #return random.choice(self.movelist)
 
 
 #Korra = character_("Korra","Water",82,55,76,,"attack")

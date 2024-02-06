@@ -55,17 +55,17 @@ def criticalAttack(damageBeingTaken, player):
     if player.movePower >= (75/modifier): #15
         # global damageBeingTaken
         damageBeingTaken += 1
-        print("Flow Awakened to strengthen attack", criticalHitText)
+        print(f"Flow Awakened to strengthen attack {criticalHitText}")
         return damageBeingTaken
 
 
 def printCurrentZone(player):
     if player.health == outsideZone:
-        print(player.name,"currently in - Outside Zone")
+        print(f"{player.name} currently in - Outside Zone")
     elif player.health <= middleZone:
-        print(player.name,"currently in - Middle Zone")
+        print(f"{player.name} currently in - Middle Zone")
     elif player.health <= innerZone:
-        print(player.name,"currently in - Inner Zone")
+        print(f"{player.name} currently in - Inner Zone")
 
 
 
@@ -79,10 +79,6 @@ def printCurrentZone(player):
 def compareStats(player1,player2,displayStoryText=False):
     attackSuccessfulText = False
 
-
-
-    
-
     print("-")
     if True:
         #print("-")
@@ -93,10 +89,6 @@ def compareStats(player1,player2,displayStoryText=False):
     if displayStoryText:
         if dialogPlacement == "start":
             printDialog(player1,player2)
-
-
-
-
 
     #Element Bonuses
     if player1.element == "Nature" and player2.element in ["Air","Water"]:
@@ -110,141 +102,128 @@ def compareStats(player1,player2,displayStoryText=False):
     elif player1.element == "Fire" and player2.element in ["Nature","Air"]:
         player1.movePower = round(player1.movePower*elementBonus)
 
-
-
-
-
-
 #Player Choosing Action for Turn
 
 #Player Choice being Attack
     if player1.moveChoice[1] == "attack":
         #same as user
         if player2.moveChoice[1] == "attack":
-            print(player1.name+" and "+player2.name+" enter a offensive showdown")
+            print(f"{player1.name} and {player2.name} enter a offensive showdown")
             if player1.movePower > player2.movePower:
                 attackSuccessfulText = True
-                print(player1.name+"'s '"+player1.element,player1.moveChoice[0]+"' technique overwhelms "+player2.name)
+                #print(player1.name+"'s '"+player1.element,player1.moveChoice[0]+"' technique overwhelms "+player2.name)
+                print(f"{player1.name}'s {player1.element} '{player1.moveChoice[0]}' technique overwhelms {player2.name}")
             else:
-                print(player1.name,"tries to hit",player2.name,"with their '"+player1.element,player1.moveChoice[0]+"' technique but isn't successful")
+                print(f"{player1.name} tries to hit {player2.name} with their {player1.element} '{player1.moveChoice[0]}' technique but isn't successful")
         #user beats
         elif player2.moveChoice[1] == "observe" or player2.moveChoice[1] == "bending":
             attackSuccessfulText = True
             if player2.moveChoice[1] == "observe":
-                print(player1.name+" manages to hit "+player2.name+" with their '"+player1.element,player1.moveChoice[0]+"' technique while "+player2.name+" is distracted")
+                print(f"{player1.name} manages to hit {player2.name} with their {player1.element} '{player1.moveChoice[0]}' technique while {player2.name} is distracted")
             else:
-                print(player1.name+"'s offensive '"+player1.moveChoice[0]+"' technique overwhelms "+player2.name+"'s inferior bending shots")
+                print(f"{player1.name}'s offensive '{player1.moveChoice[0]}' technique overwhelms {player2.name}'s inferior bending shots")
         #beats user
         elif player2.moveChoice[1] == "block" or player2.moveChoice[1] == "maneuver":
             if player2.moveChoice[1] == "block":
-                print(player2.name+" successfully deflects "+player1.name+"'s '"+player1.element,player1.moveChoice[0]+"' technique")
+                print(f"{player2.name} successfully deflects {player1.name}'s {player1.element} '{player1.moveChoice[0]}' technique")
             else:
-                print(player2.name+" outmaneuvers "+player1.name+"'s '"+player1.element,player1.moveChoice[0]+"' technique")
+                print(f"{player2.name} outmaneuvers {player1.name}'s '{player1.element} '{player1.moveChoice[0]}' technique")
 
 #Player Choice being Block
     elif player1.moveChoice[1] == "block":
         #same as user
         if player2.moveChoice[1] == "block":
-            print(player1.name+" and "+player2.name+" both get into defensive positions")
+            print(f"{player1.name} and {player2.name} both get into defensive positions")
             if player1.movePower > player2.movePower:
-                print(player2.name+"'s'"+player2.element,player1.moveChoice[0]+"' blocking technique was too weak for "+player1.name+"'s",player1.element,"bending attacks")
+                print(f"{player2.name}'s {player2.element} {player1.moveChoice[0]}' blocking technique was too weak for {player1.name}'s {player1.element} bending attacks")
                 attackSuccessfulText = True
             else:
-                print(player2.name,"manages to block",player1.name+"'s",player1.element,"bending attacks")
+                print(f"{player2.name} manages to block {player1.name}'s {player1.element} bending attacks")
         #user beats
         elif player2.moveChoice[1] == "attack" or player2.moveChoice[1] == "observe":
             attackSuccessfulText = True
             if player2.moveChoice[1] == "attack":
-                print(player1.name+"'s '"+player1.element,player1.moveChoice[0]+"' technique successfully counters "+player2.name+"'s "+player2.element+" attacks")
+                print(f"{player1.name}'s '{player1.element} {player1.moveChoice[0]}' technique successfully counters {player2.name}'s {player2.element} attacks")
             else:
-                print(player1.name+" manages to successfully hit "+player2.name+" as "+player1.name+"'s '"+player1.moveChoice[0]+"' technique was too difficult to analyse")
+                print(f"{player1.name} manages to successfully hit {player2.name} as {player1.name}'s '{player1.element} {player1.moveChoice[0]}' technique was too difficult to analyse")
         #beats user
         elif player2.moveChoice[1] == "maneuver" or player2.moveChoice[1] == "bending":
             if player2.moveChoice[1] == "maneuver":
-                print(player2.name+" outmaneuvers "+player1.name+"'s defensive moves")
+                print(f"{player2.name} outmaneuvers {player1.name}'s defensive moves")
             else:
-                print(player1.name+"'s defensive moves aren't enought to break "+player2.name+"'s bending shots")
+                print(f"{player1.name}'s defensive moves aren't enought to break {player2.name}'s bending shots")
 
-#Player Choice being Observe
+    #Player Choice being Observe
     elif player1.moveChoice[1] == "observe":
         #same as user
         if player2.moveChoice[1] == "observe":
-            print(player1.name+" and "+player2.name+" carefully analyse the other's attacks")
+            print(f"{player1.name} and {player2.name} carefully analyse the other's attacks")
             if player1.movePower > player2.movePower:
-                print(player1.name,"gets a clean",player1.element,"bending hit against",player2.name)
+                print(f"{player1.name} gets a clean {player1.element} bending hit against {player2.name}")
                 attackSuccessfulText = True
             else:
-                print(player1.name+"'s",player1.element+" attacks were too easy for",player2.name,"to read")
+                print(f"{player1.name}'s {player1.element} attacks were too easy for {player2.name} to read")
         #user beats
         elif player2.moveChoice[1] == "bending" or player2.moveChoice[1] == "maneuver":
             attackSuccessfulText = True
             if player2.moveChoice[1] == "bending":
-                print(player1.name+" successfully uses their '"+player1.moveChoice[0]+"' technique to analyse "+player2.name+"'s "+player2.element,"bending habits and sneaks in a hit")
+                print(f"{player1.name} successfully uses their '{player1.moveChoice[0]}' technique to analyse {player2.name}'s {player2.element} bending habits and sneaks in a hit")
             else:
-                print(player1.name+" successfully uses their '"+player1.moveChoice[0]+"' technique to analyse "+player2.name+"'s movements and predicts their shots to hit "+player2.name)
+                print(f"{player1.name} successfully uses their '{player1.moveChoice[0]}' technique to analyse {player2.name}'s movements and predicts their shots to hit {player2.name}")
         #beats user
         elif player2.moveChoice[1] == "attack" or player2.moveChoice[1] == "block":
             if player2.moveChoice[1] == "attack":
-                print(player2.name+"'s attacks are too difficult for "+player1.name+" to analyse")
+                print(f"{player2.name}'s attacks are too difficult for {player1.name} to analyse")
             else:
-                print(player2.name+"'s defending moves are too difficult for "+player1.name+" to analyse")
+                print(f"{player2.name}'s defending moves are too difficult for {player1.name} to analyse")
 
-#Player Choice being Maneuver
+    #Player Choice being Maneuver
     elif player1.moveChoice[1] == "maneuver":
         #same as user
         if player2.moveChoice[1] == "maneuver":
-            print(player1.name+" and "+player2.name+" are both attempting to secure an advantageous position")
+            print(f"{player1.name} and {player2.name} are both attempting to secure an advantageous position")
             if player1.movePower > player2.movePower:
-                print(player1.name, "skillfully uses their '"+player1.moveChoice[0]+"' technique and lands a precise", player1.element + " attack against", player2.name)
+                print(f"{player1.name} skillfully uses their '{player1.moveChoice[0]}' technique and lands a precise {player1.element} attack against {player2.name}")
                 attackSuccessfulText = True
             else:
-                print(player1.name,"attempts to hit",player2.name,"with their",player1.element+"bending attacks but misses")
+                print(f"{player1.name} attempts to hit {player2.name} with their {player1.element} bending attacks but misses")
         #user beats
         elif player2.moveChoice[1] == "block" or player2.moveChoice[1] == "attack":
             attackSuccessfulText = True
             if player2.moveChoice[1] == "block":
-                print(player1.name+" uses their '"+player1.moveChoice[0]+"' technique to evade "+player2.name+"'s "+player2.element+" attacks and successfully hits back")
+                print(f"{player1.name} uses their '{player1.moveChoice[0]}' technique to evade {player2.name}'s {player2.element} attacks and successfully hits back")
             else:
-                print(player1.name+" uses their '"+player1.moveChoice[0]+"' technique to outmaneuver "+player2.name+"'s "+player2.element+" attacks and successfully hits back")
+                print(f"{player1.name} uses their '{player1.moveChoice[0]}' technique to outmaneuver {player2.name}'s {player2.element} attacks and successfully hits back")
         #beats user
         elif player2.moveChoice[1] == "bending" or player2.moveChoice[1] == "observe":
             if player2.moveChoice[1] == "bending":
-                print(player2.name+" is prepared to anticipate and adjust their bending to "+player1.name+"'s movements")
+                print(f"{player2.name} is prepared to anticipate and adjust their bending to {player1.name}'s movements")
             else:
-                print(player1.name+"'s movements were anazlysed by "+player2.name)
+                print(f"{player1.name}'s movements were anazlysed by {player2.name}")
 
-#Player Choice being Bending
+    #Player Choice being Bending
     elif player1.moveChoice[1] == "bending":
         #same as user
         if player2.moveChoice[1] == "bending":
-            print(player1.name+" and "+player2.name+" both enter a bending showdown")
+            print(f"{player1.name} and {player2.name} both enter a bending showdown")
             if player1.movePower > player2.movePower:
-                print(player1.name+"'s '"+player1.element,player1.moveChoice[0]+"' bending technique is superior to",player2.name+"'s bending")
+                print(f"{player1.name}'s '{player1.element} {player1.moveChoice[0]}' bending technique is superior to {player2.name}'s bending")
                 attackSuccessfulText = True
             else:
-                print(player1.name,"and",player2.name+" bending attacks match up in power with nobody getting ahead")
+                print(f"{player1.name} and {player2.name} bending attacks match up in power with nobody getting ahead")
         #user beats
         elif player2.moveChoice[1] == "block" or player2.moveChoice[1] == "maneuver":
             attackSuccessfulText = True
             if player2.moveChoice[1] == "block":
-                print(player1.name+"'s '"+player1.element,player1.moveChoice[0]+"' bending technique outperforms "+player2.name+"'s defensive capabilities")
+                print(f"{player1.name}'s '{player1.element} {player1.moveChoice[0]}' bending technique outperforms {player2.name}'s defensive capabilities")
             else:
-                print(player1.name+" anticipates "+player2.name+"'s movements and beats them with their '"+player1.element,player1.moveChoice[0]+"' bending technique")             
+                print(f"{player1.name} anticipates {player2.name}'s movements and beats them with their '{player1.element} {player1.moveChoice[0]}' bending technique")             
         #beats user
         elif player2.moveChoice[1] == "attack" or player2.moveChoice[1] == "observe":
             if player2.moveChoice[1] == "attack":
-                print(player2.name+"'s "+player2.element+"bending doesn't match up to "+player1.name+"'s offensive attacks")
+                print(f"{player2.name}'s {player2.element} bending doesn't match up to {player1.name}'s offensive attacks")
             else:
-                print(player2.name+" analyzes "+player1.name+"'s "+player1.element+" bending habits")
-
-
-
-
-
-
-
-
-    
+                print(f"{player2.name} analyzes {player1.name}'s {player1.element} bending habits")
 
     # Activate when the attack is successful
     if attackSuccessfulText:

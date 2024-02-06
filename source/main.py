@@ -1,10 +1,8 @@
-#custom game engine for Avatar Legends: Onyx Control
-
 #idea; attack, defend, observe & strategize
 #stats from 1-100, average % compared to others in program
 #team stat too, sum all and divide by 150(?) and thats a stat multiplier before comparesent.
 #picks random opponent, each needs to be hit 9 times to be knocked off. (time limit?)
-import random, sys, matplotlib.pyplot as plt, numpy as np
+import random, sys, matplotlib.pyplot as plt, numpy as np, requests, importlib.util
 import plotly.express as px
 import pandas as pd
 from statistics import mean
@@ -14,17 +12,11 @@ from combat import *
 from matchInfo import *
 
 
-import sys
-import requests
-import importlib.util
-
-
-
 
 
 
 #####################################################################Database
-if True:
+if False:
     # GitHub URL
     github_url = 'https://raw.githubusercontent.com/TheFilip/ElementBendingBattleEngine/main/source/characterDB.py'
 
@@ -67,8 +59,9 @@ else:
 
 random.seed(int(seed), version=2)
 
-baseHitTarget = 3
-elementList = ["Earth","Fire","Water"]
+baseHitTargetB = baseHitTarget
+elementList = ["Earth","Fire","Water","Air"]
+
 
 global RedTeam,BlueTeam
 
@@ -149,12 +142,6 @@ def roundTimeAdd():
             print("Round Time: "+str(currentRoundTime)+" minutes")
             print("---")
         
-    
-
-
-
-
-
 def playerSubstitute(listOfPlayers):
     if False: #activate Substitues
         subChance = 10#/100
@@ -162,12 +149,6 @@ def playerSubstitute(listOfPlayers):
             player = random.choice(listOfPlayers)
             print(player.name,"should be substituted")
             input()
-
-
-
-
-
-
 
 
 
@@ -190,27 +171,6 @@ def count_items(input_list):
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 def match(team1,team2,setEmoticonConversations):
     global teamA, teamB
     global totalHP1, totalHP2, totalRoundsPassed, totalTimePassed
@@ -219,79 +179,37 @@ def match(team1,team2,setEmoticonConversations):
     roundResults = []
     playerSubstitute(team1 + team2)
 
-
-
     print("----------\n"+firstTeamName)
     for i in team1:
         if useEmotes:
-            if i.health == innerZone:
-                print(random.choice(emoticonsFaces),i.name,"the",i.element+"bending "+i.role)
-            elif i.health == middleZone:
-                print(random.choice(emoticonsFaces),i.name,"the",i.element+"bending "+i.role)
-            elif i.health == outsideZone:
-                print(random.choice(emoticonsFaces),i.name,"the",i.element+"bending "+i.role)
+            print(random.choice(emoticonsFaces),i.name,"the",i.element+"bending "+i.role)
         else:
-            if i.health == innerZone:
-                print(i.name,"the",i.element+"bending "+i.role)
-            elif i.health == middleZone:
-                print(i.name,"the",i.element+"bending "+i.role)
-            elif i.health == outsideZone:
-                print(i.name,"the",i.element+"bending "+i.role)
+            print(i.name,"the",i.element+"bending "+i.role)
+
     #print out all players for second team
     print("-----\n"+secondTeamName)
     for i in team2:
         if useEmotes:
-            if i.health == innerZone:
-                print(random.choice(emoticonsFaces),i.name,"the",i.element+"bending "+i.role)
-            elif i.health == middleZone:
-                print(random.choice(emoticonsFaces),i.name,"the",i.element+"bending "+i.role)
-            elif i.health == outsideZone:
-                print(random.choice(emoticonsFaces),i.name,"the",i.element+"bending "+i.role)
+            print(random.choice(emoticonsFaces),i.name,"the",i.element+"bending "+i.role)
         else:
-            if i.health == innerZone:
-                print(i.name,"the",i.element+"bending "+i.role)
-            elif i.health == middleZone:
-                print(i.name,"the",i.element+"bending "+i.role)
-            elif i.health == outsideZone:
-                print(i.name,"the",i.element+"bending "+i.role)
+            print(i.name,"the",i.element+"bending "+i.role)
     print("----------")
     #turnPlayers.sort(key=lambda x: x.initiative, reverse=True)
                         #run combat per player for each team
-    
-
     #t1W=0
     #t2W=0
-
     print("----- NEW MATCH ROUND STARTS -----")
     print("----------\n"+firstTeamName)
     for i in team1:
-        if i.health == innerZone:
-            print(i.name,"the",i.element+"bender - Inner Zone")
-        elif i.health == middleZone:
-            print(i.name,"the",i.element+"bender - Middle Zone")
-        elif i.health == outsideZone:
-            print(i.name,"the",i.element+"bender - Outside Zone")
+        print(i.name,"the",i.element+"bender")
     #print out all players for second team
     print("-----\n"+secondTeamName)
     for i in team2:
-        if i.health == innerZone:
-            print(i.name,"the",i.element+"bender - Inner Zone")
-        elif i.health == middleZone:
-            print(i.name,"the",i.element+"bender - Middle Zone")
-        elif i.health == outsideZone:
-            print(i.name,"the",i.element+"bender - Outside Zone")
+        print(i.name,"the",i.element+"bender")
     print("----------")
-
-
-
-
 
     global currentRoundTime
     currentRoundTime = 0 #timer resets to 0 at start of round
-
-
-
-
 
     while len(team1)>0 and len(team2)>0:
         global yP, xP, yPP
@@ -317,21 +235,10 @@ def match(team1,team2,setEmoticonConversations):
                 yP+=1
             else:
                 totalHP2 += i.health
-
-
-
-
-
-            
+ 
         #yP+=(totalHP1-totalHP2) ############################# WORKING HERE ON THIS ALGO
 
-        
         xP.append(totalRoundsPassed)
-
-
-        
-
-
 
         turnPlayers = []
         turnPlayers = team1 + team2
@@ -340,15 +247,6 @@ def match(team1,team2,setEmoticonConversations):
         #turnPlayers.insert(team2)
         #PRINT HEALTH OF PLAYERS AT START OF ROUND
         #print("----------")
-
-
-
-        
-
-
-
-
-
 
         if len(team1) == 0:
             break
@@ -367,14 +265,6 @@ def match(team1,team2,setEmoticonConversations):
                 for i in team2:
                     i.turnChoice(team1)
 
-
-
-
-                
-
-
-
-
                 #print out all players for first team
                 if True:
                     if currentRoundTime == 0:
@@ -384,22 +274,12 @@ def match(team1,team2,setEmoticonConversations):
                             print("----------")
                             print(firstTeamName)
                             for i in team1:
-                                if i.health == innerZone:
-                                    print(i.name,"the",i.element+"bender - Inner Zone")
-                                elif i.health == middleZone:
-                                    print(i.name,"the",i.element+"bender - Middle Zone")
-                                elif i.health == outsideZone:
-                                    print(i.name,"the",i.element+"bender - Outside Zone")
+                                printCurrentZone(i)
                             print("-----")
                             #print out all players for second team
                             print(secondTeamName)
                             for i in team2:
-                                if i.health == innerZone:
-                                    print(i.name,"the",i.element+"bender - Inner Zone")
-                                elif i.health == middleZone:
-                                    print(i.name,"the",i.element+"bender - Middle Zone")
-                                elif i.health == outsideZone:
-                                    print(i.name,"the",i.element+"bender - Outside Zone")
+                                printCurrentZone(i)
                             print("----------")
                             turnPlayers.sort(key=lambda x: x.initiative, reverse=True)
                             #run combat per player for each team
@@ -421,9 +301,11 @@ def match(team1,team2,setEmoticonConversations):
                             pass
                         else:
                             if i in team1: ########## KEEP EYE ON THIS
-                                i.chooseRandomOpponent(team2)
+                                pass
+                                #i.chooseRandomOpponent(team2)
                             else:
-                                i.chooseRandomOpponent(team1)
+                                pass
+                                #i.chooseRandomOpponent(team1)
 
                         #combat per player
                         compareStats(i,i.target,setEmoticonConversations)
@@ -568,9 +450,9 @@ def phase1(aTeamName,a,bTeamName,b,amountOfRounds=1,setEmoticonConversations=def
         if t1W == targetToWin or t2W == targetToWin:
             break
         for u in a:
-            u.health = baseHitTarget
+            u.health = baseHitTargetB
         for u in b:
-            u.health = baseHitTarget
+            u.health = baseHitTargetB
         teamA = a.copy()
         teamB = b.copy()
         match(teamA,teamB,setEmoticonConversations)
