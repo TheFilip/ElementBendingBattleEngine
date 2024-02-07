@@ -1,3 +1,14 @@
+v0.3a-240207
+-----
+~bug fixes
+--fixed issue where duplicate players wouldn't be read correctly
+--fixed issue where selected players wouldn't be read correctly
+~changes
+--included a quick info popup
+--rewritten main file, should run faster
+--added timer & round time limits
+--added draws
+
 v0.25a-240204
 -----
 ~bug fixes
