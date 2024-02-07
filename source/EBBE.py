@@ -1,12 +1,13 @@
-from main import *
 import tkinter as tk
 from tkinter import ttk
 import tkinter.messagebox as messagebox
 from tkinter.scrolledtext import ScrolledText
 import sys, os, webbrowser, random, requests
+import math
+from main import *
 
 # Define the version of your application
-APP_VERSION = "0.25a"  # Change this to your actual version
+APP_VERSION = "0.3a"  # Change this to your actual version
 
 # Save the original stdout for later use
 original_stdout = sys.stdout
@@ -30,12 +31,20 @@ def generate_simulation():
     # Retrieve the selected player objects from the dropdowns
     available_characters = update_available_characters()
 
-    team_a_players = [next((char for char in available_characters if char and char.name in left_comboboxes[i].get()), None) if left_comboboxes[i].get() != 'None' else None for i in range(5)]
-    team_b_players = [next((char for char in available_characters if char and char.name in right_comboboxes[i].get()), None) if right_comboboxes[i].get() != 'None' else None for i in range(5)]
+    # Directly compare the names without extracting
+    team_a_players = [next((char for char in available_characters if char and char.name == left_comboboxes[i].get().split(' - ')[1]), None) if left_comboboxes[i].get() != 'None' else None for i in range(5)]
+    team_b_players = [next((char for char in available_characters if char and char.name == right_comboboxes[i].get().split(' - ')[1]), None) if right_comboboxes[i].get() != 'None' else None for i in range(5)]
 
+    # Ensure the order of players is correct
+    team_a_players = [team_a_players[0], team_a_players[2], team_a_players[1], team_a_players[3], team_a_players[4]]
+    team_b_players = [team_b_players[0], team_b_players[2], team_b_players[1], team_b_players[3], team_b_players[4]]
+
+    # Print selected player names for debugging
+    #print("Team A Players:", [player.name if player else None for player in team_a_players])
+    #print("Team B Players:", [player.name if player else None for player in team_b_players])
 
     # Check if each team has at least one player
-    if not any(team_a_players) or not any(team_b_players) or len(set(player for player in team_a_players if player is not None)) != 1 or len(set(player for player in team_b_players if player is not None)) != 1:
+    if not team_a_players or not team_b_players:
         messagebox.showwarning("Team Incomplete", "Each team must have at least one player.")
         return
 
@@ -48,7 +57,6 @@ def generate_simulation():
         messagebox.showwarning("Duplicate Selection", "Each character can only be selected once.")
         return
 
-
     # Add selected characters to the dictionary with counts, excluding None
     selected_characters.clear()
     for player in selected_players:
@@ -57,13 +65,25 @@ def generate_simulation():
 
     # Check if any player has been selected more than once, excluding None
     if any(count > 1 for count in selected_characters.values()):
-        messagebox.showwarning("Duplicate Player Selection", "Each player can only be selected once in the simulation.")
+        messagebox.showwarning("Duplicate Selection", "Each character can only be selected once.")
         return
 
     # Ensure that there is at least one character selected for each team
     if not any(team_a_players) or not any(team_b_players):
-        messagebox.showwarning("Team Incomplete", "Each team must have at least one player.2")
+        messagebox.showwarning("Team Incomplete", "Each team must have at least one player.")
         return
+
+    # Retrieve the round number from the entry
+    round_number = int(round_number_entry.get())
+
+    # Retrieve the state of the "Allow Emote Conversations" checkbox
+    emoticon_conversations_enabled = allow_emote_conversations_var.get()
+
+    # Retrieve the state of the "Timer" checkbox
+    timer_enabled = timer_var.get()
+
+    # Retrieve the round time from the entry
+    round_time = int(round_time_entry.get()) if timer_enabled else 0
 
     # Define the folder name within the user's documents
     documents_folder = os.path.expanduser("~\\Documents")
@@ -77,13 +97,8 @@ def generate_simulation():
     team_name_left = team_name_left_entry.get()
     team_name_right = team_name_right_entry.get()
 
-    # Retrieve the round number from the entry
-    round_number = int(round_number_entry.get())
     randomKey = random.randint(1, 1000000)
     file_name = f"{folder_name}/{team_name_left} vs {team_name_right} - {round_number} Round - Key {randomKey}.txt"
-
-    # Retrieve the state of the "Allow Emote Conversations" checkbox
-    emoticon_conversations_enabled = allow_emote_conversations_var.get()
 
     try:
         # Open the file in write mode with UTF-8 encoding using a context manager
@@ -92,7 +107,7 @@ def generate_simulation():
             sys.stdout = file
 
             # Call the phase1 function with the collected information and emoticonConversations state
-            phase1(team_name_left, team_a_players, team_name_right, team_b_players, round_number, emoticon_conversations_enabled)
+            mainMatchRun(team_name_left,team_a_players,team_name_right,team_b_players,round_number,emoticon_conversations_enabled,timer_enabled, round_time)
     finally:
         # Reset stdout to its original value
         reset_stdout()
@@ -150,6 +165,15 @@ folder_button.grid(row=1, column=0, sticky="nw", pady=5)
 patch_notes_button = tk.Button(root, text="...", command=open_patch_notes)
 patch_notes_button.grid(row=0, column=0, sticky="nw")
 
+# Function to display help information
+def display_help():
+    help_text = """Select 2 unique teams of players and simulate a match between them!\n\nPressing the folder icon on the left will take you to generated TEXT files of the matches!"""
+    messagebox.showinfo("Help", help_text)
+
+# Create the "?" button
+help_button = tk.Button(root, text="?", command=display_help)
+help_button.grid(row=2, column=0, sticky="nw", pady=5)
+
 # Create and place the team name input above both drop-down areas
 team_name_left_label = tk.Label(root, text="Team Name (Left):")
 team_name_left_label.grid(row=0, column=1, padx=10, pady=5)
@@ -202,9 +226,21 @@ allow_emote_conversations_var = tk.BooleanVar()
 allow_emote_conversations_checkbox = tk.Checkbutton(root, text="Allow Emote Conversations", variable=allow_emote_conversations_var)
 allow_emote_conversations_checkbox.grid(row=7, column=3, padx=10, pady=5)
 
+# Create and place the "Timer" checkbox
+timer_var = tk.BooleanVar()
+timer_checkbox = tk.Checkbutton(root, text="Timer", variable=timer_var)
+timer_checkbox.grid(row=8, column=1, padx=10, pady=5)
+
+# Create and place the "Round Time" input
+round_time_label = tk.Label(root, text="Round Time:")
+round_time_label.grid(row=8, column=2, padx=10, pady=5)
+
+round_time_entry = tk.Entry(root, width=5)
+round_time_entry.grid(row=8, column=3, padx=10, pady=5)
+
 # Create and place the "Generate/Simulate" button in the middle at the bottom
 generate_button = tk.Button(root, text="Simulate Match", command=generate_simulation)
-generate_button.grid(row=7, column=4, pady=20)
+generate_button.grid(row=8, column=4, pady=20)
 
 # Start the Tkinter event loop
 root.mainloop()
