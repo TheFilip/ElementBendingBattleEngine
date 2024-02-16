@@ -58,7 +58,7 @@ TheBoulder = character_("The Boulder","Earth","Brawler",[["Observating", "observ
 bendersMasterList = [Amon, Unalaq, Kuruk, Yangchen, Roku, Korra, Kyoshi, Aang, Wan, Ozai, Azula, JeongJeong, Iroh, 
     Zuko, MonkGyatso, KingBumi, Toph, Katara, Tenzin, Kuvira, MasterPakku, Ghazan, Lin, Suyin, 
     Bolin, Mako, Rangi, Kya, ChiefTonraq, LongFeng, Desna, Eska, GeneralFong, Jinora, AdmiralZhao, 
-    Meelo, Kai, Opal, CanyonGuide, Haru, Hippo, TheBoulder]
+    Meelo, Kai, Opal, DaiLi, Haru, FireNationSoldier, TheBoulder]
 
 # Separate lists for each element
 earthBenders = []
