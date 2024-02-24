@@ -14,7 +14,7 @@ awayTeam = [JinHo,Kaito,Renji]
 
 
 
-phase1("Team A",homeTeam,"Team B",awayTeam,amountOfRounds=1)
+mainMatchRun("Team A",homeTeam,"Team B",awayTeam,amountOfRounds=3,setEmoticonConversations=True,timerActivation=False,maxTurnTime=35)
 
 #outputStats(homeTeam)
 #outputStats(awayTeam)
