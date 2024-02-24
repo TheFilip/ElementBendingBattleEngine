@@ -9,11 +9,11 @@ basicFObserveMove = ["Basic Swift Eyes", "observe"]
 basicFManeuverMove =["Basic Flair Glide", "maneuver"]
 basicFBendingMove = ["Basic Flair Surge", "bending"]
 
-basicAttackMove  = ["Basic Swift Strike", "attack"]
-basicBlockMove = ["Basic Elemental Spike Shield", "block"]
-basicObserveMove = ["Basic Swift Eyes", "observe"]
-basicManeuverMove =["Basic Elemental Glide", "maneuver"]
-basicBendingMove = ["Basic Elemental Surge", "bending"]
+basicAttackMove  = ["Basic Swift Strike", "attack",5]
+basicBlockMove = ["Basic Elemental Spike Shield", "block",5]
+basicObserveMove = ["Basic Swift Eyes", "observe",5]
+basicManeuverMove =["Basic Elemental Glide", "maneuver",5]
+basicBendingMove = ["Basic Elemental Surge", "bending",5]
 baseMoveList = [basicAttackMove,basicBlockMove,basicObserveMove,basicManeuverMove,basicBendingMove]
 
 #baseMoveList = [["Basic Swift Strike", "attack"],["Basic Elemental Spike Shield", "block"],["Basic Swift Eyes", "observe"],["Basic Elemental Glide", "maneuver"],["Basic Elemental Surge", "bending"]]
@@ -48,7 +48,7 @@ necessaryBonus = 1.2
 importantBonus = 1.1
 goodBonus = 1.05
 
-
+elementBonus = 1.1
 
 
 #function to check player's role and adjust the player's attributes
@@ -68,6 +68,8 @@ supportPositions = ["Playmaker","Tactician","Artist","Phantom","Shadow Assassin"
 analyticalPositions = ["Tactician","Zoner","Cutman"]
 movementPositions = ["Phantom","Shadow Assassin","Tempest","Reaper"]
 
+allRolesList = offensePositions+defensePositions+supportPositions
+elementList = ["Fire","Earth","Water","Air","Nature"]
 
 
 #= character_("","Water","Bully","observe",62,24,84,86,71,78,80,38,63,54,15,29,63,17,39,68)
@@ -82,15 +84,40 @@ class character_:
     def __init__(self,name,element,role,preference,initiativeBonus,ElementalPrecision,BendingSpeed,AdaptiveStrategy,TacticalAwareness,Composure,Adaptability,Resilience,PrecisionBlocking,Balance,ElementalDistortion,ElementalReserves,MentalToughness,Agility,Speed,Strength):
         self.name = name
         self.element = element
-
-
-
         self.health = baseHitTarget
-        #self.health = baseHitTarget+round(Resilience/16.66666667)
+        self.healthBackup = baseHitTarget
+        
+        if self.health == baseHitTarget:
+            self.zoneName = "inner zone"
+        elif self.health == round(baseHitTarget/2):
+            self.zoneName = "middle zone"
+        else:
+            self.zoneName = "outer zone"
+
+        # Use current role as prefered role then randomly choose a role to play as in the match
+        self.roleList = supportPositions+defensePositions+offensePositions
+        for i in range(9): #odds: 1(+1)/17-11%, 2(+1)/18-16%, 3(+1)/19-21%, 4(+1)/20-25%, 5(+1)/21-29%
+            self.roleList.append(role)
+
+        self.role = random.choice(self.roleList)
+        if self.role in offensePositions:
+            self.position = "offense"
+        elif self.role in defensePositions:
+            self.position = "defense"
+        elif self.role in supportPositions:
+            self.position = "support"
+        else:
+            self.position = "other"
+
+        # Levels
+        self.level = 1
+        self.star = 1
+
+        
+
+        
 
 
-
-        self.role = role
         #role bonus change
         ####DEFENSIVE
         if role == "Wall":
@@ -312,9 +339,7 @@ class character_:
 
 
 
-        #apply stats
-        self.level = 1
-        self.star = 1
+        
 
 
 
@@ -334,31 +359,47 @@ class character_:
         self.bendingStat = round(((BendingSpeed+ElementalPrecision+ElementalDistortion+ElementalReserves)/4)/modifier)
         #self.playmakeStat = round((AdaptiveStrategy+TacticalAwareness+Composure+Adaptability)/4)
         self.playmakeStat = round((((AdaptiveStrategy + TacticalAwareness + Composure + Adaptability) / 4) * (1 + ((self.level - 1) / 10) + ((self.star - 1) / 100)))/modifier) #<add stars+levels
-
-        
         self.defensiveStat = round(((Resilience+MentalToughness+Composure+Balance)/4)/modifier)
 
+        # Initiative Bonus
+        self.initiativeBonus = round(((initiativeBonus+((Speed+Agility)/5)))/modifier)
+        self.initiative = 0
 
+        # Amount of times character has successfully knocked out opponent or how many times they have successfully hit
+        self.knockedoutAmount = 0
+        self.successfulHits = 0
 
+        
+        #self.movelist = [["Basic Swift Strike", "attack"],["Basic Elemental Spike Shield", "block"],["Basic Swift Eyes", "observe"],["Basic Elemental Glide", "maneuver"],["Basic Elemental Surge", "bending"]]#baseMoveList
+        self.movelist =[basicAttackMove,basicBlockMove,basicObserveMove,basicManeuverMove,basicBendingMove]
 
-
-
-        self.movelist = [["Basic Swift Strike", "attack"],["Basic Elemental Spike Shield", "block"],["Basic Swift Eyes", "observe"],["Basic Elemental Glide", "maneuver"],["Basic Elemental Surge", "bending"]]#baseMoveList
+        # Changes from this list to further down with offense positions and further in blackbox need changing too
+        #self.movelist = [["Bending", "bending"],["Maneuvering", "maneuver"],["Attacking", "attack"],["Observating", "observe"],["Blocking", "block"]]
         #self.movelist = [["Basic Swift Strike", "attack"],["Basic Elemental Spike Shield", "block"],["Basic Swift Eyes", "observe"],["Basic Elemental Glide", "maneuver"],["Basic Elemental Surge", "bending"]]#baseMoveList
         #supportPositions,defensePositions,offensePositions
         if role in offensePositions:
             self.movelist.append(random.choice([basicAttackMove,basicBendingMove]))
         elif role in defensePositions:
-            self.movelist.append(random.choice([basicBlockMove,basicObserveMove]))
+            self.movelist.append(random.choice([basicObserveMove,basicBlockMove]))
 
         for i in range(1): #test out doing this twice, odds: 1/6-17%, 2/7-29%, 3/9-33%
             self.movelist.extend(preference)
 
+        self.movePower = 0
 
 
-        self.initiativeBonus = round(((initiativeBonus+((Speed+Agility)/5)))/modifier)
+    # Reset all player attributes that might change
+    def reset(self):
+        self.health = baseHitTarget
+
+        # Levels
+        self.level = 1
+        self.star = 1
+
+        # Initiative Bonus
         self.initiative = 0
 
+        # Amount of times character has successfully knocked out opponent or how many times they have successfully hit
         self.knockedoutAmount = 0
         self.successfulHits = 0
 
@@ -383,9 +424,22 @@ class character_:
         if self.moveChoice[1] == "bending":
             self.movePower = random.randrange(1,self.bendingStat)
         self.movePower += (random.randint((0-variance),variance))#+moveChoice[2]
+
+        #Element Bonuses
+        if self.element == "Nature" and self.target.element in ["Air","Water"]:
+            self.movePower = round(self.movePower*elementBonus)
+        elif self.element == "Air" and self.target.element in ["Water","Earth"]:
+            self.movePower = round(self.movePower*elementBonus)
+        elif self.element == "Water" and self.target.element in ["Earth","Fire"]:
+            self.movePower = round(self.movePower*elementBonus)
+        elif self.element == "Earth" and self.target.element in ["Fire","Nature"]:
+            self.movePower = round(self.movePower*elementBonus)
+        elif self.element == "Fire" and self.target.element in ["Nature","Air"]:
+            self.movePower = round(self.movePower*elementBonus)
+
         #print(self.name,self.moveChoice,self.movePower,target.name)
     
-
+    # TODO: MAYBE ADD MEMORY OF LAST OPPONENT MOVE AND USE THAT TO FACTOR IN CURRENT MOVE?
         
     def blackboxDecision(self, opponentTeam):
         tempMoveList = self.movelist.copy()
@@ -394,12 +448,14 @@ class character_:
         total_opponent_health = sum([opponent.health for opponent in opponentTeam]) if opponentTeam else 0
         opponent_team_health_average = total_opponent_health / len(opponentTeam) if opponentTeam else 0
 
-        if self.health > opponent_team_health_average:
-            tempMoveList.append(basicAttackMove)
-        elif self.health < opponent_team_health_average:
-            tempMoveList.append(basicBlockMove)
-        else:
-            tempMoveList.append(basicObserveMove)
+        #if self.health > opponent_team_health_average:
+            #tempMoveList.append(basicAttackMove)
+        #elif self.health < opponent_team_health_average:
+            #tempMoveList.append(basicBlockMove)
+        #else:
+            #tempMoveList.append(basicObserveMove)
+
+        
 
         player_stat_weights = {
             "attack": self.attackStat,
@@ -411,7 +467,7 @@ class character_:
 
         # Scale the player stat weights based on random values between 0.8 and 1.2
         for move_type in player_stat_weights:
-            player_stat_weights[move_type] *= random.uniform(0.8, 1.2)
+            player_stat_weights[move_type] *= random.uniform(0.7, 1.3)
 
         # Count occurrences of each move type in tempMoveList
         move_counts = Counter(move[1] for move in tempMoveList)

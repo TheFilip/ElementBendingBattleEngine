@@ -1,10 +1,11 @@
 #newMain
-import random, math, time, sys, requests, importlib.util
+import copy, random, math, time, sys, requests, importlib.util
 from statistics import mean
 from scipy.interpolate import make_interp_spline
 from collections import Counter
 from combat import *
 from matchInfo import *
+from tempCDB import *
 random.seed(int(seed), version=2)
 #####################################################################Database
 if False:
@@ -60,9 +61,11 @@ timerRanOut = False
 # Count and Print time
 def roundTimeAdd():
     if timerActive == True:
-        global currentRoundTime
-        currentRoundTime += random.randrange(1,4)+random.randrange(1,4)
-        if random.randrange(1,10)<=8:
+        global currentRoundTime, totalTimePassed
+        tta = random.randrange(1,6)+random.randrange(1,6) # Time To Add
+        currentRoundTime += tta
+        totalTimePassed += tta
+        if random.randrange(1,10)<=10:
             print("---")
             #print(str(currentRoundTime)+" minutes has passed")
             print("Round Time: "+str(currentRoundTime)+" minutes")
@@ -95,23 +98,29 @@ def count_items(input_list):
     print("-Potential MVPs-")
     for item, count in sorted_items:
         total_count = sum(item[1:]) + count
-        print(f"{item[0]}: knocked out {item[2]} - successful hits {item[1]}")
+        print(f"{item[0]} - {item[2]} knockouts & {item[1]} successful hits")
         #print(f"{item[0]}")
+
+
+
+
+
+
 
 # Displays selected team roster
 def displayRoster(team):
     print(f"----------\n{team.name} Roster")
     for i in team.roster:
         if useEmotes:
-            print(f"{random.choice(emoticonsFaces)} {i.name} the {i.element}bending {i.role}")
+            print(f"{random.choice(emoticonsFaces)} {i.name} the {i.element}bending {i.role} - playing in the {i.position} position")
         else:
-            print(f"{i.name} the {i.element}bending {i.role}")
+            print(f"{i.name} the {i.element}bending {i.role} - playing in the {i.position} position")
     print(f"----------")
 
 def printRosterStats(team):
     print("\n\n"+team+"\n----")
     for i in team:
-        print(i.name+": knocked out:",i.knockedoutAmount," - successful hits:",i.successfulHits)
+        print(f"{i.name} - {i.knockedoutAmount} knockouts & {i.successfulHits} successful hits")
         i.knockedoutAmount = 0
         i.successfulHits = 0
 
@@ -121,6 +130,8 @@ class team:
         self.name = name
         self.roster = roster
         self.rosterBackup = roster[:]
+        #self.roster = copy.deepcopy(roster)  # Deep copy of the roster - for ADND
+        #self.rosterBackup = copy.deepcopy(roster)  # Deep copy of the roster for backup - for ADND
         self.winNumber = 0
         self.loseNumber = 0
 
@@ -132,7 +143,8 @@ class team:
     # Used to reset the roster after removing everyone
     def roster_backup(self):
         self.roster = self.rosterBackup[:]
-    
+        #self.roster = copy.deepcopy(self.rosterBackup)  # Deep copy of the roster for backup - for ADND
+
     def resetWinLose(self):
         self.winNumber = 0
         self.loseNumber = 0
@@ -151,7 +163,7 @@ def teamWinning(team1,team2):
 
 
 # Main Match Function
-def runRound(homeTeam,awayTeam,setEmoticonConversations,):
+def runRound(homeTeam,awayTeam,setEmoticonConversations):
     global totalRoundsPassed, totalTimePassed, currentRoundTime
     timerRanOut = False
     currentRoundTime = 0
@@ -194,6 +206,11 @@ def runRound(homeTeam,awayTeam,setEmoticonConversations,):
 
         # Action per turn for each player
         for i in turnPlayers:
+            
+            if random.randint(1,10)>=8:
+                # Generate Conversation before match starts
+                if setEmoticonConversations:
+                    emoteConversationGenerator(random.randrange(3,5), homeTeam.roster + awayTeam.roster)
 
             # Check if current player's target is still in play
             if not homeTeam.roster or not awayTeam.roster:
@@ -206,7 +223,7 @@ def runRound(homeTeam,awayTeam,setEmoticonConversations,):
                     i.chooseRandomOpponent(homeTeam.roster)
 
             # Run compareStats combat
-            compareStats(i,i.target,setEmoticonConversations)
+            compareStats(i,i.target,totalTimePassed,setEmoticonConversations)
 
             # Check if target's health is 0 or less, if so remove from that team's roster and increase current player's knocked out count
             if i.target.health<=0:
@@ -220,6 +237,12 @@ def runRound(homeTeam,awayTeam,setEmoticonConversations,):
             # Remove knocked-out player from the list of potential targets for other players
             for team_ in [homeTeam, awayTeam]:
                 team_.roster = [player for player in team_.roster if player.health > 0]
+
+            
+
+
+
+
             
         # Run round timer function
         roundTimeAdd()
@@ -235,7 +258,7 @@ def runRound(homeTeam,awayTeam,setEmoticonConversations,):
         # Run after round finishes
         print("----- ROUND FINISH -----")
         print("This round lasted",str(currentRoundTime),"minutes")
-        totalTimePassed += currentRoundTime
+        #totalTimePassed += currentRoundTime
         printLeftOverPlayers(turnPlayers)
         teamWinning(homeTeam,awayTeam)  
         potMVPs.append(turnPlayers)
@@ -250,15 +273,16 @@ def printLeftOverPlayers(list):
 def playerStats(team_):
     print("\n\n"+team_.name+"\n----")
     for i in team_.rosterBackup:
-        print(i.name+": knocked out:",i.knockedoutAmount," - successful hits:",i.successfulHits)
+        print(f"{i.name} - {i.knockedoutAmount} knockouts & {i.successfulHits} successful hits")
         i.knockedoutAmount = 0
         i.successfulHits = 0
 
 
 
 # Print out at the end of all matches
-def endOfMatchDisplay(homeTeam,awayTeam):
+def endOfMatchDisplay(homeTeam,awayTeam,runs):
     print("\n-----------\nMatch Time: "+str(totalTimePassed)+" minutes")
+    print("\n-----------\nAverage Round Time: "+str(totalTimePassed/runs)+" minutes")
     for team_ in [homeTeam, awayTeam]:
         print(f"{team_.name}:{team_.winNumber}")
     count_items(potMVPs)
@@ -299,30 +323,56 @@ def mainMatchRun(team1Name,team1Players,team2Name,team2Players,amountOfRounds=1,
     init()
 
     # Run rounds per amount in runs
+    roundsPassed = 0
+
+    # Generate Conversation before match starts
+    if setEmoticonConversations:
+        emoteConversationGenerator(random.randrange(5,8), homeTeam.roster + awayTeam.roster)
+
+    def teamCleanup(team_):
+        team_.roster_backup()
+        team_.reset_health()
+
     for i in range(runs):       
         # For every team, reset roster and player health
         for team_ in [homeTeam, awayTeam]:
-            team_.roster_backup()
-            team_.reset_health()
+            teamCleanup(team_)
 
         global timerRunOutActive, maxRoundTime
         maxRoundTime = maxTurnTime
         timerRunOutActive = timerActivation
         # Run round
-        runRound(homeTeam,awayTeam,False)
+        runRound(homeTeam,awayTeam,setEmoticonConversations)
+        roundsPassed+=1
 
         # If team won more that half, end
         if homeTeam.winNumber >= rounds_to_win or awayTeam.winNumber >= rounds_to_win:
             break
-    if homeTeam.winNumber == 0 and awayTeam.winNumber == 0:
+    if homeTeam.winNumber == awayTeam.winNumber:
         for team_ in [homeTeam, awayTeam]:
             team_.roster_backup()
             team_.reset_health()
         timerRunOutActive = False
         print("--- Tie Breaker ---")
-        runRound(homeTeam,awayTeam,False)
+        # print(f"homeTeam:{homeTeam.winNumber}, awayTeam:{awayTeam.winNumber}")
+        runRound(homeTeam,awayTeam,setEmoticonConversations)
 
-    endOfMatchDisplay(homeTeam,awayTeam)
+    endOfMatchDisplay(homeTeam,awayTeam,roundsPassed)
+
+    # Generate Conversation after match finishes
+    if setEmoticonConversations:
+        for team_ in [homeTeam, awayTeam]:
+            teamCleanup(team_)
+        emoteConversationGenerator(random.randrange(4,8), homeTeam.roster + awayTeam.roster)
+
+    print("Best Plays")
+    for i in storeBestPlaysList:
+        print(i)
+
+    if homeTeam.winNumber > awayTeam.winNumber:
+        return 1
+    else:
+        return 2
 
 
 # Run Main
