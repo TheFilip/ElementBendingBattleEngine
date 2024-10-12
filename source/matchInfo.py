@@ -19,9 +19,6 @@ basicPlaymakingMove = ["Basic Playmaking", "playmake",8]
 baseMoveList = [basicAttackMove,basicBlockMove,basicObserveMove,basicManeuverMove,basicBendingMove]
 
 #baseMoveList = [["Basic Swift Strike", "attack"],["Basic Elemental Spike Shield", "block"],["Basic Swift Eyes", "observe"],["Basic Elemental Glide", "maneuver"],["Basic Elemental Surge", "bending"]]
-global drunkList
-drunkList = [] # i doint know what else to call it, am drunk rn but i know what his means. itll jsut sum all move powers,and average it at the end
-
 
 global baseHitTarget
 baseHitTarget = 3
