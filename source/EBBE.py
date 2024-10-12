@@ -6,8 +6,7 @@ import sys, os, webbrowser, random, requests
 import math
 from main import *
 
-# Define the version of your application
-APP_VERSION = "0.3a"  # Change this to your actual version
+APP_VERSION = "0.3a" 
 
 # Save the original stdout for later use
 original_stdout = sys.stdout
